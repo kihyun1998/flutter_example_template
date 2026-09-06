@@ -81,6 +81,15 @@ ColorScheme _scheme(Brightness brightness) => ColorScheme.fromSeed(
 /// typography, which Flutter ships, so the default is correct in any consumer
 /// with no assets, no declaration and no network.
 ///
+/// **Asserting that this argument arrived is harder than it looks, and a test
+/// written from the obvious model is wrong twice.** `ThemeData` exposes no
+/// `fontFamily` getter: the argument is applied to `textTheme` and
+/// `primaryTextTheme` and is readable nowhere else, so a test must read a style
+/// off one of those. And with no family given the default is **not null** —
+/// Material typography names `Roboto`, which Flutter ships — so an assertion
+/// that a family is absent by default fails against a name it did not expect.
+/// Measured 2026-09-06, after both had already moved a test.
+///
 /// It used to name `Pretendard` here, while the four weights behind that name
 /// lived in the example app's `assets/fonts/`. Once this file moved into the
 /// portable zone the name travelled and the files did not, and **nothing

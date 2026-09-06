@@ -30,3 +30,10 @@ decide it are the subject's.
 
 Nothing stops the next doc-comment from naming a subject again. Two quotations already do, on
 purpose.
+
+The tree looks empty of content, and that is the same decision seen from the other side. When `lib/`
+was transplanted, the recipes, the scenarios, the demo data, the 58 settings and the registry rows
+that built their controls were all left behind: every one of them was content belonging to the
+package being demonstrated. This package holds the mechanism and none of the subject, which is why
+it ships no destinations of its own — and why the rule about a destination's pasteable file, in
+[ADR-0002](./0002-depended-on-not-copied.md), has nothing here to walk.
