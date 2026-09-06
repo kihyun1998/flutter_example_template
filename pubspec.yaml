@@ -1,7 +1,7 @@
 name: flutter_example_template
-description: "A new Flutter package project."
+description: "An example-app shell for Flutter packages: a viewport-aware preview stage, a device wall, a source pane, and a settings panel, all driven through ports so the shell never names what it demonstrates."
 version: 0.0.1
-homepage:
+repository: https://github.com/kihyun1998/flutter_example_template
 
 environment:
   sdk: ^3.13.1

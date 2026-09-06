@@ -7,8 +7,15 @@ template, so anything defined here is inherited by every project that starts fro
 
 _No domain terms yet._
 
-This repo is currently the unmodified `flutter create --template=package` scaffold: the only code is
-the placeholder `Calculator` class, which is not a domain concept and will be removed.
+`lib/` now holds a transplanted example-app shell — 3,758 lines over five areas — so the domain
+exists in the code and not yet in this file. The vocabulary is already earned rather than waiting to
+be invented: the words the code itself uses are *zone*, *barrel*, *port*, *destination*, *host*,
+*stage*, *knobs*, *device wall*, *recipe* and *scenario*.
+
+**Read `docs/inherited-decisions.md` before filling this in.** It carries what the transplant could
+not: the alternatives that were tried, measured and refused, and eight dated measurements. It is raw
+material for this file and for `docs/adr/`, and is meant to be consumed and deleted rather than
+kept.
 
 Add terms here as the domain emerges — one or two sentences each, defining what a thing **is** rather
 than what it does, with rejected synonyms under `_Avoid_`:
