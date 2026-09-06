@@ -33,6 +33,11 @@ _Avoid_: User, viewer, visitor
 An abstract class the consumer implements to supply what the gallery must not name.
 _Avoid_: Interface, contract, adapter
 
+**Host**:
+A consumer's implementation of a port: a short-lived value wrapping what it currently owns, rebuilt
+whenever that changes. It is not a store and holds no state of its own.
+_Avoid_: Store, controller, provider, adapter
+
 **Seam**:
 Where the gallery meets the subject — the ports, and the rules that keep the two apart.
 _Avoid_: Boundary, interface, layer
@@ -58,6 +63,10 @@ _Avoid_: Layout, scaffold, frame
 **Destination**:
 One entry the menu points at.
 _Avoid_: Page, route, item, tab
+
+**Stage**:
+The shell region a destination renders into, under the viewport control.
+_Avoid_: Canvas, viewport, content area
 
 **Stage destination**:
 A destination the shell draws itself, in its stage and its knob region.
