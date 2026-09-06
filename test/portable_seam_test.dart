@@ -61,6 +61,19 @@ List<File> _allDartFiles() =>
         .where((f) => f.path.endsWith('.dart'))
         .toList();
 
+/// A file's path relative to `lib/`, spelled the way an import spells it.
+///
+/// `listSync` reports what the platform reports, and on Windows that is
+/// `lib/src\shell\shell_page.dart` — the separator this file joined with and
+/// the one the OS returned, in one string. Every string a path is compared
+/// *against* here is Dart source: an `export 'src/…'` line, an import URI.
+/// Those are `/` on every platform, because they are not filesystem entries.
+///
+/// Comparing the two directly made every file under `lib/src/` look missing
+/// from the barrel — on Windows only, in the test whose whole job is to notice
+/// a missing file. `File.uri` is the conversion the SDK already owns.
+String _libRelative(File file) => file.uri.path.substring('lib/'.length);
+
 List<String> _importsOf(File file) => RegExp(
   r"^import\s+'([^']+)'",
   multiLine: true,
@@ -167,7 +180,7 @@ void main() {
           .toSet();
 
       final present = _dartFilesUnder(_zoneInternals.replaceAll('/', ''))
-          .map((f) => f.path.substring('lib/'.length))
+          .map(_libRelative)
           .toSet();
 
       expect(
