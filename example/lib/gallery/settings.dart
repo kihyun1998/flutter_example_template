@@ -156,7 +156,7 @@ const galleryPresets = <PresetSummary>[
     title: 'Crowded',
     lookFor:
         'Ten labelled actions. Open the Device Wall: the desktop frame keeps '
-        'them all, the phone frame keeps two and menus the other eight.',
+        'them all, the phone frame keeps three and menus the other seven.',
   ),
   PresetSummary(
     id: 'icons',

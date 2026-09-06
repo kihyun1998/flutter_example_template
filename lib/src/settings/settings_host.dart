@@ -44,6 +44,18 @@ abstract class SettingsHost {
   /// Read for its `label` as well as drawn — the search matches on labels, and
   /// asking the host for the control is how it gets one without a registry of
   /// its own.
+  ///
+  /// **A feature's [SettingFeature.switchId] is one of these ids.** The detail
+  /// pane draws the switch by asking here for it, the same way it asks for the
+  /// options. That is easy to miss from the member names alone — [isOn] and
+  /// [setSwitch] speak of switch ids and this speaks of setting ids — and the
+  /// host that serves only the options looks finished until the first feature
+  /// with a switch is opened. In a release build the throw surfaces as a grey
+  /// box where the pane should be, and nothing reports it.
+  ///
+  /// Measured 2026-09-06: this repository's own example got it wrong, and it
+  /// was a screenshot rather than a test that showed it. Hold a host to its
+  /// spec with a test that walks every switch and option id and asks for each.
   SettingsControl control(String settingId);
 
   /// Widgets the registry cannot express, drawn before this feature's options.

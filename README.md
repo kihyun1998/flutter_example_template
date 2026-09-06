@@ -6,6 +6,8 @@ Writing a good example for a package is most of a small app: a menu, somewhere t
 some controls, and a way to show the code. This is that app, with the part that knows *which*
 package removed. You supply what to demonstrate; the shell draws everything around it.
 
+![The shell at desktop width: a category menu, a preview stage and a knob region](https://raw.githubusercontent.com/kihyun1998/flutter_example_template/main/docs/images/shell.png)
+
 ## What a consumer gets
 
 - **A category menu** over recipes, scenarios and full pages.
@@ -23,6 +25,31 @@ package removed. You supply what to demonstrate; the shell draws everything arou
   opening the feature that holds it.
 - **A theme** for the chrome that carries no hue at all, so the only colour on screen is the one
   your package is wearing.
+
+## What it looks like
+
+**The Device Wall.** Three viewports at once, live, over one set of knobs. The example's subject is
+an action bar that gives up labels and then whole actions as room runs out, so the desktop frame
+holds all ten, the tablet frame eight, and the phone frame three and a menu — in one image, rather
+than held against a memory of the previous mode.
+
+![Desktop, tablet and phone frames side by side, each holding a different number of actions](https://raw.githubusercontent.com/kihyun1998/flutter_example_template/main/docs/images/device-wall.png)
+
+**The Code pane.** The running file, read out of the asset bundle and tokenised into a partition, so
+what is on screen is what you can paste.
+
+![A recipe's source with its asset path above it and a copy button](https://raw.githubusercontent.com/kihyun1998/flutter_example_template/main/docs/images/code-pane.png)
+
+**The settings panel.** A preset applied, with the line that earns it its name, the feature it opened,
+and the interaction that feature declares — with a citation behind it.
+
+<img src="https://raw.githubusercontent.com/kihyun1998/flutter_example_template/main/docs/images/settings-panel.png" width="320" alt="The preset bar, feature list and detail pane stacked in a 320-wide column">
+
+These are captures of a build made by [`tool/screenshots.sh`](./tool/screenshots.sh), which drives
+the example in headless Chrome the way a reader drives it — pressing controls by their semantics
+label and checking what is on screen before it captures, so a moved menu row fails the run instead
+of producing a confidently wrong picture. Rerun it after anything that changes the
+UI: a screenshot of something that has since moved is a citation that no longer says anything.
 
 ## The claim it holds itself to
 

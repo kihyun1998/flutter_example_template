@@ -30,6 +30,15 @@ class EditorToolbar extends StatelessWidget {
   final bool allowOverflow;
   final bool showDivider;
 
+  /// The bar's own horizontal inset, both sides together.
+  ///
+  /// Public because two other places need the width the bar actually gets, and
+  /// a number written down in three files is a number that drifts in two of
+  /// them: the gallery's readout computes what survives at phone width, and a
+  /// test pins the Crowded preset's guidance against the same figure. Both
+  /// derive it from here and from `ViewportSpec.mobile`.
+  static const horizontalInset = 16.0;
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -37,7 +46,10 @@ class EditorToolbar extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: horizontalInset / 2,
+            vertical: 4,
+          ),
           decoration: BoxDecoration(
             color: scheme.surfaceContainerLow,
             border: Border(bottom: BorderSide(color: scheme.outlineVariant)),

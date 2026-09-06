@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example_template/flutter_example_template.dart';
 
+import '../scenarios/editor_toolbar.dart';
 import '../subject/adaptive_action_bar.dart';
 import 'settings.dart';
 
@@ -38,8 +39,31 @@ class GalleryHost extends SettingsHost {
     };
   }
 
+  /// Every id the spec names — a feature's switch as well as its options.
+  ///
+  /// The switch belongs here too; `SettingsHost.control` says why, and this app
+  /// is the one that got it wrong. `test/settings_panel_test.dart` walks the
+  /// whole spec so a new id cannot arrive here unanswered.
   @override
   SettingsControl control(String settingId) => switch (settingId) {
+    'showLabels' => buildSwitchTile(
+      id: 'showLabels',
+      label: 'Show labels',
+      value: _s.showLabels,
+      onChanged: (on) => setSwitch('showLabels', on),
+    ),
+    'allowOverflow' => buildSwitchTile(
+      id: 'allowOverflow',
+      label: 'Overflow menu',
+      value: _s.allowOverflow,
+      onChanged: (on) => setSwitch('allowOverflow', on),
+    ),
+    'showDivider' => buildSwitchTile(
+      id: 'showDivider',
+      label: 'Rules between actions',
+      value: _s.showDivider,
+      onChanged: (on) => setSwitch('showDivider', on),
+    ),
     'density' => buildDropdownRow<ActionBarDensity>(
       id: 'density',
       label: 'Action density',
@@ -79,11 +103,11 @@ class GalleryHost extends SettingsHost {
     if (featureId != 'actions') return const [];
 
     final actions = demoActions.take(_s.actionCount).toList();
-    // A phone viewport, less the toolbar's own horizontal padding.
-    const room = 390.0 - 16;
     final fits = AdaptiveActionBar.fitCount(
       actions,
-      room,
+      // The width the bar actually gets in the wall's phone frame, derived
+      // from the viewport and the toolbar rather than written down again.
+      ViewportSpec.mobile.width - EditorToolbar.horizontalInset,
       showLabels: _s.showLabels,
       density: _s.density,
       allowOverflow: _s.allowOverflow,
