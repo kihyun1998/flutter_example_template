@@ -2,7 +2,7 @@
 /// changes what.
 ///
 /// **Types only — no settings.** A gallery renders a description; which
-/// settings exist is the demonstrated package's business, and lives beside it.
+/// settings exist is the subject's business, and lives beside it.
 /// The split is what lets the same panel draw a table's 58 options and some
 /// other package's twelve.
 ///
@@ -29,8 +29,8 @@ class SettingGroup {
   final List<SettingFeature> features;
 }
 
-/// A capability of the table, and the settings that only mean something once it
-/// is on.
+/// A capability of the subject, and the settings that only mean something once
+/// it is on.
 ///
 /// [switchId] names the boolean field that turns it on, when there is one; a
 /// feature without a switch is a heading over settings that are always live.
@@ -93,8 +93,8 @@ SettingFeature featureIn(List<SettingGroup> spec, String id) =>
 /// A named combination of features, as far as the bar that draws it is
 /// concerned.
 ///
-/// **What it turns on is deliberately not here.** A preset in the demonstrated
-/// package is a set of that package's switch ids, and the bar never reads them —
+/// **What it turns on is deliberately not here.** A preset in the subject is a
+/// set of that package's switch ids, and the bar never reads them —
 /// it draws a chip and a line of guidance and hands an id back. Carrying
 /// `featuresOn` across the seam would put the consumer's vocabulary in the
 /// gallery for the sake of a field nothing here looks at.

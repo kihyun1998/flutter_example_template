@@ -1,7 +1,7 @@
 /// A shell that demonstrates a package without knowing which one.
 ///
 /// A menu of destinations, a viewport-aware preview stage with a device wall, a
-/// source pane that reads the running file, a settings panel, and the app chrome
+/// Code pane that reads the running file, a settings panel, and the app chrome
 /// around them. **Nothing here names a subject**, and
 /// `test/portable_seam_test.dart` holds it to that by walking the tree rather
 /// than trusting the intention.
@@ -32,11 +32,11 @@ export 'src/settings/preset_bar.dart';
 export 'src/settings/setting_spec.dart';
 export 'src/settings/settings_host.dart';
 export 'src/settings/settings_controls.dart';
+export 'src/shell/code_pane.dart';
 export 'src/shell/dart_highlighter.dart';
 export 'src/shell/shell_destination.dart';
 export 'src/shell/shell_destinations.dart';
 export 'src/shell/shell_menu.dart';
 export 'src/shell/shell_page.dart';
-export 'src/shell/source_pane.dart';
 export 'src/theme/example_theme.dart';
 export 'src/theme/theme_mode_button.dart';

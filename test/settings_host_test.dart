@@ -7,10 +7,10 @@ import 'package:flutter_test/flutter_test.dart';
 // unusable by anyone else — reading a global it happens to reach, assuming a
 // spec shaped like this one's, needing an extras slot it was never given.
 //
-// This file is the other half. Nothing below names a single type from this
-// example: no PlaygroundSettings, no settingsSpec, no registry. If the panes can
-// be driven by a host built from scratch here, they can be driven by the next
-// package's, and the port is *sufficient* rather than merely present.
+// This file is the other half. Nothing below names a single type from any
+// subject: no settings class of one, no spec of one, no registry. If the panes
+// can be driven by a host built from scratch here, they can be driven by the
+// next package's, and the port is *sufficient* rather than merely present.
 //
 // It is also the cheapest description of what a consumer has to write, which is
 // why the fake is a plain class rather than a mock.

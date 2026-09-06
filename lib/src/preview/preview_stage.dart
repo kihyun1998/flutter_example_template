@@ -9,7 +9,7 @@ import 'viewport_spec.dart';
 ///
 /// **Two things happen here and they are not the same thing.**
 ///
-/// The `SizedBox` is what makes the demonstrated widget narrow. The widget this
+/// The `SizedBox` is what makes the subject's widget narrow. The widget this
 /// was first built against resolves
 /// its column widths from its own `constraints.maxWidth` — the `LayoutBuilder`
 /// at its own root — and reads `MediaQuery` exactly once, for the

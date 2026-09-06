@@ -1,11 +1,11 @@
-/// The example app's own theme — the chrome around the table, not the table.
+/// The example app's own theme — the chrome around the subject, not the subject.
 ///
 /// Two things live here and they are deliberately kept apart:
 ///
 /// * **This file** themes the *application*: the app bar, the sidebar, the
 ///   cards and the controls the reader operates.
-/// * **`TablePlusTheme`** themes the *package*, and the playground builds it
-///   from its settings.
+/// * **The subject's own theme** themes the *subject*, and
+///   the consumer builds it from its settings.
 ///
 /// **The chrome carries no hue at all.** That is the decision, and it is made
 /// for the demo's purpose rather than for taste: with an achromatic chrome, the
@@ -90,7 +90,7 @@ ColorScheme _scheme(Brightness brightness) => ColorScheme.fromSeed(
 ///
 /// Fetching a face over the network was the other candidate and is rejected.
 /// This repository already rejected it once inside this zone, for the Code pane:
-/// see `SourcePane.monoFallback`. An example that needs the network to draw its
+/// see `CodePane.monoFallback`. An example that needs the network to draw its
 /// own chrome fails on a train, draws a fallback and reflows on first paint, and
 /// makes an outbound request its consumer never asked a library for.
 ThemeData exampleTheme(Brightness brightness, {String? chromeFont}) {

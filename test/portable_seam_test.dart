@@ -4,9 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 // This package is chrome that demonstrates *another* package without knowing
 // which one: a menu, a destination model, a viewport frame, a device wall, a
-// source pane, a settings panel. Nothing in `lib/` may name a demonstrated
-// package, and nothing outside `lib/src/` may be reached from outside this
-// package at all.
+// Code pane, a settings panel. Nothing in `lib/` may name a subject, and
+// nothing outside `lib/src/` may be reached from outside this package at all.
 //
 // **Both rules are legal Dart.** A file here could import anything its pubspec
 // allows and compile; a consumer could import `lib/src/...` directly and
@@ -43,8 +42,8 @@ const _zoneInternals = 'src/';
 ///
 /// Flutter is the floor this is written against; `dart:` is the language.
 /// **Everything else is what this test exists to catch** — most of all a
-/// package being demonstrated, which is the one dependency that would make this
-/// gallery about a subject. The list is two entries and grows only with a
+/// the subject, which is the one dependency that would make this gallery about
+/// one. The list is two entries and grows only with a
 /// dependency the gallery genuinely needs, one at a time, on purpose.
 const _allowedExternal = ['dart:', 'package:flutter/'];
 

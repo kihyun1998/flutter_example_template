@@ -24,8 +24,8 @@ import 'package:flutter/services.dart';
 /// until a restart clears them. That is what makes the ticket's visual check —
 /// edit a comment, hot restart, see it — a real test of where the text came
 /// from.
-class SourcePane extends StatefulWidget {
-  const SourcePane({super.key, required this.assetPath, this.bundle});
+class CodePane extends StatefulWidget {
+  const CodePane({super.key, required this.assetPath, this.bundle});
 
   /// The asset key, which is the path exactly as `pubspec.yaml` declares it.
   final String assetPath;
@@ -50,9 +50,9 @@ class SourcePane extends StatefulWidget {
   /// the first fallback reads as belt-and-braces and is the shape that hid the
   /// bug, because `monoFallback.first` looked like the family was set.
   ///
-  /// Not `GoogleFonts.firaCode`, which the playground uses: that fetches over
-  /// the network on first use, and a pane whose whole job is to show bytes
-  /// already on disk should not need the network to draw them.
+  /// Not a face fetched over the network, such as `GoogleFonts.firaCode`: that
+  /// fetches on first use, and a pane whose whole job is to show bytes already
+  /// on disk should not need the network to draw them.
   static const monoFallback = [
     'SF Mono',
     'Menlo',
@@ -67,10 +67,10 @@ class SourcePane extends StatefulWidget {
   final AssetBundle? bundle;
 
   @override
-  State<SourcePane> createState() => _SourcePaneState();
+  State<CodePane> createState() => _CodePaneState();
 }
 
-class _SourcePaneState extends State<SourcePane> {
+class _CodePaneState extends State<CodePane> {
   late Future<String> _source;
 
   @override
@@ -80,7 +80,7 @@ class _SourcePaneState extends State<SourcePane> {
   }
 
   @override
-  void didUpdateWidget(SourcePane oldWidget) {
+  void didUpdateWidget(CodePane oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Switching recipes without this leaves the previous recipe's source on
     // screen under the new recipe's path — the one failure mode this pane
@@ -199,7 +199,7 @@ class _PathBarState extends State<_PathBar> {
   @override
   void didUpdateWidget(_PathBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // **The confirmation belongs to the file it was shown for.** `SourcePane`
+    // **The confirmation belongs to the file it was shown for.** `CodePane`
     // sits in a keyless conditional slot in the shell, and opening another
     // recipe does not close the Code view — so the element is reused and this
     // State survives the path change. Without this, copying recipe A and
@@ -260,8 +260,8 @@ class _PathBarState extends State<_PathBar> {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 12,
-                fontFamily: SourcePane.monoFamily,
-                fontFamilyFallback: SourcePane.monoFallback,
+                fontFamily: CodePane.monoFamily,
+                fontFamilyFallback: CodePane.monoFallback,
                 color: scheme.onSurfaceVariant,
               ),
             ),
@@ -454,8 +454,8 @@ class _CodeState extends State<_Code> {
               style: TextStyle(
                 fontSize: 12.5,
                 height: 1.45,
-                fontFamily: SourcePane.monoFamily,
-                fontFamilyFallback: SourcePane.monoFallback,
+                fontFamily: CodePane.monoFamily,
+                fontFamilyFallback: CodePane.monoFallback,
                 color: widget.scheme.onSurface,
               ),
             ),

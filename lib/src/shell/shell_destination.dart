@@ -31,8 +31,9 @@ enum ShellCategory {
 /// the shell's stage, the other leaves the shell entirely.
 ///
 /// That distinction is the whole reason this type is sealed rather than a class
-/// with a nullable builder. The playground is a full page — its own app bar, its
-/// own three panes — and putting it inside the stage would mean taking it apart.
+/// with a nullable builder. Some destinations are full pages — their own app
+/// bar, their own panes — and putting one inside the stage would mean taking it
+/// apart.
 /// It is pointed at, not absorbed, and the type makes that a fact about the
 /// destination rather than a branch someone can forget to write.
 sealed class ShellDestination {

@@ -51,7 +51,7 @@ class SettingsControl extends StatelessWidget {
 
 /// The controls the settings panes are built from. Each is pure: it renders
 /// what it is handed and reports back through its callback, knowing nothing of
-/// PlaygroundSettings or of which feature it belongs to.
+/// the subject's settings object or of which feature it belongs to.
 SettingsControl buildSliderSetting({
   required String id,
   required String label,

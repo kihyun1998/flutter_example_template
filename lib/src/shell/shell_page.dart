@@ -11,7 +11,7 @@ import '../theme/theme_mode_button.dart';
 import 'shell_destination.dart';
 import 'shell_destinations.dart';
 import 'shell_menu.dart';
-import 'source_pane.dart';
+import 'code_pane.dart';
 
 /// Three regions: a category menu, a preview stage, and a knob region.
 ///
@@ -297,7 +297,7 @@ class _ShellPageState extends State<ShellPage> {
               // the source to whatever factor fits 1440px into the pane and
               // then clip it to a phone, which is unreadable and answers a
               // question nobody asked.
-              ? SourcePane(assetPath: source)
+              ? CodePane(assetPath: source)
               : ColoredBox(
                   color: scheme.surfaceContainerHighest,
                   child: _showingWall

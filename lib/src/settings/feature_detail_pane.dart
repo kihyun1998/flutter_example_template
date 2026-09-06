@@ -52,9 +52,9 @@ class FeatureDetailPane extends StatelessWidget {
   /// features are independent. These are the couplings the description records,
   /// each carrying a citation that a human has read.
   ///
-  /// Stated in the direction it happens. "A merged row carries no card" and
-  /// "the card is never built for a merged row" are different claims; only one
-  /// of them is what `table_body.dart` does.
+  /// Stated in the direction it happens. Two readings of one coupling can be
+  /// different claims about which side acts; only one of them is what the
+  /// subject actually does, and the citation is where that is settled.
   Widget _affects(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 12),

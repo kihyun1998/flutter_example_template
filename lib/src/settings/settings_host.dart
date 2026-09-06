@@ -9,7 +9,7 @@ import 'settings_controls.dart';
 /// The port between the panes and a settings object they must not name.
 ///
 /// **Every member here was read off a call site, not designed.** The three panes
-/// were typed on the demonstrated package's own settings class, and what they
+/// were typed on the subject's own settings class, and what they
 /// actually did with it was: walk the spec, read a switch, write a switch, build
 /// one control, and — in one place — draw something no registry entry could
 /// express. Five operations, so five members. A sixth would be a guess.
