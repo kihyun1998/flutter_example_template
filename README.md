@@ -67,7 +67,14 @@ pane shows imports no shell.** That is what keeps "pasteable" true.
 
 ## Installing
 
-Not on pub.dev yet. Until it is, in your **`example/pubspec.yaml`** — not your package's:
+In your **`example/pubspec.yaml`** — not your package's:
+
+```yaml
+dependencies:
+  flutter_example_template: ^0.1.0
+```
+
+Or, to track `main` ahead of a release:
 
 ```yaml
 dependencies:
@@ -206,11 +213,16 @@ is the working rules — the mistakes this codebase made and would make again.
 
 ## Status
 
-`0.0.1`, and honest about it: one example, no published release, and open questions in the issue
-tracker about the palette, the bundled tokenizer, and whether colour becomes a fourth port.
+`0.1.0`, and honest about it: one example, and two open questions in the issue tracker — whether
+colour becomes a fourth port, and what happens to the bundled Dart tokenizer when it is extracted
+into a package of its own.
 
-The comments are load-bearing. Measured 2026-09-06: 1,209 of 3,731 lines under `lib/` are comment
-lines, a third of the file. They record measurements with dates, and two explanations that were
+**Requires Flutter 3.47.** That is the version this was built and tested against rather than a
+measured minimum; `pubspec.yaml` says why, and lowering it wants someone to run both suites against
+an older SDK first.
+
+The comments are load-bearing. Measured 2026-09-06: 1,233 of 3,757 lines under `lib/` are
+comment lines, a third of the file. They record measurements with dates, and two explanations that were
 asserted, tested and **withdrawn** — cited in four files, because the retraction travels with
 everything that had leaned on the claim. If a comment looks redundant, assume it is the residue of
 something expensive before assuming it is noise.

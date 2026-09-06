@@ -1,3 +1,60 @@
-## 0.0.1
+## 0.1.0
 
-* TODO: Describe initial release.
+First release. The shell was built inside the example app of a Flutter table
+package over roughly a dozen tickets, extracted once it had been proven
+portable, and rebuilt here around three ports.
+
+**What a consumer gets**
+
+* `ShellPage` — a category menu, a preview stage and a knob region, holding one
+  destination at a time.
+* `PreviewStage`, `PreviewFrame` and `ViewportSpec` — a subtree rendered as if it
+  were running at desktop, tablet or phone size: constrained, told that is the
+  whole screen, and given its own `Overlay` so tooltips and drags stay inside the
+  frame.
+* `DeviceWall` — all three viewports at once, live, over one shared state. The
+  single-viewport modes answer what something looks like at a width; the wall
+  answers what changed between them.
+* `CodePane` — a recipe's own source, read out of the asset bundle so what is on
+  screen and what executes cannot disagree. `tokenizeDart` highlights it and
+  returns a partition, so concatenating every token reproduces the file byte for
+  byte.
+* `PresetBar`, `FeatureListPane`, `FeatureDetailPane` — a settings panel drawn
+  from a description of groups, features, options and the interactions between
+  them, with search over control labels.
+* `MetricsPanel` and `MetricsChip` — named readings the consumer formats and
+  assigns a severity, since the thresholds belong to whoever knows what is being
+  measured.
+* `exampleTheme` — chrome that carries no hue, so the only colour on screen is
+  the one your package is wearing. The font family is a parameter;
+  this package ships no typeface and names none.
+
+**The three ports**
+
+`ShellDestinations` carries what the menu points at *and its lifetime*.
+`SettingsHost` is five members, each read off a real call site. `PresetSummary`
+carries a preset's name and what to watch for, and deliberately not what it turns
+on. Writes across the seam are commands — `setSwitch(id, on)`, `applyPreset(id)`
+— never a settings object, because constructing one means knowing its type.
+
+**The property, and what enforces it**
+
+Nothing in `lib/` names what it demonstrates. Three rules hold what the
+compiler will not, all of them legal Dart when violated: nothing under `lib/`
+imports outside `dart:` and `package:flutter/`; nothing outside `lib/src/`
+reaches into it; and the barrel and the tree name the same files, both ways. A
+fourth lives in `example/` — a file the Code pane shows imports no shell.
+
+**Also in this release**
+
+* `example/` demonstrates an adaptive action bar, deliberately not a table.
+* `docs/adr/` records ten decisions, including the ones most likely to be
+  re-proposed: no demo framework, the font as a parameter, no line numbers in the
+  Code pane, and why this package is depended on rather than copied.
+* `tool/screenshots.sh` regenerates the README images by driving the example in
+  headless Chrome, pressing controls by their semantics label and checking the
+  state it reached before capturing.
+
+Tested against Flutter 3.47.1. The floor in `pubspec.yaml` is that tested
+version rather than a measured minimum; lowering it wants someone to run the
+suites against an older SDK first.
