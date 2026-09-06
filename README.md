@@ -217,9 +217,9 @@ is the working rules — the mistakes this codebase made and would make again.
 colour becomes a fourth port, and what happens to the bundled Dart tokenizer when it is extracted
 into a package of its own.
 
-**Requires Flutter 3.47.** That is the version this was built and tested against rather than a
-measured minimum; `pubspec.yaml` says why, and lowering it wants someone to run both suites against
-an older SDK first.
+**Requires Flutter 3.27.** Measured, not inherited: both suites pass and analyse clean on 3.27.0 and
+on 3.41.9, and 3.24.5 fails on exactly one line — `pubspec.yaml` names that line, and says what
+going lower would cost.
 
 The comments are load-bearing. Measured 2026-09-06: 1,233 of 3,757 lines under `lib/` are
 comment lines, a third of the file. They record measurements with dates, and two explanations that were

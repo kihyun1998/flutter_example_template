@@ -12,14 +12,21 @@ topics:
   - responsive
 
 environment:
-  sdk: ^3.13.1
-  # The version this was built and tested against, not a measured minimum.
-  # `feature_list_pane.dart` records one behaviour that changed in 3.47 — an
-  # assertion that turned 21 of these tests red with nothing here having moved —
-  # so the floor is set where the evidence is. Lowering it wants someone to run
-  # both suites against an older SDK first; a compatibility claim nobody has run
-  # is the kind this repository does not make.
-  flutter: ">=3.47.0"
+  # Measured at both ends rather than inherited from whatever built it.
+  # Both suites — 21 tests here, 10 in the example — pass and analyse clean
+  # on 3.27.0 and on 3.41.9. 3.24.5 fails, with exactly one error:
+  # `CardThemeData` in `example_theme.dart`, which Flutter added in 3.27.0
+  # and which is now the only type `ThemeData.cardTheme` accepts. The top of
+  # the range is where it was built, 3.47.1.
+  #
+  # So one line sets this floor, and it is named here so the next person can
+  # weigh moving it. The code below would in fact run lower — swapping that
+  # line for the pre-3.27 `CardTheme` turned 3.24.5 fully green — and it is
+  # not swapped, because no Flutter accepts both spellings. After that the
+  # next wall is 3.22.0, where `WidgetStateProperty` and
+  # `surfaceContainerLow` arrive.
+  sdk: ^3.6.0
+  flutter: ">=3.27.0"
 
 dependencies:
   flutter:
@@ -28,7 +35,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  # A range, not `^6.0.0`. flutter_lints 6 needs Dart 3.8, which is above the
+  # floor declared above — pinning it would mean the minimum this package
+  # advertises is a version the package cannot be checked on. A consumer never
+  # sees this either way, since dev dependencies are not inherited; the person
+  # it would strand is whoever clones the repo at the floor to verify the
+  # claim. Pub takes 6 on a current SDK and 5 at the floor.
+  flutter_lints: ">=5.0.0 <7.0.0"
 
 # Shown on the package page. They ship because `docs/images/` ships: a
 # `.pubignore` that excluded it also replaced the root `.gitignore` — pub reads

@@ -55,6 +55,11 @@ fourth lives in `example/` — a file the Code pane shows imports no shell.
   headless Chrome, pressing controls by their semantics label and checking the
   state it reached before capturing.
 
-Tested against Flutter 3.47.1. The floor in `pubspec.yaml` is that tested
-version rather than a measured minimum; lowering it wants someone to run the
-suites against an older SDK first.
+Runs on Flutter 3.27.0 and up, and that floor was measured rather than
+inherited from whatever built it: both suites — 21 tests here, 10 in the
+example — pass and analyse clean on 3.27.0 and on 3.41.9, and 3.24.5 fails
+with exactly one error, `CardThemeData` in `example_theme.dart`. `pubspec.yaml`
+names that line, and says why it is not swapped for the older spelling that
+would reach lower still. The upper end is unchanged: 3.47.1 is where
+this was built, and `feature_list_pane.dart` records the assertion that
+version tightened.
