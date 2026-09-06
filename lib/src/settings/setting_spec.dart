@@ -3,8 +3,8 @@
 ///
 /// **Types only — no settings.** A gallery renders a description; which
 /// settings exist is the subject's business, and lives beside it.
-/// The split is what lets the same panel draw a table's 58 options and some
-/// other package's twelve.
+/// The split is what lets the same panel draw one package's dozens of options
+/// and the next package's handful.
 ///
 /// A spec is held honest by the app that owns it — see
 /// a test in the app that owns it, which reddens on a field left undescribed or

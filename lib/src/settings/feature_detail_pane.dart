@@ -5,13 +5,15 @@ import 'settings_host.dart';
 
 /// One feature, opened.
 ///
-/// Sixty-eight controls stood in a column. At most twelve stand here, and they
-/// all belong to the feature whose name is at the top: its switch, and the
-/// options it owns. A test counts them against the
-/// description, so a control that drifts to the wrong feature turns it red.
+/// Every control once stood in one list. Only one feature's stand here, and
+/// they all belong to the feature whose name is at the top: its switch, and the
+/// options it owns. A test in the app that owns the spec counts them against
+/// it, so a control that drifts to the wrong feature turns it red.
 ///
-/// The pane draws no chrome of its own — the page gives it its width and hangs
-/// the performance monitor beneath it, because a monitor belongs to no feature.
+/// The pane draws no chrome of its own. Its width is `ShellPage.knobRegionWidth`
+/// — whatever the shell gives the knob region — and anything that belongs to no
+/// feature, a readout of the whole, arrives through the host's extras hooks
+/// rather than from here.
 class FeatureDetailPane extends StatelessWidget {
   const FeatureDetailPane({
     super.key,
@@ -87,8 +89,9 @@ class FeatureDetailPane extends StatelessWidget {
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 2),
-            // The pane is 380 wide and the widget-test font draws every glyph
-            // as a square of the font size. This wraps; it must never be a Row.
+            // The pane is `ShellPage.knobRegionWidth` wide and the
+            // widget-test font draws every glyph as a square of the font size.
+            // This wraps; it must never be a Row.
             Text(
               i.effect,
               style: TextStyle(

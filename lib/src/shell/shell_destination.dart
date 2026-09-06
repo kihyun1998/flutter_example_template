@@ -77,8 +77,8 @@ class StageDestination extends ShellDestination {
   /// True is right for anything that is one table: the wall draws three of them
   /// over one state, so an interaction in the narrow frame paints its result in
   /// the other two. What it is wrong for is a destination whose point is a
-  /// measurement — three tables over the same hundred thousand rows makes a
-  /// frame rate a measurement of the wall.
+  /// measurement — three copies of an expensive subject over one data set
+  /// makes a frame rate a measurement of the wall.
   ///
   /// Setting it false is not enough on its own: the wall is a mode the shell is
   /// already *in*, so `ShellPage` also has to leave that mode when a

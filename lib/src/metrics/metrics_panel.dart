@@ -128,9 +128,9 @@ class MetricsPanel extends StatelessWidget {
             children: [
               Icon(Icons.speed, color: scheme.onSurfaceVariant, size: 20),
               const SizedBox(width: 8),
-              // The knob region is a fixed 380 wide, so the title has to yield
-              // rather than overflow when the text grows — a larger
-              // accessibility text scale, or a translation, will do it.
+              // The knob region is `ShellPage.knobRegionWidth` wide, so the
+              // title has to yield rather than overflow when the text grows — a
+              // larger accessibility text scale, or a translation, will do it.
               Expanded(
                 child: Text(
                   title,

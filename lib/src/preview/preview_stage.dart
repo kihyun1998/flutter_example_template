@@ -164,8 +164,8 @@ class ViewportBar extends StatelessWidget {
   /// **A flag rather than something the host could infer**, because the reason
   /// to refuse is not a property of this bar. The shell has somewhere to put a
   /// wall and still refuses it for one destination — see
-  /// `StageDestination.allowsWall` — because a wall over a hundred thousand
-  /// rows measures the wall.
+  /// `StageDestination.allowsWall` — because a wall over an expensive subject
+  /// measures the wall.
   ///
   /// **A second reason was written here and its example is gone.**
   /// An earlier host drew one frame and had nowhere to put a wall; retiring it

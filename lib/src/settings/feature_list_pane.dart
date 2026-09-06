@@ -3,21 +3,20 @@ import 'package:flutter/material.dart';
 import 'feature_search.dart';
 import 'settings_host.dart';
 
-/// The twenty features, in a column of their own.
+/// Every feature the spec names, in a column of its own.
 ///
-/// Sixty-eight controls used to stand here. Each row now answers two questions —
-/// is this on, and how much is inside it — and defers the rest to the pane that
-/// shows the feature you pick.
+/// Every control used to stand here, in one list. Each row now answers two
+/// questions — is this on, and how much is inside it — and defers the rest to
+/// the pane that shows the feature you pick.
 ///
-/// Four features own no switch. Rows, Zoom, Rows and text and Row ink are
-/// headings over settings that are always live, and a dot beside them would
-/// offer to turn off something that cannot be turned off.
+/// A feature with no switch is a heading over settings that are always live,
+/// and a dot beside it would offer to turn off something that cannot be turned
+/// off.
 ///
 /// A search narrows this list rather than a column of controls, because the
 /// setting someone is hunting almost always belongs to a feature they have not
-/// opened. Under each surviving name it says which setting matched, so
-/// `Handle Indent` can be found to live under Column resizing without opening
-/// anything.
+/// opened. Under each surviving name it says which setting matched, so a
+/// setting can be found to live under a feature without opening it.
 class FeatureListPane extends StatefulWidget {
   const FeatureListPane({
     super.key,

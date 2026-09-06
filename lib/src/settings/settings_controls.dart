@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 ///
 /// A blank query is not a search, so everything survives it. Otherwise the
 /// query is a substring of the label, in any case and anywhere within it —
-/// someone hunting the tooltip anchors types "anchor", not "Cell Anchor".
+/// someone hunting a setting types the word they remember, not the label's
+/// full capitalised form.
 bool settingMatches(String label, String query) {
   final needle = query.trim().toLowerCase();
   if (needle.isEmpty) return true;
@@ -17,7 +18,7 @@ bool settingMatches(String label, String query) {
 ///
 /// The label travels with the widget rather than being buried inside it, so a
 /// section can ask what its children are before it builds them — which is what
-/// searching across 68 controls needs and a bare `Widget` cannot answer.
+/// searching across a panel of them needs and a bare `Widget` cannot answer.
 class SettingsControl extends StatelessWidget {
   const SettingsControl({
     super.key,
@@ -117,9 +118,9 @@ SettingsControl buildSwitchTile({
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          // The panel is a fixed 380 wide. The label has to yield the space the
-          // control needs, not push it off the edge — a wider text scale, or a
-          // longer translation, will ask it to.
+          // The panel is only `ShellPage.knobRegionWidth` wide. The label has
+          // to yield the space the control needs, not push it off the edge — a
+          // wider text scale, or a longer translation, will ask it to.
           Expanded(
             child: Text(
               label,

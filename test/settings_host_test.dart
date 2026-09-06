@@ -118,10 +118,15 @@ Widget _list(_FakeHost host, {String? selected}) => MaterialApp(
   ),
 );
 
+/// The pane at the width the shell actually gives it.
+///
+/// Not a number of this file's own: these pumped at 380 while `ShellPage` hands
+/// the knob region 320, so anything that fitted only in the wider box passed
+/// here and overflowed in the app. A guard has to read the destination.
 Widget _detail(_FakeHost host, SettingFeature feature) => MaterialApp(
   home: Scaffold(
     body: SizedBox(
-      width: 380,
+      width: ShellPage.knobRegionWidth,
       child: FeatureDetailPane(host: host, feature: feature),
     ),
   ),
@@ -261,7 +266,7 @@ void main() {
           MaterialApp(
             home: Scaffold(
               body: SizedBox(
-                width: 380,
+                width: ShellPage.knobRegionWidth,
                 child: FeatureDetailPane(
                   host: host,
                   feature: _spec.first.features.first,

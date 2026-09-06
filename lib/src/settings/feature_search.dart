@@ -43,9 +43,9 @@ List<FeatureMatch> searchFeatures(String query, SettingsHost host) {
   for (final feature in host.spec.expand((g) => g.features)) {
     final nameMatched = searching && settingMatches(feature.title, query);
 
-    // Only the options. A feature's switch *is* the feature, and listing "Drag
-    // Selection" underneath "Drag selection" says nothing the row above it did
-    // not.
+    // Only the options. A feature's switch *is* the feature, and listing the
+    // switch's label underneath the feature's own name says nothing the row
+    // above it did not.
     final matchedLabels = <String>[];
     if (searching) {
       for (final id in feature.options) {

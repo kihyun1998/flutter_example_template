@@ -27,7 +27,7 @@ import 'code_pane.dart';
 /// [ShellDestinations], and the bar's [title] with it, because both are the one
 /// thing a shell around a different package could not reuse. The list used to be
 /// a field of this state, which is what made a page that knows nothing about
-/// recipes import eleven of them.
+/// recipes import every one of them.
 class ShellPage extends StatefulWidget {
   const ShellPage({
     super.key,
@@ -47,6 +47,17 @@ class ShellPage extends StatefulWidget {
   /// as long as it owns itself, which is the lifetime the notifiers behind the
   /// destinations already had. See [ShellDestinations].
   final ShellDestinations Function() createDestinations;
+
+  /// What the knob region is given, and the width a destination's knobs have
+  /// to work in.
+  ///
+  /// Public because the panes are written against it and were written against
+  /// the wrong number: three comments in `lib/src/settings/` and two test pumps
+  /// said 380, which is what this region was in the repository these files came
+  /// from. A pane tested at 380 and drawn at 320 is a guard reading a width the
+  /// app does not use — measured 2026-09-06, four sites out of step with one
+  /// field.
+  static const knobRegionWidth = 320.0;
 
   /// Below this the three regions do not fit side by side, and the shell shows
   /// one at a time instead. Measured against the widest of them plus the stage's
@@ -153,7 +164,7 @@ class _ShellPageState extends State<ShellPage> {
         ),
         Expanded(child: _stageRegion(context)),
         Container(
-          width: 320,
+          width: ShellPage.knobRegionWidth,
           decoration: BoxDecoration(
             border: Border(
               left: BorderSide(color: Theme.of(context).dividerColor),
