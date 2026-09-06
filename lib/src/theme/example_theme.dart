@@ -9,7 +9,7 @@
 ///
 /// **The chrome carries no hue at all.** That is the decision, and it is made
 /// for the demo's purpose rather than for taste: with an achromatic chrome, the
-/// only colour anywhere on screen is the one the table is wearing — so "this
+/// only colour anywhere on screen is the one the subject is wearing — so "this
 /// colour is something you set" needs no caption. A chrome with an accent of
 /// its own would put two colours on screen and lose that.
 ///

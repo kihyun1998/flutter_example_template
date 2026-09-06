@@ -273,13 +273,13 @@ class _ShellPageState extends State<ShellPage> {
                   // refuses it is opened; hiding a segment out from under the
                   // current selection is silent.
                   //
-                  // Row count is a separate axis and is deliberately not
-                  // guarded: `EmployeeDemo` offers 20 000 rows from a knob pane
-                  // that sits outside the wall, so the expensive shape is
-                  // reachable there too. The tables build their rows lazily, so
-                  // the cost is three times what is on screen rather than three
-                  // times the data — measured, and judged not
-                  // worth binding the knob pane to the shell's viewport state.
+                  // Data volume is a separate axis and is deliberately not
+                  // guarded: a destination can offer a large data set from a
+                  // knob pane that sits outside the wall, so the expensive
+                  // shape is reachable there too. A subject that builds its
+                  // content lazily costs three times what is on screen rather
+                  // than three times the data — measured, and judged not worth
+                  // binding the knob pane to the shell's viewport state.
                   showsWall: _open.allowsWall,
                   selectedId: _viewportId,
                   onChanged: (id) => setState(() {

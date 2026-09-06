@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'settings_host.dart';
 
-/// The named combinations, above the table.
+/// The named combinations, above the subject.
 ///
 /// A preset is the first thing anyone will feel, which is why it arrived before
 /// the panel was rebuilt: a set of feature switches applied to the settings,

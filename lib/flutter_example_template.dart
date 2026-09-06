@@ -20,7 +20,7 @@
 /// public.
 library;
 
-export 'src/perf/performance_monitor.dart';
+export 'src/metrics/metrics_panel.dart';
 export 'src/preview/device_wall.dart';
 export 'src/preview/preview_frame.dart';
 export 'src/preview/preview_stage.dart';

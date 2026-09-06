@@ -158,3 +158,14 @@ _Avoid_: Profile, preset config, scenario (a Scenario is a destination)
 **Look-for**:
 What to watch once a preset is applied.
 _Avoid_: Description, hint, caption
+
+### The metrics panel
+
+**Reading**:
+One named measurement about the subject, formatted by whoever took it.
+_Avoid_: Metric, stat, datum, measurement
+
+**Severity**:
+How much attention a reading is asking for. It arrives with the reading, because the thresholds
+that decide it are the subject's.
+_Avoid_: Level, status, priority, health

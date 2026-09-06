@@ -14,9 +14,9 @@ library;
 /// One thing a reader might be trying to do.
 ///
 /// Groups are cut by intent, not by what a setting configures. A feature's own
-/// options do not share an effect — `tooltipBehavior` builds a column while
-/// `tooltipDirection` builds a theme — so cutting by effect would tear the
-/// tooltip feature in half and hide half of it from anyone looking for it.
+/// options do not share an effect — one of them may build a column while its
+/// neighbour builds a theme — so cutting by effect would tear a feature in half
+/// and hide half of it from anyone looking for it.
 class SettingGroup {
   const SettingGroup({
     required this.id,

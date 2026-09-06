@@ -14,7 +14,7 @@ import 'viewport_spec.dart';
 /// bug besides.
 ///
 /// **Scaling was measured, not assumed.** An earlier version of this refused to
-/// scale on the grounds that a transform above the table put drag selection's
+/// scale on the grounds that a transform above the subject put drag selection's
 /// viewport-local coordinate frame in question. That was recorded at the time as
 /// unproven, and it was wrong: `Transform` applies the inverse to hit testing, so
 /// `event.localPosition` reaches the gesture code already in the child's own

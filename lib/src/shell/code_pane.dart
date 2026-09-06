@@ -267,10 +267,11 @@ class _PathBarState extends State<_PathBar> {
             ),
           ),
           IconButton(
-            // A Material tooltip, deliberately: `just_tooltip` arbitrates the
-            // *table's* tooltips and this is app chrome with no `JustTooltip`
-            // ancestor to nest inside. Reaching for the package's tooltip here
-            // would import an arbitration question that does not exist.
+            // A Material tooltip, deliberately: a subject that arbitrates its
+            // own tooltips does so inside its own subtree, and this is chrome
+            // with no such ancestor to nest inside. Reaching for the subject's
+            // tooltip here would import an arbitration question that does not
+            // exist.
             tooltip: _copied ? 'Copied' : 'Copy the file',
             iconSize: 17,
             visualDensity: VisualDensity.compact,
@@ -397,11 +398,11 @@ class _CodeState extends State<_Code> {
   /// seeded from black, so there is no hue here to take even if one were
   /// wanted.
   ///
-  /// `table_palette.dart` reaches the same conclusion from the other side and
-  /// is worth not confusing with this one: it says the **table's** colours
-  /// cannot be *derived* from the app's `ColorScheme`, which is the measurement
-  /// behind. Chrome can and does derive from it — that is the difference
-  /// between a demo's frame and the thing the demo is showing.
+  /// A subject's own palette reaches the same conclusion from the other side
+  /// and is worth not confusing with this one: it says the **subject's** colours
+  /// cannot be *derived* from the app's `ColorScheme`. Chrome can and does
+  /// derive from it — that is the difference between a demo's frame and the
+  /// thing the demo is showing.
   ///
   /// **Comments are not dimmed, which inverts the usual mapping.** A
   /// conventional highlighter fades comments and lights up keywords, because in

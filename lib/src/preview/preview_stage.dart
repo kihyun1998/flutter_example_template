@@ -13,25 +13,25 @@ import 'viewport_spec.dart';
 /// was first built against resolves
 /// its column widths from its own `constraints.maxWidth` — the `LayoutBuilder`
 /// at its own root — and reads `MediaQuery` exactly once, for the
-/// text scaler, never for the size. So for the table, the constraint alone is
+/// text scaler, never for the size. So for that widget, the constraint alone is
 /// the whole story.
 ///
 /// The `MediaQuery` override is for everything *else* in the frame. A recipe or
 /// a scenario is consumer code, and consumer code is entitled to branch on
 /// `MediaQuery.of(context).size` — a phone preview that reported the desktop
 /// window's width would make that branch take the wrong arm and would do it
-/// silently, since nothing about the table would look wrong.
+/// silently, since nothing about the subject would look wrong.
 ///
 /// The earlier claim that the override was needed to make the *table* behave was
 /// measured and is false. The override is kept for the reason above, which is
 /// the real one.
 ///
 /// **It also owns an overlay, and that is a third thing.** `Draggable` puts its
-/// feedback in `Overlay.of(context)` — the *nearest* one — and `just_tooltip`
-/// does the same with its tooltip, going further and reading that overlay's
-/// render box to place itself. With no overlay inside the frame, "nearest" is
-/// the app's root one, which sits above [PreviewFrame]'s `FittedBox`: the table
-/// is drawn at 0.46× and the header cell dragged out of it at 1:1, measured
+/// feedback in `Overlay.of(context)` — the *nearest* one — and a tooltip
+/// package can do the same, going further and reading that overlay's render box
+/// to place itself. With no overlay inside the frame, "nearest" is
+/// the app's root one, which sits above [PreviewFrame]'s `FittedBox`: the
+/// subject is drawn at 0.46× and the header cell dragged out of it at 1:1, measured
 /// 2026-08-26 at 91.7px against 200px, floating over the whole window at more
 /// than twice the size of the row it came from. A real viewport contains its own
 /// overlays, so a preview of one has to as well — which is what makes this
@@ -41,7 +41,7 @@ import 'viewport_spec.dart';
 /// viewport down so all of it is visible is [PreviewFrame]'s job, one layer up.
 ///
 /// An earlier version of this comment said scale must stay at 1.0 because a
-/// transform above the table would put drag selection's viewport-local
+/// transform above the subject would put drag selection's viewport-local
 /// coordinate frame in question. **Measured afterwards and withdrawn:**
 /// `Transform` applies the inverse to hit testing, so `event.localPosition`
 /// reaches the gesture code already in the child's untransformed frame, and a
