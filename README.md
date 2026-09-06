@@ -205,8 +205,8 @@ example/lib/main.dart    the one file that has to know this shell exists
 
 [`docs/adr/`](./docs/adr) records the decisions, including the ones most likely to be re-proposed:
 why there is no demo framework dependency, why the chrome font is a parameter rather than fetched or
-bundled, why the Code pane has no line numbers, and why this package is depended on rather than
-copied.
+bundled, why the Code pane has no line numbers, why this package is depended on rather than copied,
+and why the SDK floor is 3.27.0 rather than the 3.22 the code alone would reach.
 
 [`CONTEXT.md`](./CONTEXT.md) is the vocabulary. [`docs/agents/lessons.md`](./docs/agents/lessons.md)
 is the working rules — the mistakes this codebase made and would make again.

@@ -48,9 +48,14 @@ fourth lives in `example/` — a file the Code pane shows imports no shell.
 **Also in this release**
 
 * `example/` demonstrates an adaptive action bar, deliberately not a table.
-* `docs/adr/` records ten decisions, including the ones most likely to be
+* `docs/adr/` records eleven decisions, including the ones most likely to be
   re-proposed: no demo framework, the font as a parameter, no line numbers in the
-  Code pane, and why this package is depended on rather than copied.
+  Code pane, why this package is depended on rather than copied, and why the SDK
+  floor is 3.27.0 and not the 3.22 the code alone would reach.
+* `.github/workflows/ci.yml` runs both suites on four legs — the declared floor
+  and the current stable, on Linux and on Windows. The platform axis is there
+  because a property in `portable_seam_test.dart` had been red on Windows since
+  the day it was written, and nothing was looking.
 * `tool/screenshots.sh` regenerates the README images by driving the example in
   headless Chrome, pressing controls by their semantics label and checking the
   state it reached before capturing.

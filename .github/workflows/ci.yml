@@ -1,0 +1,70 @@
+# The suites, on both ends of the range this package claims.
+#
+# `portable_seam_test.dart` and `pasteable_seam_test.dart` hold four properties
+# that are legal Dart when violated — a file naming a package outside Flutter, a
+# reach past the barrel, a barrel out of step with the tree, a shown file that
+# imports the shell. Nothing but running them stands between those and silence.
+#
+# Two axes, and both have already caught something:
+#
+# - **SDK.** `pubspec.yaml` says `>=3.27.0`, measured. Nothing but a run at 3.27.0
+#   keeps that true, and the line that sets it is one line deep in a theme.
+# - **Platform.** The barrel/tree property was red on Windows from the day it was
+#   written, because it compared `listSync` paths against `export` strings. A
+#   Linux-only workflow would not have seen it; a Windows-only one would miss the
+#   inverse. The maintainer's machine is Windows, so Linux is the new information.
+#
+# Deliberately not here: `dart format --set-exit-if-changed`. The tree is
+# formatted by exactly one SDK and no other agrees — Dart 3.11.5 rewrites 9 of
+# these 36 files, Dart 3.6.0 rewrites 17 — so that gate would be red on every leg
+# but one. ADR-0011 records the measurement.
+#
+# Also not here: `tool/screenshots.sh`. It needs Chrome and a web build, and it
+# is the check that would catch a UI change silently invalidating the README.
+# See issue #9 for why it wants a schedule rather than a push trigger.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  suites:
+    name: ${{ matrix.flutter || 'latest stable' }} · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      # Every leg reports. A red floor and a red platform are different facts,
+      # and cancelling the others hides whichever finishes second.
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        # "" takes the channel's latest; the pin is the floor `pubspec.yaml`
+        # declares. Raising that floor means editing this line in the same commit.
+        flutter: ["3.27.0", ""]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ matrix.flutter }}
+          cache: true
+
+      - run: flutter --version
+
+      - name: Package
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
+
+      - name: Example
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
