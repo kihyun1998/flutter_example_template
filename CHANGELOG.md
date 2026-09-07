@@ -69,10 +69,11 @@ fourth lives in `example/` — a file the Code pane shows imports no shell.
   quietly replace the front page.
 * `tool/screenshots.sh` regenerates the README images by driving the example in
   headless Chrome, pressing controls by their semantics label and checking the
-  state it reached before capturing.
+  state it reached before capturing. The Code pane's shot also checks the
+  picture, because its content is painted to a canvas that no label can see.
 
 Runs on Flutter 3.27.0 and up, and that floor was measured rather than
-inherited from whatever built it: both suites — 21 tests here, 10 in the
+inherited from whatever built it: both suites — 23 tests here, 11 in the
 example — pass and analyse clean on 3.27.0 and on 3.41.9, and 3.24.5 fails
 with exactly one error, `CardThemeData` in `example_theme.dart`. `pubspec.yaml`
 names that line, and says why it is not swapped for the older spelling that

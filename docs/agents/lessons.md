@@ -27,8 +27,34 @@ three times here:
 - A monospace assertion that read the wrapper `SelectableText` puts around a span tree, instead of
   the leaf that names the family. The pane rendered in the proportional chrome font for six releases
   underneath it.
+- `tool/shots.mjs` checked the Code pane by looking for the **path bar above it**, on the reasoning
+  that nothing else on screen names the file. The path is drawn from `assetPath` before the bundle
+  answers, so the check was satisfied by a pane that had drawn nothing yet, and the tool
+  photographed the state before the file arrived. `docs/images/code-pane.png` was empty in the
+  commit that added the tool and in every one after, on the pub.dev front page. `code_pane.dart`
+  had already named the trap in a doc-comment — *"a pane that renders empty on error is
+  indistinguishable from a pane that loaded an empty file"* — and the tool walked into it from
+  outside.
 
-Both were green while the defect was on screen.
+All three were green while the defect was on screen.
+
+**The destination is sometimes a picture, and a picture is hard to read.** The Code pane's content
+is painted to a canvas: it is not in the DOM and not in the accessibility tree, so no string check
+can see it, and a `Semantics` label added to make one possible would be present whether or not the
+paint succeeded — the same mistake with more steps. What is left is the capture, which is what
+`isBlank` reads.
+
+## A `sleep` is not a wait, in a headless browser
+
+Diagnosing the above, four seconds of `setTimeout` before the capture produced the same empty
+picture. That read as *the file never loads*, and it sent the search into the widget tree — a
+scroll-nesting change was written, and reverted, because the pane had never been wrong.
+
+Headless Chrome had simply not drawn another frame; nothing had asked it to.
+`Page.captureScreenshot` asks, which is why polling the picture both waits and checks, and why the
+sleep that looked like a
+control was measuring nothing at all. A fixed delay in a browser driver is not a slower version of a
+poll. It is a different thing that can hold still.
 
 ## A green from a test nobody watched fail is not evidence — and neither is a red
 

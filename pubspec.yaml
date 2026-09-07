@@ -13,7 +13,7 @@ topics:
 
 environment:
   # Measured at both ends rather than inherited from whatever built it.
-  # Both suites — 21 tests here, 10 in the example — pass and analyse clean
+  # Both suites — 23 tests here, 11 in the example — pass and analyse clean
   # on 3.27.0 and on 3.41.9. 3.24.5 fails, with exactly one error:
   # `CardThemeData` in `example_theme.dart`, which Flutter added in 3.27.0
   # and which is now the only type `ThemeData.cardTheme` accepts. The top of

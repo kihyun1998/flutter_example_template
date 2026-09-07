@@ -1,7 +1,7 @@
 # The SDK floor is measured, and one line sets it
 
 `environment` names `sdk: ^3.6.0` and `flutter: ">=3.27.0"`. Both ends were run before either was
-written: the package and the example resolve, analyse clean and pass — 21 tests and 10 — on 3.27.0
+written: the package and the example resolve, analyse clean and pass — 23 tests and 11 — on 3.27.0
 and on 3.41.9, and 3.24.5 fails with exactly one error.
 
 The numbers this replaced were `^3.13.1`, which `flutter create` left in the initial commit, and

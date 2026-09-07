@@ -65,8 +65,16 @@ const shots = [
     name: 'code-pane',
     caption: "a recipe's own source, read out of the bundle",
     steps: ['Basic bar', 'Code'],
-    // The pane prints the asset key it read. Nothing else on screen does.
+    // The path bar, which says the pane is pointed at the right file.
     expect: ['lib/recipes/basic_action_bar.dart'],
+    // And the file itself, which the path bar does not imply. See `isBlank`.
+    // `ink` is where the first lines of this recipe fall; `paper` is empty
+    // space below its last one. Equal captures mean the body drew nothing.
+    notBlank: {
+      what: "the recipe's source",
+      ink: { x: 250, y: 165, width: 300, height: 90 },
+      paper: { x: 250, y: 800, width: 300, height: 90 },
+    },
   },
   {
     name: 'settings-panel',
@@ -207,6 +215,34 @@ async function press(send, label) {
   await evaluate(send, `${find}.click()`);
 }
 
+/// Whether the region that should be carrying content is empty.
+///
+/// Two clips of the same size: one where the content must fall, one from a part
+/// of the same pane that must stay empty. A flat colour encodes to the same PNG
+/// bytes wherever it is taken from, so identical captures mean nothing was
+/// drawn — and one glyph in the first is enough to break the equality. No image
+/// library, which matters for a tool whose own comment says that a dependency
+/// tree is what stops a tool being rerun.
+///
+/// **This is the only check here that reads the picture, and the Code pane is
+/// why.** Its content is painted to a canvas that never reaches the DOM or the
+/// semantics tree, so no string check can see it — and a `Semantics` label added
+/// to make one possible would be present whether or not the paint succeeded.
+/// The first version of this tool checked the path bar above the pane instead,
+/// which is drawn before the file arrives and stays drawn if it never does;
+/// `docs/images/code-pane.png` was empty from the commit that added the tool
+/// until the one that added this.
+async function isBlank(send, { ink, paper }) {
+  const grab = async (clip) =>
+    (
+      await send('Page.captureScreenshot', {
+        format: 'png',
+        clip: { ...clip, scale: 1 },
+      })
+    ).data;
+  return (await grab(ink)) === (await grab(paper));
+}
+
 /// What makes this tool able to be wrong out loud.
 ///
 /// Every claim is checked against the labels actually on screen at the moment
@@ -220,6 +256,7 @@ async function check(send, shot) {
   const unmet = async () => {
     const found = await labels(send);
     const has = (needle) => found.some((l) => l.includes(needle));
+    const blank = shot.notBlank ? await isBlank(send, shot.notBlank) : false;
     missing = [
       ...(shot.expect ?? [])
         .filter((n) => !has(n))
@@ -231,6 +268,7 @@ async function check(send, shot) {
         .map(([pattern, want]) => [pattern, want, found.filter((l) => pattern.test(l)).length])
         .filter(([, want, got]) => got !== want)
         .map(([pattern, want, got]) => `expected ${want} labels matching ${pattern}, found ${got}`),
+      ...(blank ? [`the region that should hold ${shot.notBlank.what} is blank`] : []),
     ];
     return missing.length === 0;
   };
