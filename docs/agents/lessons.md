@@ -60,3 +60,27 @@ commit that wrote it. Both of its rosters now read the tree instead.
 The same shape shows up wherever a second list of something is kept in step by hand:
 `ViewportSpec.values` stays the only roster of viewports there is, which is why the wall is selected
 by an id rather than by a fourth `ViewportSpec` that would have to invent a size and a chrome policy.
+
+## A subject may be named as evidence, never as vocabulary
+
+`lib/` may not name what it demonstrates — [ADR-0001](../adr/0001-the-gallery-names-no-subject.md)
+— and the counts and feature names went in 8b99cac. What survived that sweep was measurement
+prose, and the line through it was drawn by hand twice before anybody wrote it down.
+
+**Where the subject is the evidence, it is named.** A dated measurement cites what it measured on,
+and a citation made vaguer is a citation made worthless: `preview_frame.dart` records a probe that
+"dragged rows 0..2 and selected exactly rows 0..2", and the withdrawn `Transform` claim that four
+files cite has to stay legible as the claim it actually was. `metrics_panel.dart` goes further and
+names the table on purpose — that its three old thresholds "are a fact about one kind of table and
+about nothing else" *is* the argument for the seam, and the same sentence with the noun taken out
+argues nothing.
+
+**Where the subject has become the vocabulary, it goes.** That is prose in the shell's own voice
+reaching for the subject's noun as the default one: a consequence reading "the frame's rows really
+are ~11px" where it means the frame's content, or a live rule on `StageDestination.allowsWall`
+explained as being about "three tables". Those are not citations. They are the shell forgetting it
+does not know.
+
+The test is which way the sentence points. A measurement points outward, at something that
+happened, and the noun is part of what happened. A description points inward, at this package, and
+there the noun is a claim about what the package knows.

@@ -1,10 +1,10 @@
 /// A viewport the preview stage can pretend to be.
 ///
-/// The example runs on a desktop window, so every table it draws is a table
-/// with room. The one layout behaviour a reader most needs to see before
-/// adopting this package is what happens when there *isn't* room —
-/// a table of this kind does not reflow, it clips and scrolls horizontally —
-/// and that is the one thing a desktop-sized demo can never show.
+/// The example runs on a desktop window, so everything it draws is drawn with
+/// room. The one layout behaviour a reader most needs to see before adopting a
+/// package is what happens when there *isn't* room — whether the thing reflows,
+/// or clips and scrolls instead — and that is the one thing a desktop-sized
+/// demo can never show.
 library;
 
 import 'package:flutter/widgets.dart';

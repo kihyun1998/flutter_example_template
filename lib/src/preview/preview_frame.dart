@@ -152,8 +152,8 @@ class PreviewFrame extends StatelessWidget {
   /// The dimensions, and the factor when there is one.
   ///
   /// Said out loud because a shrunken preview is otherwise indistinguishable
-  /// from a small table: the reader has to know these are 1440 logical pixels
-  /// drawn at 0.7×, not 1000 pixels drawn honestly.
+  /// from something genuinely that size: the reader has to know these are 1440
+  /// logical pixels drawn at 0.7×, not 1000 pixels drawn honestly.
   String _label(double scale) {
     final size = '${spec.width.toInt()} × ${spec.height.toInt()}';
     if (scale == 1.0) return '$size · 1:1';

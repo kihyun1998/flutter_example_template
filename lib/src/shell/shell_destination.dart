@@ -74,7 +74,7 @@ class StageDestination extends ShellDestination {
   /// test against a particular id would be the shell learning what a scenario
   /// is.
   ///
-  /// True is right for anything that is one table: the wall draws three of them
+  /// True is right for anything that is one subject: the wall draws three of it
   /// over one state, so an interaction in the narrow frame paints its result in
   /// the other two. What it is wrong for is a destination whose point is a
   /// measurement — three copies of an expensive subject over one data set

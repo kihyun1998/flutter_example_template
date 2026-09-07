@@ -42,18 +42,18 @@ import 'viewport_spec.dart';
 /// the tablet and desktop frames at the same time: *how this renders at three
 /// widths*, at once, instead of held against a memory of the other mode.
 ///
-/// Two consequences worth knowing rather than discovering. The desktop frame's
-/// rows really are ~11px on screen and clicking one is imprecise — the
-/// single-viewport modes are where precision lives. And an `IgnorePointer` here
-/// would have been half a decision anyway: it vetoes hit testing only, while
-/// focus traversal and `Actions` bypass it entirely, so a row's ink well and the
-/// row checkbox stayed keyboard-activatable throughout. Measured: 20 of 40 Tab
-/// presses landed inside a wall table. Live in both routes is one rule; live in
-/// one and dead in the other was two.
+/// Two consequences worth knowing rather than discovering. At 0.28× the desktop
+/// frame really does draw that 40px target ~11px tall, and clicking one is
+/// imprecise — the single-viewport modes are where precision lives. And an
+/// `IgnorePointer` here would have been half a decision anyway: it vetoes hit
+/// testing only, while focus traversal and `Actions` bypass it entirely, so the
+/// subject's own ink wells and checkboxes stayed keyboard-activatable
+/// throughout. Measured: 20 of 40 Tab presses landed inside a scaled frame.
+/// Live in both routes is one rule; live in one and dead in the other was two.
 ///
-/// **Mutually exclusive with the very-large-row-count scenario, and that is now
-/// a property rather than a convention.** That scenario is a single-table
-/// performance claim; this draws three tables over the same data at once, so a
+/// **Mutually exclusive with any scenario making a performance claim, and that
+/// is now a property rather than a convention.** Such a scenario measures one
+/// subject under load; this draws three of it over the same data at once, so a
 /// frame rate measured here would be measuring the wall. The rule lives on
 /// `StageDestination.allowsWall` — the destination's call, not this
 /// widget's — and `ShellPage._select` leaves the wall when a

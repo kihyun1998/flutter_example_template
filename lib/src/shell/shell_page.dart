@@ -275,9 +275,9 @@ class _ShellPageState extends State<ShellPage> {
                 ViewportBar(
                   compact: true,
                   // The destination's call, not the page's — see
-                  // `StageDestination.allowsWall`. This was unconditional from
-                  // unconditional at first, and correct only while every destination
-                  // was a single table.
+                  // `StageDestination.allowsWall`. This was unconditional at
+                  // first, and correct only while every destination was a
+                  // single subject.
                   //
                   // **Hiding the segment is half of it.** The other half is in
                   // `_select`, which leaves the wall when a destination that
