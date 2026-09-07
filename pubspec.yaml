@@ -17,7 +17,8 @@ environment:
   # on 3.27.0 and on 3.41.9. 3.24.5 fails, with exactly one error:
   # `CardThemeData` in `example_theme.dart`, which Flutter added in 3.27.0
   # and which is now the only type `ThemeData.cardTheme` accepts. The top of
-  # the range is where it was built, 3.47.1.
+  # the range is held by CI rather than by memory: its `latest stable` legs
+  # resolve 3.47.2 and run the same suites on every push.
   #
   # So one line sets this floor, and it is named here so the next person can
   # weigh moving it. The code below would in fact run lower — swapping that

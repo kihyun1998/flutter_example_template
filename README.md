@@ -50,7 +50,8 @@ and the interaction that feature declares — with a citation behind it.
 These are captures of a build made by [`tool/screenshots.sh`](./tool/screenshots.sh), which drives
 the example in headless Chrome the way a reader drives it — pressing controls by their semantics
 label and checking what is on screen before it captures, so a moved menu row fails the run instead
-of producing a confidently wrong picture. Rerun it after anything that changes the
+of producing a confidently wrong picture. The Code pane's shot checks the picture itself, because
+its content is painted to a canvas that no label can see. Rerun it after anything that changes the
 UI: a screenshot of something that has since moved is a citation that no longer says anything.
 
 ## The claim it holds itself to
@@ -60,7 +61,7 @@ property that makes the shell reusable at all, and it is enforced rather than in
 
 Two test suites hold three things the compiler will not — all of which are legal Dart when violated:
 
-- nothing under `lib/` imports outside `dart:`, `package:flutter/` and one named dependency;
+- nothing under `lib/` imports outside `dart:`, `package:flutter/` and `flutter_syntax_highlight`;
 - nothing outside `lib/src/` reaches into it (the suite stands in as the package's first consumer);
 - the barrel and the tree name the same set of files, in both directions.
 
@@ -207,26 +208,29 @@ example/lib/main.dart    the one file that has to know this shell exists
 
 ## Why things are the way they are
 
-[`docs/adr/`](./docs/adr) records the decisions, including the ones most likely to be re-proposed:
-why there is no demo framework dependency, why the chrome font is a parameter rather than fetched or
-bundled while the palette is not, why the Code pane has no line numbers, why this package is
-depended on rather than copied, why the SDK floor is 3.27.0 rather than the 3.22 the code alone
-would reach, and why the import allow-list grew to three.
+[`docs/adr/`](./docs/adr) records the decisions. The ones most likely to be re-proposed:
+
+- there is no demo framework dependency;
+- the chrome font is a parameter, and the palette is not;
+- the Code pane has no line numbers;
+- this package is depended on rather than copied;
+- the SDK floor is 3.27.0 though the code alone would reach 3.22, and the import allow-list is
+  three entries rather than two.
 
 [`CONTEXT.md`](./CONTEXT.md) is the vocabulary. [`docs/agents/lessons.md`](./docs/agents/lessons.md)
 is the working rules — the mistakes this codebase made and would make again.
 
 ## Status
 
-`0.1.0`, and honest about it: one example, and one open question in the issue tracker — whether
-colour becomes a fourth port.
+`0.1.0`, and honest about it: one example, and one consumer — this repository's own. The questions
+the transplant left open are answered in `docs/adr/` rather than still being weighed.
 
 **Requires Flutter 3.27.** Measured, not inherited, and held rather than remembered: CI runs both
 suites at that floor and at the current stable, on Linux and on Windows, on every push. 3.24.5 fails
 on exactly one line — `pubspec.yaml` names that line, and says what going lower would cost.
 
-The comments are load-bearing. Measured 2026-09-06: 1,233 of 3,757 lines under `lib/` are
-comment lines, a third of the file. They record measurements with dates, and two explanations that were
+The comments are load-bearing. Measured 2026-09-07: 1,088 of 3,280 lines under `lib/` are comment
+lines, a third of the file. They record measurements with dates, and two explanations that were
 asserted, tested and **withdrawn** — cited in four files, because the retraction travels with
 everything that had leaned on the claim. If a comment looks redundant, assume it is the residue of
 something expensive before assuming it is noise.

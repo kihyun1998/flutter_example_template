@@ -26,8 +26,9 @@ portable, and rebuilt here around three ports.
   assigns a severity, since the thresholds belong to whoever knows what is being
   measured.
 * `exampleTheme` — chrome that carries no hue, so the only colour on screen is
-  the one your package is wearing. The font family is a parameter;
-  this package ships no typeface and names none.
+  the one your package is wearing. The font family is a parameter; this package
+  ships no typeface and names none. The palette is not a parameter, and
+  ADR-0013 says what that buys.
 
 **The three ports**
 
@@ -41,10 +42,10 @@ on. Writes across the seam are commands — `setSwitch(id, on)`, `applyPreset(id
 
 Nothing in `lib/` names what it demonstrates. Three rules hold what the
 compiler will not, all of them legal Dart when violated: nothing under `lib/`
-imports outside `dart:`, `package:flutter/` and one named dependency; nothing
-outside `lib/src/`
-reaches into it; and the barrel and the tree name the same files, both ways. A
-fourth lives in `example/` — a file the Code pane shows imports no shell.
+imports outside `dart:`, `package:flutter/` and `flutter_syntax_highlight`;
+nothing outside `lib/src/` reaches into it; and the barrel and the tree name the
+same files, both ways. A fourth lives in `example/` — a file the Code pane shows
+imports no shell.
 
 **Also in this release**
 
@@ -77,6 +78,5 @@ inherited from whatever built it: both suites — 23 tests here, 11 in the
 example — pass and analyse clean on 3.27.0 and on 3.41.9, and 3.24.5 fails
 with exactly one error, `CardThemeData` in `example_theme.dart`. `pubspec.yaml`
 names that line, and says why it is not swapped for the older spelling that
-would reach lower still. The upper end is unchanged: 3.47.1 is where
-this was built, and `feature_list_pane.dart` records the assertion that
-version tightened.
+would reach lower still. The upper end is held by CI rather than by memory: the
+`latest stable` legs resolve 3.47.2 and run the same suites on every push.
