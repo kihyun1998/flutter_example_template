@@ -33,7 +33,6 @@ export 'src/settings/setting_spec.dart';
 export 'src/settings/settings_host.dart';
 export 'src/settings/settings_controls.dart';
 export 'src/shell/code_pane.dart';
-export 'src/shell/dart_highlighter.dart';
 export 'src/shell/shell_destination.dart';
 export 'src/shell/shell_destinations.dart';
 export 'src/shell/shell_menu.dart';

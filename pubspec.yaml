@@ -32,6 +32,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # The third entry on a list that was always described as growing one
+  # dependency at a time, on purpose — `portable_seam_test.dart` holds the
+  # rule, ADR-0012 records what taking this cost and what the copy had been
+  # costing instead. It declares the same floor as this package, so it moves
+  # nothing above.
+  flutter_syntax_highlight: ^0.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

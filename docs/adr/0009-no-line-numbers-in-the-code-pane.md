@@ -11,5 +11,7 @@ look more like a source viewer is the feature that breaks the one thing it is fo
 ## Consequences
 
 The same standard applies to anything else that stands between the bundle's bytes and the clipboard.
-The highlighter is held to it structurally: `tokenizeDart` returns a partition, so concatenating
-every token reproduces the input byte for byte.
+The highlighter is held to it structurally: `flutter_syntax_highlight`'s `tokenizeDart` returns a
+partition, so concatenating every token reproduces the input byte for byte. It is a dependency
+rather than a copy since [ADR-0012](0012-the-tokenizer-is-a-dependency.md); the property it is
+being held to did not change.

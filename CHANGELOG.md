@@ -16,9 +16,9 @@ portable, and rebuilt here around three ports.
   single-viewport modes answer what something looks like at a width; the wall
   answers what changed between them.
 * `CodePane` — a recipe's own source, read out of the asset bundle so what is on
-  screen and what executes cannot disagree. `tokenizeDart` highlights it and
-  returns a partition, so concatenating every token reproduces the file byte for
-  byte.
+  screen and what executes cannot disagree. `flutter_syntax_highlight` tokenizes
+  it into a partition, so concatenating every token reproduces the file byte for
+  byte, and this package decides only what a kind looks like.
 * `PresetBar`, `FeatureListPane`, `FeatureDetailPane` — a settings panel drawn
   from a description of groups, features, options and the interactions between
   them, with search over control labels.
@@ -41,17 +41,23 @@ on. Writes across the seam are commands — `setSwitch(id, on)`, `applyPreset(id
 
 Nothing in `lib/` names what it demonstrates. Three rules hold what the
 compiler will not, all of them legal Dart when violated: nothing under `lib/`
-imports outside `dart:` and `package:flutter/`; nothing outside `lib/src/`
+imports outside `dart:`, `package:flutter/` and one named dependency; nothing
+outside `lib/src/`
 reaches into it; and the barrel and the tree name the same files, both ways. A
 fourth lives in `example/` — a file the Code pane shows imports no shell.
 
 **Also in this release**
 
 * `example/` demonstrates an adaptive action bar, deliberately not a table.
-* `docs/adr/` records eleven decisions, including the ones most likely to be
+* `docs/adr/` records twelve decisions, including the ones most likely to be
   re-proposed: no demo framework, the font as a parameter, no line numbers in the
-  Code pane, why this package is depended on rather than copied, and why the SDK
-  floor is 3.27.0 and not the 3.22 the code alone would reach.
+  Code pane, why this package is depended on rather than copied, why the SDK
+  floor is 3.27.0 and not the 3.22 the code alone would reach, and why the import
+  allow-list grew to three.
+* The Dart tokenizer is `flutter_syntax_highlight` rather than 485 lines under
+  `src/`. Measured before it was decided: the two disagree on 1,821 characters of
+  38,492, every one of them the package being finer — string interpolation most
+  of all, which the copy painted as one flat literal.
 * `.github/workflows/ci.yml` runs both suites on four legs — the declared floor
   and the current stable, on Linux and on Windows. The platform axis is there
   because a property in `portable_seam_test.dart` had been red on Windows since

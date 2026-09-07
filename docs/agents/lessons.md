@@ -1,8 +1,8 @@
 # Lessons
 
 Working rules, not decisions — the decisions are in [`docs/adr/`](../adr/). Each of these was got
-wrong, measured, and is cheap to get wrong again. `lib/src/shell/dart_highlighter.dart` cites this
-file.
+wrong, measured, and is cheap to get wrong again. `tool/screenshots.sh` and `tool/shots.mjs` cite
+this file.
 
 ## Classify by transitive dependency, never by direct import
 
@@ -44,7 +44,9 @@ Three things that discipline found:
 - In the highlighter, an explanation was asserted, tested and **withdrawn**: the claim was that
   branch *order* kept a comment from opening a string, and reversing the branches changed nothing.
   The mutation had to cripple `_lineCommentEnd` before the guarding test would redden. What protects
-  the property is that a comment is consumed whole, not the order it is checked in.
+  the property is that a comment is consumed whole, not the order it is checked in. That code is
+  `flutter_syntax_highlight` now (ADR-0012); the lesson stayed because it is about tests rather
+  than about tokenizing.
 - The seam test's own first red was a **false** one. A resolver bug made every same-directory import
   read as leaving the package, so the test was red for a reason unrelated to the property it
   asserts.

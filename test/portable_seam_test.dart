@@ -41,11 +41,19 @@ const _zoneInternals = 'src/';
 /// Import prefixes that leave this package and are therefore always fine.
 ///
 /// Flutter is the floor this is written against; `dart:` is the language.
-/// **Everything else is what this test exists to catch** — most of all a
-/// the subject, which is the one dependency that would make this gallery about
-/// one. The list is two entries and grows only with a
-/// dependency the gallery genuinely needs, one at a time, on purpose.
-const _allowedExternal = ['dart:', 'package:flutter/'];
+/// **Everything else is what this test exists to catch** — most of all the
+/// subject, which is the one dependency that would make this gallery about one.
+///
+/// The third entry is the list growing the way it was always described as
+/// growing: one dependency, genuinely needed, on purpose.
+/// `flutter_syntax_highlight` is the tokenizer that used to sit under `src/` as
+/// a copy, and ADR-0012 records what taking it cost against what the copy was
+/// costing instead.
+const _allowedExternal = [
+  'dart:',
+  'package:flutter/',
+  'package:flutter_syntax_highlight/',
+];
 
 List<File> _dartFilesUnder(String dir) =>
     Directory('lib/$dir')

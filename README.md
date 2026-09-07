@@ -60,7 +60,7 @@ property that makes the shell reusable at all, and it is enforced rather than in
 
 Two test suites hold three things the compiler will not — all of which are legal Dart when violated:
 
-- nothing under `lib/` imports anything outside `dart:` and `package:flutter/`;
+- nothing under `lib/` imports outside `dart:`, `package:flutter/` and one named dependency;
 - nothing outside `lib/src/` reaches into it (the suite stands in as the package's first consumer);
 - the barrel and the tree name the same set of files, in both directions.
 
@@ -185,9 +185,11 @@ however your knob region wants.
 
 ## The pieces, used on their own
 
-`PreviewStage`, `PreviewFrame`, `DeviceWall`, `ViewportSpec`, `CodePane`, `MetricsPanel` and
-`tokenizeDart` are all exported and none of them requires the shell. The tokenizer imports nothing
-at all — not Flutter, not `dart:` — so it is a pure function you can test without pumping a widget.
+`PreviewStage`, `PreviewFrame`, `DeviceWall`, `ViewportSpec`, `CodePane` and `MetricsPanel` are all
+exported and none of them requires the shell. The highlighting under `CodePane` is
+[`flutter_syntax_highlight`](https://pub.dev/packages/flutter_syntax_highlight) — a dependency
+rather than a copy, see ADR-0012 — whose tokenizer is a pure function you can test without pumping
+a widget. What a token *looks* like stays here.
 
 ## The example
 
@@ -208,16 +210,16 @@ example/lib/main.dart    the one file that has to know this shell exists
 [`docs/adr/`](./docs/adr) records the decisions, including the ones most likely to be re-proposed:
 why there is no demo framework dependency, why the chrome font is a parameter rather than fetched or
 bundled, why the Code pane has no line numbers, why this package is depended on rather than copied,
-and why the SDK floor is 3.27.0 rather than the 3.22 the code alone would reach.
+why the SDK floor is 3.27.0 rather than the 3.22 the code alone would reach, and why the import
+allow-list grew to three.
 
 [`CONTEXT.md`](./CONTEXT.md) is the vocabulary. [`docs/agents/lessons.md`](./docs/agents/lessons.md)
 is the working rules — the mistakes this codebase made and would make again.
 
 ## Status
 
-`0.1.0`, and honest about it: one example, and two open questions in the issue tracker — whether
-colour becomes a fourth port, and what happens to the bundled Dart tokenizer when it is extracted
-into a package of its own.
+`0.1.0`, and honest about it: one example, and one open question in the issue tracker — whether
+colour becomes a fourth port.
 
 **Requires Flutter 3.27.** Measured, not inherited, and held rather than remembered: CI runs both
 suites at that floor and at the current stable, on Linux and on Windows, on every push. 3.24.5 fails

@@ -3,10 +3,9 @@ library;
 
 import 'dart:async';
 
-import 'dart_highlighter.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_syntax_highlight/flutter_syntax_highlight.dart';
 
 /// Renders the bytes of [assetPath], not a copy of them.
 ///
@@ -426,6 +425,16 @@ class _CodeState extends State<_Code> {
       DartTokenKind.string ||
       DartTokenKind.number => TextStyle(color: scheme.onSurfaceVariant),
       DartTokenKind.punctuation => TextStyle(color: scheme.outline),
+
+      // Two kinds this chrome declines, on the grounds above rather than by
+      // oversight. `escape` is the one thing inside a string that is not
+      // literal text and `function` is an identifier before a bracket — both
+      // worth separating where there is hue to spend on them. There is none
+      // here, and the single axis that is left is already carrying keywords.
+      // So each reads as whatever encloses it. The tokenizer offering more
+      // kinds than the chrome spends is the seam working, not a gap in it.
+      DartTokenKind.escape => TextStyle(color: scheme.onSurfaceVariant),
+      DartTokenKind.function => null,
     };
   }
 
