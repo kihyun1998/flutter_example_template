@@ -49,11 +49,11 @@ fourth lives in `example/` — a file the Code pane shows imports no shell.
 **Also in this release**
 
 * `example/` demonstrates an adaptive action bar, deliberately not a table.
-* `docs/adr/` records twelve decisions, including the ones most likely to be
-  re-proposed: no demo framework, the font as a parameter, no line numbers in the
-  Code pane, why this package is depended on rather than copied, why the SDK
-  floor is 3.27.0 and not the 3.22 the code alone would reach, and why the import
-  allow-list grew to three.
+* `docs/adr/` records thirteen decisions, including the ones most likely to be
+  re-proposed: no demo framework, the font as a parameter but not the palette,
+  no line numbers in the Code pane, why this package is depended on rather than
+  copied, why the SDK floor is 3.27.0 and not the 3.22 the code alone would
+  reach, and why the import allow-list grew to three.
 * The Dart tokenizer is `flutter_syntax_highlight` rather than 485 lines under
   `src/`. Measured before it was decided: the two disagree on 1,821 characters of
   38,492, every one of them the package being finer — string interpolation most
