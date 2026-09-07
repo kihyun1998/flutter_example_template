@@ -56,6 +56,11 @@ fourth lives in `example/` — a file the Code pane shows imports no shell.
   and the current stable, on Linux and on Windows. The platform axis is there
   because a property in `portable_seam_test.dart` had been red on Windows since
   the day it was written, and nothing was looking.
+* `.github/workflows/screenshots.yml` runs `tool/screenshots.sh` when `lib/`,
+  `example/` or `tool/` moves, and weekly besides. It gates on the script's own
+  exit code — a shot it could not reach — and uploads what it captured rather
+  than committing it, because a bot that commits screenshots is a bot that can
+  quietly replace the front page.
 * `tool/screenshots.sh` regenerates the README images by driving the example in
   headless Chrome, pressing controls by their semantics label and checking the
   state it reached before capturing.

@@ -1,0 +1,69 @@
+# Regenerates the README images, and fails when it cannot reach a shot.
+#
+# Separate from `ci.yml` because it is a different question at a different cost.
+# That one asks whether the code is right — four legs, every push. This one asks
+# whether the pictures on the pub.dev front page still describe a UI that
+# exists, and it needs Chrome and a web build to ask, so it runs only when
+# something that could move them has moved.
+#
+# **It gates on the exit code, not on a pixel diff.** `shots.mjs` presses
+# controls by their semantics label and checks what is on screen before it
+# captures, so a shot it cannot reach is already a non-zero exit — that failure
+# mode was built into the tool on purpose (#5). Comparing PNGs would add the
+# rendering differences between this runner and whichever machine last committed
+# the images, which is noise wearing the costume of staleness.
+#
+# **The images are uploaded, not committed.** A run that produces different
+# pictures is a thing for somebody to look at; a bot that commits screenshots is
+# a bot that can quietly replace the front page.
+
+name: Screenshots
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lib/**"
+      - "example/**"
+      - "tool/**"
+      - ".github/workflows/screenshots.yml"
+  schedule:
+    # Mondays, 03:00 UTC. Catches drift that arrives through a Flutter release
+    # rather than through a commit here — which is the kind nothing else here
+    # would notice.
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+jobs:
+  capture:
+    name: capture the README images
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter --version
+
+      # The script defaults `CHROME` to a macOS path, and that default is the
+      # whole of its platform dependence — it ran unmodified on Windows with
+      # this one variable set. Google Chrome ships on this runner image, so the
+      # path is asked for rather than written down.
+      - name: Capture
+        run: |
+          export CHROME="$(command -v google-chrome)"
+          bash tool/screenshots.sh
+
+      - name: What moved
+        if: always()
+        run: git status --short docs/images/ || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: docs/images/*.png
