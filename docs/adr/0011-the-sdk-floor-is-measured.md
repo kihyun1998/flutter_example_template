@@ -1,8 +1,13 @@
 # The SDK floor is measured, and one line sets it
 
 `environment` names `sdk: ^3.6.0` and `flutter: ">=3.27.0"`. Both ends were run before either was
-written: the package and the example resolve, analyse clean and pass — 23 tests and 11 — on 3.27.0
-and on 3.41.9, and 3.24.5 fails with exactly one error.
+written: the package and the example resolve, analyse clean and pass — 23 tests and 11, as the
+suites stood on 2026-09-06 — on 3.27.0 and on 3.41.9, and 3.24.5 fails with exactly one error.
+
+Those two numbers are dated on purpose. They are evidence that real suites were run rather than
+nothing, which is a fact about the measurement and stays true; they are not a description of the
+suites today, and reading them as one is how a record turns into a wrong answer. The manifest used
+to carry the same pair as a live claim and has stopped.
 
 The numbers this replaced were `^3.13.1`, which `flutter create` left in the initial commit, and
 `">=3.47.0"`, raised at release prep to whatever the package happened to be built on. Neither had

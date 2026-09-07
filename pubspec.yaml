@@ -13,8 +13,14 @@ topics:
 
 environment:
   # Measured at both ends rather than inherited from whatever built it.
-  # Both suites — 23 tests here, 11 in the example — pass and analyse clean
-  # on 3.27.0 and on 3.41.9. 3.24.5 fails, with exactly one error:
+  # Both suites pass and analyse clean on 3.27.0 and on 3.41.9.
+  #
+  # **No count, deliberately.** This comment named one — "23 tests here, 11 in
+  # the example" — and it went stale the first time a test was added, which was
+  # three tests in one commit. A number here has nowhere to be checked, and the
+  # claim that matters is not how many there are but that both suites pass at
+  # the floor. CI holds that on every push; a number in a manifest holds
+  # nothing. 3.24.5 fails, with exactly one error:
   # `CardThemeData` in `example_theme.dart`, which Flutter added in 3.27.0
   # and which is now the only type `ThemeData.cardTheme` accepts. The top of
   # the range is held by CI rather than by memory: its `latest stable` legs
