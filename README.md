@@ -1,5 +1,7 @@
 # flutter_example_template
 
+[![CI](https://github.com/kihyun1998/flutter_example_template/actions/workflows/ci.yml/badge.svg)](https://github.com/kihyun1998/flutter_example_template/actions/workflows/ci.yml)
+
 An example-app shell for Flutter packages.
 
 Writing a good example for a package is most of a small app: a menu, somewhere to put the widget,
@@ -62,7 +64,7 @@ Two test suites hold three things the compiler will not — all of which are leg
 - nothing outside `lib/src/` reaches into it (the suite stands in as the package's first consumer);
 - the barrel and the tree name the same set of files, in both directions.
 
-A third rule lives in the example, where there are real recipes for it to walk: **a file the Code
+A fourth rule lives in the example, where there are real recipes for it to walk: **a file the Code
 pane shows imports no shell.** That is what keeps "pasteable" true.
 
 ## Installing
@@ -217,9 +219,9 @@ is the working rules — the mistakes this codebase made and would make again.
 colour becomes a fourth port, and what happens to the bundled Dart tokenizer when it is extracted
 into a package of its own.
 
-**Requires Flutter 3.27.** Measured, not inherited: both suites pass and analyse clean on 3.27.0 and
-on 3.41.9, and 3.24.5 fails on exactly one line — `pubspec.yaml` names that line, and says what
-going lower would cost.
+**Requires Flutter 3.27.** Measured, not inherited, and held rather than remembered: CI runs both
+suites at that floor and at the current stable, on Linux and on Windows, on every push. 3.24.5 fails
+on exactly one line — `pubspec.yaml` names that line, and says what going lower would cost.
 
 The comments are load-bearing. Measured 2026-09-06: 1,233 of 3,757 lines under `lib/` are
 comment lines, a third of the file. They record measurements with dates, and two explanations that were
