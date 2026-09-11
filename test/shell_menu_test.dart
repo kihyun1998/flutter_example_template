@@ -2,29 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_example_template/flutter_example_template.dart';
 
-// `shell_menu.dart` keeps a branch no roster in this repository reaches: a
-// category with nothing in it. Its own doc-comment says the branch is kept
-// because "the next category added is added empty, which is exactly when it is
-// needed and exactly when nobody would think to write it", and that it is held
-// by a test pumping the widget directly rather than through the shell.
+// #11 chose "hide an empty category outright", so the first two tests here are
+// the inverse of what they asserted before: they used to pin a header and a
+// *nothing here yet* over every category the roster left empty. They are kept
+// as the same two cases rather than deleted because the behaviour they cover
+// is the same behaviour, answered the other way — a reader comparing them
+// against the issue should find both halves.
 //
-// These pin what the widget does today, which is not the same as endorsing it:
-// whether an empty category should be visible at all is open in #11, and
-// "hide an empty category outright" is one of the options there. If that is
-// what gets chosen, the first two tests change with it. What they are for
-// meanwhile is that the behaviour stopped being unguarded.
+// The empty-roster line is the one thing that survived from the old empty
+// state, and it is somewhere else on purpose: an empty category is a
+// capability nobody claimed and draws nothing (ADR-0005), while an empty
+// roster is the whole page. The third test is what keeps those two from
+// collapsing back into each other.
 //
-// This is that test. Pumping through `ShellPage` cannot ask these questions:
-// the shell hands the menu whatever the roster holds, so the empty branch and a
-// null selection are reachable from here and from nowhere else.
+// Pumping through `ShellPage` cannot ask these questions: the shell hands the
+// menu whatever the roster holds, so a partly-filled roster and a null
+// selection are reachable from here and from nowhere else.
 
 // Mutated and watched failing, and one of these was worth the pass: swapping
 // the highlight predicate for "the first entry in the category" left *the open
 // one is the only entry highlighted* green, because it counted the highlights
 // without asking which row wore one. The same root showed up again at the
-// open-in-new icon. Both now name the row. Dropping the header text and
-// dropping the empty-category line were mutated separately, so each half of
-// the first test is known to fail on its own.
+// open-in-new icon. Both now name the row.
+//
+// The three mutations run for #11, each reddening only what it should. Putting
+// the header back outside the empty check took the first two tests; dropping
+// the empty-roster line took the third. The third mutation is the one that
+// shaped these: drawing that line beside the sections rather than instead of
+// them reddens the first two and *not* the third, because a line that is
+// always there is still there when the roster is empty. What catches it is the
+// `findsNothing` below and the text count beside it — an assertion about where
+// the line is absent, which is the half a test of the empty case cannot make.
+//
+// A first attempt at that mutation replaced the whole condition with `true`,
+// which dropped every entry as well and reddened nine tests. A mutation that
+// breaks more than the rule under test says nothing about the rule.
 
 StageDestination _stage(String id, ShellCategory category) => StageDestination(
   id: id,
@@ -68,41 +80,74 @@ Iterable<Color?> _entryColours(WidgetTester t) => t
 /// The background painted behind one entry, found by its label.
 Color? _colourOf(WidgetTester t, String label) => t
     .widget<Material>(
-      find.ancestor(of: find.text(label), matching: find.byType(Material)).first,
+      find
+          .ancestor(of: find.text(label), matching: find.byType(Material))
+          .first,
     )
     .color;
 
 void main() {
-  testWidgets('a category with nothing in it is still drawn, and says so', (
-    t,
-  ) async {
+  testWidgets('a category with nothing in it is not drawn at all', (t) async {
     await t.pumpWidget(_menu([_stage('basic', ShellCategory.recipes)]));
 
-    for (final category in ShellCategory.values) {
+    expect(
+      find.text(ShellCategory.recipes.title.toUpperCase()),
+      findsOneWidget,
+      reason: 'the one the roster filled',
+    );
+    for (final category in ShellCategory.values.where(
+      (c) => c != ShellCategory.recipes,
+    )) {
       expect(
         find.text(category.title.toUpperCase()),
-        findsOneWidget,
-        reason: category.title,
+        findsNothing,
+        reason: '${category.title} has no header, not an empty one',
       );
     }
-    expect(
-      find.text('nothing here yet'),
-      findsNWidgets(ShellCategory.values.length - 1),
-      reason: 'one for every category the roster left empty',
-    );
+    // The empty-roster line belongs to a roster, not to a category, and this
+    // roster is not empty. Without this a line drawn unconditionally would sit
+    // under the one filled category and no test here would mind.
+    expect(find.text('No destinations yet.'), findsNothing);
   });
 
-  testWidgets('a roster of routes alone leaves every content category empty', (
+  testWidgets('a roster of routes alone draws its category and no other', (
     t,
   ) async {
     await t.pumpWidget(_menu([_route('about', ShellCategory.pages)]));
 
-    expect(
-      find.text('nothing here yet'),
-      findsNWidgets(ShellCategory.values.length - 1),
-      reason: 'every category but the one this roster fills',
-    );
     expect(find.text('about'), findsOneWidget);
+    expect(
+      find.text(ShellCategory.pages.title.toUpperCase()),
+      findsOneWidget,
+      reason: 'the route is listed under its own category',
+    );
+    expect(
+      find.byType(Text),
+      findsNWidgets(2),
+      reason:
+          'a header and an entry — the two content categories contribute '
+          'no text at all, which counting is the only way to say without '
+          'naming every category that is absent',
+    );
+  });
+
+  testWidgets('a roster with nothing in it says so once, for the roster', (
+    t,
+  ) async {
+    await t.pumpWidget(_menu([]));
+
+    expect(
+      find.text('No destinations yet.'),
+      findsOneWidget,
+      reason: 'once for the menu, not once per category',
+    );
+    for (final category in ShellCategory.values) {
+      expect(
+        find.text(category.title.toUpperCase()),
+        findsNothing,
+        reason: category.title,
+      );
+    }
   });
 
   testWidgets('no selection highlights nothing', (t) async {

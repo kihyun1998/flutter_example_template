@@ -1,5 +1,19 @@
 ## Unreleased
 
+**Changed**
+
+* `ShellMenu` no longer draws a header, or a *nothing here yet* line, for a
+  category the roster left empty. A category cannot be claimed — `ShellCategory`
+  is a fixed enum and the roster is the only input — so an empty one is a
+  capability nothing supplied, and ADR-0005 already said those draw nothing. A
+  menu now grows a section when the first destination of that kind arrives,
+  which is the cost. Reported against 0.1.0 by a consumer with eleven recipes
+  and no scenarios, whose menu got emptier-looking as its example got better.
+  (#11)
+* A roster holding nothing at all says so once, in the menu, rather than three
+  times by category. With the fix below that state is the whole screen, and it
+  is the one a reader cannot tell from a build that failed.
+
 **Fixed**
 
 * `ShellPage` no longer throws `Bad state: No element` when the roster it is

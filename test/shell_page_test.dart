@@ -96,12 +96,12 @@ void main() {
       await t.pumpWidget(_shell([]));
 
       expect(find.byType(ShellMenu), findsOneWidget);
-      expect(
-        find.text('nothing here yet'),
-        findsNWidgets(ShellCategory.values.length),
-        reason: 'every category is empty, and the roster of them is not typed '
-            'out here',
-      );
+      // What the menu says here is `shell_menu_test.dart`'s question. What
+      // this one asks is that the shell still draws it: with #11's fix the
+      // empty categories are gone, so this page's entire content is the one
+      // line below, and silence would be a blank screen indistinguishable
+      // from a failed build.
+      expect(find.text('No destinations yet.'), findsOneWidget);
     });
 
     testWidgets('a route still opens on its own route', (t) async {

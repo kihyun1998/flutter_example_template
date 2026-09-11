@@ -83,7 +83,8 @@ A destination the shell draws itself, in its stage and its knob region.
 A destination that opens on its own route. The shell hands over rather than absorbing it.
 
 **Category**:
-One of the three groups the menu shows. Two name content and the third names a hosting kind.
+One of the three groups a menu can show. Two name content and the third names a hosting kind. A
+category no destination claims is not drawn — it is not a slot standing open (ADR-0005).
 _Avoid_: Section, group (a Group is a settings-panel term)
 
 **Recipe**:
