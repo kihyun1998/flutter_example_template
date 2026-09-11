@@ -13,11 +13,14 @@ import 'shell_destinations.dart';
 import 'shell_menu.dart';
 import 'code_pane.dart';
 
-/// Three regions: a category menu, a preview stage, and a knob region.
+/// A category menu, and — while a destination is open in it — a preview stage
+/// and a knob region.
 ///
-/// The menu points at destinations; a destination fills the other two. That
-/// division is what makes the shell reusable — nothing here knows what a recipe
-/// or a scenario is, only that a destination supplies a stage and some knobs.
+/// The menu points at destinations; a destination fills the other two, which is
+/// why a roster supplying none leaves the menu alone on the page (ADR-0005).
+/// That division is what makes the shell reusable — nothing here knows what a
+/// recipe or a scenario is, only that a destination supplies a stage and some
+/// knobs.
 ///
 /// **A full page is pointed at, not absorbed.** Something with its own app bar
 /// and its own panes would have to be taken apart to sit inside the stage, so
@@ -74,10 +77,18 @@ class _ShellPageState extends State<ShellPage> {
 
   List<ShellDestination> get _destinations => _destinationSet.all;
 
-  late String _selectedId = _destinations
+  /// The open destination's id, or null when the roster holds none to open.
+  ///
+  /// **Nullable because a roster of [RouteDestination]s alone is a legal
+  /// roster.** That is what `RouteDestination` already promises — the shell
+  /// hands over, and nothing about the page it opens changes to accommodate
+  /// being listed. This read `.whereType<StageDestination>().first.id` and
+  /// threw `Bad state: No element` on the first build of any such roster, which
+  /// is the shell requiring a shape nothing had written down.
+  late String? _selectedId = _destinations
       .whereType<StageDestination>()
-      .first
-      .id;
+      .firstOrNull
+      ?.id;
 
   /// A [ViewportSpec.id], or [ViewportBar.wallId] for the Device Wall.
   String _viewportId = ViewportSpec.desktop.id;
@@ -113,9 +124,11 @@ class _ShellPageState extends State<ShellPage> {
     super.dispose();
   }
 
-  StageDestination get _open => _destinations
+  /// The open destination, or null when the roster supplies none.
+  StageDestination? get _open => _destinations
       .whereType<StageDestination>()
-      .firstWhere((d) => d.id == _selectedId);
+      .where((d) => d.id == _selectedId)
+      .firstOrNull;
 
   void _select(ShellDestination destination) {
     switch (destination) {
@@ -147,14 +160,40 @@ class _ShellPageState extends State<ShellPage> {
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
+          final open = _open;
+          if (open == null) return _menuOnly();
           final narrow = constraints.maxWidth < ShellPage.narrowBreakpoint;
-          return narrow ? _narrow(context) : _wide(context);
+          return narrow ? _narrow(context, open) : _wide(context, open);
         },
       ),
     );
   }
 
-  Widget _wide(BuildContext context) {
+  /// The menu alone, when the roster supplies no [StageDestination].
+  ///
+  /// **No stage, no knob region and no tab bar — not empty ones.** An unclaimed
+  /// capability draws nothing at all (ADR-0005), and a stage beside a knob
+  /// region with nothing in either is chrome announcing two regions the roster
+  /// never filled. What is there is already said once, per category, by the
+  /// menu.
+  Widget _menuOnly() => ShellMenu(
+    // The field, not a literal `null`. It is usually null here and it is not
+    // only null here: this branch fires whenever `_open` is, which also covers
+    // a selected id matching nothing left in the roster — and the menu is the
+    // one thing that can say so, by highlighting nothing.
+    //
+    // Passing the literal would also make the nullable initialiser stop being
+    // load-bearing, since nothing on this path would read the field and
+    // `Iterable.where` is lazy enough that `_open` does not force it either.
+    // Measured: with the literal here, mutating that initialiser back to
+    // `.first` left the whole suite green.
+    selectedId: _selectedId,
+    destinations: _destinations,
+    onSelected: _select,
+    width: double.infinity,
+  );
+
+  Widget _wide(BuildContext context, StageDestination open) {
     return Row(
       children: [
         ShellMenu(
@@ -162,7 +201,7 @@ class _ShellPageState extends State<ShellPage> {
           selectedId: _selectedId,
           onSelected: _select,
         ),
-        Expanded(child: _stageRegion(context)),
+        Expanded(child: _stageRegion(context, open)),
         Container(
           width: ShellPage.knobRegionWidth,
           decoration: BoxDecoration(
@@ -170,7 +209,7 @@ class _ShellPageState extends State<ShellPage> {
               left: BorderSide(color: Theme.of(context).dividerColor),
             ),
           ),
-          child: _open.knobs(context),
+          child: open.knobs(context),
         ),
       ],
     );
@@ -181,7 +220,7 @@ class _ShellPageState extends State<ShellPage> {
   /// Not a narrower version of the wide layout: three columns squeezed into a
   /// phone gives three unusable columns. The regions are the same widgets, shown
   /// one at a time.
-  Widget _narrow(BuildContext context) {
+  Widget _narrow(BuildContext context, StageDestination open) {
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -202,8 +241,8 @@ class _ShellPageState extends State<ShellPage> {
                   onSelected: _select,
                   width: double.infinity,
                 ),
-                _stageRegion(context),
-                _open.knobs(context),
+                _stageRegion(context, open),
+                open.knobs(context),
               ],
             ),
           ),
@@ -212,9 +251,9 @@ class _ShellPageState extends State<ShellPage> {
     );
   }
 
-  Widget _stageRegion(BuildContext context) {
+  Widget _stageRegion(BuildContext context, StageDestination open) {
     final scheme = Theme.of(context).colorScheme;
-    final source = _open.source;
+    final source = open.source;
     final showingCode = _showCode && source != null;
 
     return Column(
@@ -291,7 +330,7 @@ class _ShellPageState extends State<ShellPage> {
                   // content lazily costs three times what is on screen rather
                   // than three times the data — measured, and judged not worth
                   // binding the knob pane to the shell's viewport state.
-                  showsWall: _open.allowsWall,
+                  showsWall: open.allowsWall,
                   selectedId: _viewportId,
                   onChanged: (id) => setState(() {
                     _viewportId = id;
@@ -312,16 +351,16 @@ class _ShellPageState extends State<ShellPage> {
               : ColoredBox(
                   color: scheme.surfaceContainerHighest,
                   child: _showingWall
-                      // The builder, not `_open.stage(context)`. Three frames
+                      // The builder, not `open.stage(context)`. Three frames
                       // over one built widget would hand the same subtree to
                       // three places in the tree; the wall wants three
                       // layouts over one set of knobs, which is the destination
                       // built three times.
-                      ? DeviceWall(stage: _open.stage)
+                      ? DeviceWall(stage: open.stage)
                       : PreviewFrame(
                           spec: ViewportSpec.byId(_viewportId),
                           fit: _fit,
-                          child: _open.stage(context),
+                          child: open.stage(context),
                         ),
                 ),
         ),

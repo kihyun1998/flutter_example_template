@@ -130,6 +130,11 @@ class MyDestinations implements ShellDestinations {
 }
 ```
 
+Any mix of the two kinds is a roster, including none of one. A gallery that lists only
+`RouteDestination`s claims no stage and no knob region, and the shell draws the menu alone rather
+than drawing those two empty — so you can adopt the shell before you have written your first
+recipe, which is when a gallery is most useful to somebody still deciding.
+
 `source` is optional and null is the ordinary answer. Pass it only where the destination *is* one
 self-contained file — offering a Code pane over something assembled from several would have to pick
 one of them and call it the source.
