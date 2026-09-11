@@ -135,6 +135,10 @@ Any mix of the two kinds is a roster, including none of one. A gallery that list
 than drawing those two empty — so you can adopt the shell before you have written your first
 recipe, which is when a gallery is most useful to somebody still deciding.
 
+The menu follows the same rule: a category no destination names is not drawn, so a gallery of
+recipes alone shows one heading rather than one and two apologies. Your menu grows a section when
+the first scenario or page arrives. A roster with nothing in it yet says so, once.
+
 `source` is optional and null is the ordinary answer. Pass it only where the destination *is* one
 self-contained file — offering a Code pane over something assembled from several would have to pick
 one of them and call it the source.
