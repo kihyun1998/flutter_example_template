@@ -1,3 +1,15 @@
+## Unreleased
+
+**Fixed**
+
+* `ShellPage` no longer throws `Bad state: No element` when the roster it is
+  handed holds no `StageDestination`. A roster of `RouteDestination`s alone is
+  a legal one — that is what `RouteDestination` already promised — and the
+  shell now draws the menu alone for one, with no stage, no knob region and no
+  tab bar over them. ADR-0005 records why those are absent rather than empty.
+  Reported against 0.1.0 by a consumer adopting the shell before its first
+  recipe existed, which is the one shape that could not start. (#10)
+
 ## 0.1.0
 
 First release. The shell was built inside the example app of a Flutter table

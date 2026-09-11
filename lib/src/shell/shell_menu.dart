@@ -12,13 +12,17 @@ import 'shell_destination.dart';
 /// what this example intends to hold, and hiding one until it fills would make
 /// the menu appear to grow new sections out of nowhere.
 ///
-/// **Every category has entries today**, so the branch below is no longer
-/// reachable from `ShellPage`. This comment used to name `Scenarios` as the
-/// live example of an empty one — which is now its counter-example, the
-/// shape where a rationale goes false and no test notices. The branch is kept,
-/// because the next category added is added empty, which is exactly when it is
-/// needed and exactly when nobody would think to write it; it is pinned by a
-/// test that pumps this widget directly rather than through the shell.
+/// **The branch below is reachable from `ShellPage` again.** A roster holding
+/// no `StageDestination` leaves both content categories empty, and the shell
+/// draws this menu alone for one (ADR-0005) — so the empty state is somewhere a
+/// reader lands rather than somewhere the next category will.
+///
+/// This paragraph is its own counter-example twice over, which is why the
+/// history stays. It once named `Scenarios` as the live empty category and went
+/// false when scenarios arrived, with no test noticing. It then claimed the
+/// branch was "pinned by a test that pumps this widget directly" while no such
+/// test existed anywhere in the tree. `test/shell_menu_test.dart` is that test
+/// now.
 class ShellMenu extends StatelessWidget {
   const ShellMenu({
     super.key,

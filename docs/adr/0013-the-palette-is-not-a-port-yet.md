@@ -37,6 +37,15 @@ only tints surfaces, an opt-in that the demo modes ignore, a scheme accepted who
 question, and they are worth asking with a real consumer's constraint in hand rather than
 without.
 
+**Half of that trigger has since arrived, and it is recorded here rather than left to be
+rediscovered.** The sentence above — *"there is one consumer of this package and it is this
+repository's own `example/`"* — stopped being true in September 2026, when
+`kihyun1998/flutter_dropdown_button` adopted the shell against 0.1.0 and filed #10 and #11 from
+doing so. The decision is unchanged: that consumer has asked for neither a palette nor an identity
+in the chrome, and the trigger is a second consumer *that says so*. What has gone is the ground of
+"a consumer who does not exist". Re-proposing the port still argues against this record; it no
+longer argues against a count.
+
 ## Consequences
 
 **Recorded rather than left open**, because "surely the palette should be configurable too" is the

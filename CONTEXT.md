@@ -57,12 +57,20 @@ _Avoid_: Module, folder, layer
 ### The shell
 
 **Shell**:
-The gallery's page: a menu, a preview stage and a knob region, holding one destination at a time.
+The gallery's page: a menu, and — while a destination is open — a preview stage and a knob region.
+It holds at most one destination at a time, and a roster of route destinations alone leaves it
+holding none.
 _Avoid_: Layout, scaffold, frame
 
 **Destination**:
 One entry the menu points at.
 _Avoid_: Page, route, item, tab
+
+**Roster**:
+Every destination one shell draws, in menu order — what a [Port] implementation supplies through
+`ShellDestinations.all`. Any mix of the two kinds is one, including none of a kind. As elsewhere
+here, the danger a roster carries is being kept by hand rather than read from what exists.
+_Avoid_: List, set, registry, catalogue, menu (a Shell has one menu, drawn from this)
 
 **Stage**:
 The shell region a destination renders into, under the viewport control.

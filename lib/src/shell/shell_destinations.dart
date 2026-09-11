@@ -24,6 +24,18 @@ import 'shell_destination.dart';
 /// per call would rebuild every destination's builder with it.
 abstract class ShellDestinations {
   /// Every destination, in menu order. Grouping is [ShellCategory]'s job.
+  ///
+  /// **No shape is required of it.** Any mix of the two kinds is legal,
+  /// including none of one: a roster holding only [RouteDestination]s claims no
+  /// stage and no knob region, and the shell draws neither rather than drawing
+  /// them empty (ADR-0005). Nothing here has to be ordered by kind either — the
+  /// first [StageDestination] opens, wherever in the list it sits.
+  ///
+  /// What is *not* free is changing that shape later: the shell reads it once,
+  /// with its state, so a list that grows its first [StageDestination] after
+  /// the first build keeps the menu-only page until the reader picks something.
+  /// That is the same field-not-a-fresh-list rule above, seen from the other
+  /// side.
   List<ShellDestination> get all;
 
   /// Releases whatever the destinations hold.

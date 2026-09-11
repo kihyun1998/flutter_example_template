@@ -111,6 +111,12 @@ class StageDestination extends ShellDestination {
 ///
 /// The shell hands over and gets out of the way. Nothing about the page it opens
 /// changes to accommodate being listed here.
+///
+/// **A roster of these alone is a roster.** It claims no stage and no knobs, so
+/// `ShellPage` draws the menu and nothing else — see [ShellDestinations.all].
+/// That is worth saying because the shell used to require one
+/// [StageDestination] without anything saying so, and threw on the first build
+/// of a roster that had none.
 class RouteDestination extends ShellDestination {
   const RouteDestination({
     required super.id,
