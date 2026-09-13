@@ -92,9 +92,6 @@ class _ShellPageState extends State<ShellPage> {
 
   /// A [ViewportSpec.id], or [ViewportBar.wallId] for the Device Wall.
   String _viewportId = ViewportSpec.desktop.id;
-  String _lastViewportId = ViewportSpec.desktop.id;
-
-  bool get _showingWall => _viewportId == ViewportBar.wallId;
 
   /// The last single-viewport mode chosen.
   ///
@@ -103,6 +100,9 @@ class _ShellPageState extends State<ShellPage> {
   /// picking a segment *is* the choice — but the forced one used to land
   /// on `desktop` whatever the reader had been looking at, which is a constant
   /// standing in for a decision.
+  String _lastViewportId = ViewportSpec.desktop.id;
+
+  bool get _showingWall => _viewportId == ViewportBar.wallId;
 
   /// Shrink the whole viewport into view, rather than showing a 1:1 slice of it.
   ///

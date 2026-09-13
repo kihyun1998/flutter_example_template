@@ -243,6 +243,50 @@ async function isBlank(send, { ink, paper }) {
   return (await grab(ink)) === (await grab(paper));
 }
 
+/// Captures once the picture has stopped moving, not once the labels are right.
+///
+/// [check] polls the semantics tree, so it returns on the first frame where the
+/// app *says* it is in the right state. Saying so and having finished drawing
+/// it are different moments: a chip pressed two steps ago can still be running
+/// its selection tint, and the capture lands at whatever phase that animation
+/// happened to be in. Nothing about the picture says so, and the tool's exit
+/// code stays 0.
+///
+/// Measured on `device-wall.png`, which was the one shot of the four that
+/// reproduced on neither platform: 5890 pixels (0.077%) differing from the
+/// committed capture, all inside a 109x60 box around the Crowded chip, at a
+/// maximum channel delta of 18. Small enough to be invisible, large enough to
+/// make the file move — which is the combination that trains a reviewer to skim
+/// a gate, and the reason `screenshots.yml` uploads these for a human at all.
+///
+/// Two identical consecutive frames rather than a fixed wait, for the reason
+/// [until] already gives: a fixed wait is either flaky or slow. Comparing the
+/// encoded PNG is enough — this is the same trick [isBlank] uses, and a
+/// dependency-free one, which the header of this file says is why the tool
+/// still gets rerun.
+async function settled(send, shot) {
+  const grab = async () =>
+    (
+      await send('Page.captureScreenshot', {
+        format: 'png',
+        // `deviceScaleFactor` already renders at DPR. A scale here would
+        // multiply on top of it — the first run of this produced 4x files.
+        ...(shot.clip ? { clip: { ...shot.clip, scale: 1 } } : {}),
+      })
+    ).data;
+
+  let previous = await grab();
+  return until(
+    async () => {
+      const current = await grab();
+      const same = current === previous;
+      previous = current;
+      return same ? current : null;
+    },
+    'the picture to stop moving',
+  );
+}
+
 /// What makes this tool able to be wrong out loud.
 ///
 /// Every claim is checked against the labels actually on screen at the moment
@@ -321,12 +365,14 @@ for (const shot of shots) {
     continue;
   }
 
-  const { data } = await send('Page.captureScreenshot', {
-    format: 'png',
-    // `deviceScaleFactor` already renders at DPR. A scale here would
-    // multiply on top of it — the first run of this produced 4x files.
-    ...(shot.clip ? { clip: { ...shot.clip, scale: 1 } } : {}),
-  });
+  let data;
+  try {
+    data = await settled(send, shot);
+  } catch (error) {
+    console.error(`FAIL ${shot.name}: ${error.message}`);
+    failures++;
+    continue;
+  }
   const path = `${outDir}/${shot.name}.png`;
   writeFileSync(path, Buffer.from(data, 'base64'));
   const size = shot.clip ?? view;
