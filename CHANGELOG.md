@@ -1,4 +1,4 @@
-## Unreleased
+## 0.2.0
 
 **Changed**
 
@@ -23,6 +23,20 @@
   tab bar over them. ADR-0005 records why those are absent rather than empty.
   Reported against 0.1.0 by a consumer adopting the shell before its first
   recipe existed, which is the one shape that could not start. (#10)
+
+**Also in this release**
+
+Neither of these changes what a consumer gets; both are the repository holding
+itself to what it already claims.
+
+* `tool/screenshots.sh` waits for two identical consecutive frames before it
+  captures, rather than for the semantics tree to report the state. It used to
+  photograph whatever animation phase the label check happened to land on, and
+  the README images moved for that rather than for any UI change (#14).
+* The capture platform is macOS, and it is now written down and announced
+  instead of implied. The committed set had been captured on two machines, and
+  Material centres an `AppBar` title on a Mac and left-aligns it everywhere
+  else — 99.5% of the drift in `code-pane.png` was that one line (#14).
 
 ## 0.1.0
 
