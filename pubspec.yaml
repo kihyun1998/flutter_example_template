@@ -1,6 +1,6 @@
 name: flutter_example_template
 description: "An example-app shell for Flutter packages: a preview stage at three widths, a device wall, a code pane and a settings panel, all driven through ports so it names no subject."
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/kihyun1998/flutter_example_template
 issue_tracker: https://github.com/kihyun1998/flutter_example_template/issues
 

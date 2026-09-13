@@ -54,6 +54,11 @@ of producing a confidently wrong picture. The Code pane's shot checks the pictur
 its content is painted to a canvas that no label can see. Rerun it after anything that changes the
 UI: a screenshot of something that has since moved is a citation that no longer says anything.
 
+**Capture them on macOS.** Flutter web reads `defaultTargetPlatform` off the user agent and Material
+reads `AppBar.centerTitle` off that, so a title that is centred here sits hard left in a capture made
+anywhere else — a layout difference no amount of looking at the picture explains. The script says so
+and prints a notice when it is run elsewhere; running it there is fine, committing the result is not.
+
 ## The claim it holds itself to
 
 **Nothing in this package names what it demonstrates.** That is not a style preference; it is the
@@ -74,7 +79,7 @@ In your **`example/pubspec.yaml`** — not your package's:
 
 ```yaml
 dependencies:
-  flutter_example_template: ^0.1.0
+  flutter_example_template: ^0.2.0
 ```
 
 Or, to track `main` ahead of a release:
@@ -231,14 +236,19 @@ is the working rules — the mistakes this codebase made and would make again.
 
 ## Status
 
-`0.1.0`, and honest about it: one example, and one consumer — this repository's own. The questions
-the transplant left open are answered in `docs/adr/` rather than still being weighed.
+`0.2.0`, and honest about it: one example, and one consumer besides this repository's own —
+`flutter_dropdown_button`, which adopted the shell against 0.1.0. Everything in this release came
+from that one adoption, and none of it could have come from here: a roster holding no
+`StageDestination`, and a gallery with recipes and no scenarios, are both shapes the example in this
+repository does not have, because it fills every category and opens with a recipe. The questions the
+transplant left open are answered in `docs/adr/` rather than still being weighed; the ones adoption
+is opening were not on that list.
 
 **Requires Flutter 3.27.** Measured, not inherited, and held rather than remembered: CI runs both
 suites at that floor and at the current stable, on Linux and on Windows, on every push. 3.24.5 fails
 on exactly one line — `pubspec.yaml` names that line, and says what going lower would cost.
 
-The comments are load-bearing. Measured 2026-09-07: 1,088 of 3,280 lines under `lib/` are comment
+The comments are load-bearing. Measured 2026-09-13: 1,159 of 3,360 lines under `lib/` are comment
 lines, a third of the file. They record measurements with dates, and two explanations that were
 asserted, tested and **withdrawn** — cited in four files, because the retraction travels with
 everything that had leaned on the claim. If a comment looks redundant, assume it is the residue of
