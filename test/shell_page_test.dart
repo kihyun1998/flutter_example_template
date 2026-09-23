@@ -40,13 +40,15 @@ RouteDestination _route(String id) => RouteDestination(
   open: (context) => Scaffold(body: Text('the $id page')),
 );
 
-StageDestination _stage(String id) => StageDestination(
-  id: id,
-  label: id,
-  category: ShellCategory.recipes,
-  stage: (context) => Text('the $id stage'),
-  knobs: (context) => Text('the $id knobs'),
-);
+StageDestination _stage(String id, {bool allowsWall = true}) =>
+    StageDestination(
+      id: id,
+      label: id,
+      category: ShellCategory.recipes,
+      stage: (context) => Text('the $id stage'),
+      knobs: (context) => Text('the $id knobs'),
+      allowsWall: allowsWall,
+    );
 
 Widget _shell(List<ShellDestination> all) => MaterialApp(
   home: ShellPage(title: 'x', createDestinations: () => _Roster(all)),
@@ -147,6 +149,172 @@ void main() {
       await t.pumpWidget(_shell([_stage('basic')]));
 
       expect(find.byType(TabBar), findsOneWidget);
+    });
+  });
+
+  group('the stage modes', () {
+    SegmentedButton<String> bar(WidgetTester t) =>
+        t.widget(find.byType(SegmentedButton<String>));
+
+    List<String> segments(WidgetTester t) =>
+        bar(t).segments.map((s) => s.value).toList();
+
+    Future<void> choose(WidgetTester t, String label) async {
+      await t.tap(find.byTooltip(label));
+      await t.pumpAndSettle();
+    }
+
+    testWidgets('offers the room between the viewports and the wall', (
+      t,
+    ) async {
+      await _wide(t);
+      await t.pumpWidget(_shell([_stage('basic')]));
+
+      expect(segments(t), ['desktop', 'tablet', 'mobile', 'room', 'all']);
+    });
+
+    testWidgets('offers the room where the wall is refused', (t) async {
+      await _wide(t);
+      await t.pumpWidget(_shell([_stage('basic', allowsWall: false)]));
+
+      expect(segments(t), ['desktop', 'tablet', 'mobile', 'room']);
+    });
+
+    testWidgets('opens on the desktop viewport, framed', (t) async {
+      await _wide(t);
+      await t.pumpWidget(_shell([_stage('basic')]));
+
+      expect(find.byType(PreviewFrame), findsOneWidget);
+      expect(find.byType(PreviewRoom), findsNothing);
+      expect(bar(t).selected, {'desktop'});
+    });
+
+    testWidgets('the room draws the stage unframed, with no fit control', (
+      t,
+    ) async {
+      await _wide(t);
+      await t.pumpWidget(_shell([_stage('basic')]));
+      expect(find.text('Fit'), findsOneWidget, reason: 'framed, it is there');
+
+      await choose(t, ViewportBar.roomLabel);
+
+      expect(find.byType(PreviewRoom), findsOneWidget);
+      expect(find.byType(PreviewFrame), findsNothing);
+      expect(find.text('the basic stage'), findsOneWidget);
+      expect(find.text('Fit'), findsNothing);
+      expect(find.text('1:1'), findsNothing);
+    });
+
+    testWidgets('the stage builder itself is told the room, not the window', (
+      t,
+    ) async {
+      await _wide(t);
+      await t.pumpWidget(
+        _shell([
+          StageDestination(
+            id: 'reads',
+            label: 'reads',
+            category: ShellCategory.recipes,
+            stage: (context) => Text('told ${MediaQuery.sizeOf(context)}'),
+            knobs: (context) => const SizedBox(),
+          ),
+        ]),
+      );
+
+      await choose(t, ViewportBar.roomLabel);
+
+      final room = t.widget<MediaQuery>(
+        find.descendant(
+          of: find.byType(PreviewRoom),
+          matching: find.byType(MediaQuery),
+        ),
+      );
+      expect(room.data.size.width, lessThan(1400));
+      expect(find.text('told ${room.data.size}'), findsOneWidget);
+    });
+
+    testWidgets('the stage builder itself is told a framed viewport too', (
+      t,
+    ) async {
+      await _wide(t);
+      await t.pumpWidget(
+        _shell([
+          StageDestination(
+            id: 'reads',
+            label: 'reads',
+            category: ShellCategory.recipes,
+            stage: (context) => Text('told ${MediaQuery.sizeOf(context)}'),
+            knobs: (context) => const SizedBox(),
+          ),
+        ]),
+      );
+
+      await choose(t, ViewportSpec.mobile.label);
+
+      expect(find.text('told Size(390.0, 844.0)'), findsOneWidget);
+    });
+
+    testWidgets('a forced exit from the wall returns to the room', (t) async {
+      await _wide(t);
+      await t.pumpWidget(
+        _shell([_stage('basic'), _stage('costly', allowsWall: false)]),
+      );
+
+      await choose(t, ViewportBar.roomLabel);
+      await choose(t, ViewportBar.wallLabel);
+      expect(find.byType(DeviceWall), findsOneWidget);
+
+      await t.tap(find.text('costly'));
+      await t.pumpAndSettle();
+
+      expect(find.byType(DeviceWall), findsNothing);
+      expect(find.byType(PreviewRoom), findsOneWidget);
+      expect(bar(t).selected, {'room'});
+    });
+  });
+
+  group('the stage toolbar', () {
+    // Every width the narrow layout can be given, at a step fine enough to
+    // land inside the band where it used to overflow.
+    final widths = [for (var w = 400; w < 900; w += 10) w];
+
+    Future<List<int>> overflowing(WidgetTester t, String? source) async {
+      final found = <int>[];
+      for (final w in widths) {
+        t.view.physicalSize = Size(w.toDouble(), 800);
+        t.view.devicePixelRatio = 1.0;
+        await t.pumpWidget(
+          MaterialApp(
+            key: ValueKey(w),
+            home: ShellPage(
+              title: 'x',
+              createDestinations: () => _Roster([
+                StageDestination(
+                  id: 'basic',
+                  label: 'basic',
+                  category: ShellCategory.recipes,
+                  stage: (context) => const SizedBox.expand(),
+                  knobs: (context) => const SizedBox(),
+                  source: source,
+                ),
+              ]),
+            ),
+          ),
+        );
+        await t.tap(find.text('Preview').first);
+        await t.pumpAndSettle();
+        if (t.takeException() != null) found.add(w);
+      }
+      t.view.reset();
+      return found;
+    }
+
+    testWidgets('fits every narrow width', (t) async {
+      expect(await overflowing(t, null), isEmpty);
+    });
+
+    testWidgets('fits every narrow width with the Code control too', (t) async {
+      expect(await overflowing(t, 'lib/basic.dart'), isEmpty);
     });
   });
 }

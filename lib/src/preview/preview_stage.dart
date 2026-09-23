@@ -119,15 +119,16 @@ class _ContainedOverlayState extends State<_ContainedOverlay> {
   Widget build(BuildContext context) => Overlay(initialEntries: [_entry]);
 }
 
-/// Chooses what the stage is showing — one named viewport, or all of them.
+/// Chooses what the stage is showing — one named viewport, the room it is
+/// drawn in, or all of the viewports.
 ///
-/// **The selection is an id rather than a [ViewportSpec], because one of the
-/// modes is not a viewport.** The wall has no size of its own and no chrome
-/// policy, so a fourth `ViewportSpec` would have to invent both. The id is what
-/// this control has always dealt in internally, and [ViewportSpec.values] stays
-/// the only roster of viewports there is — a second list of the same three,
-/// kept in step by hand, is the shape a hand-maintained roster always takes
-/// is about.
+/// **The selection is an id rather than a [ViewportSpec], because two of the
+/// modes are not a viewport.** Neither the room nor the wall has a fixed size
+/// or a chrome policy, so a fourth `ViewportSpec` would have to invent both.
+/// The id is what this control has always dealt in internally, and
+/// [ViewportSpec.values] stays the only roster of viewports there is — a second
+/// list of the same three, kept in step by hand, is the shape a hand-maintained
+/// roster always takes.
 class ViewportBar extends StatelessWidget {
   const ViewportBar({
     super.key,
@@ -147,7 +148,12 @@ class ViewportBar extends StatelessWidget {
 
   static const wallLabel = 'All · side by side';
 
-  /// Either a [ViewportSpec.id] or [wallId].
+  /// The mode that draws the stage region at its own size, at 1:1.
+  static const roomId = 'room';
+
+  static const roomLabel = 'Room · the stage at 1:1';
+
+  /// A [ViewportSpec.id], [roomId] or [wallId].
   final String selectedId;
 
   final ValueChanged<String> onChanged;
@@ -159,7 +165,7 @@ class ViewportBar extends StatelessWidget {
   /// earn its width.
   final bool compact;
 
-  /// Whether the wall is offered as a fourth mode.
+  /// Whether the wall is offered as a mode.
   ///
   /// **A flag rather than something the host could infer**, because the reason
   /// to refuse is not a property of this bar. The shell has somewhere to put a
@@ -196,6 +202,12 @@ class ViewportBar extends StatelessWidget {
             label: compact ? null : Text(v.label),
             tooltip: v.label,
           ),
+        ButtonSegment<String>(
+          value: roomId,
+          icon: const Icon(Icons.open_in_full),
+          label: compact ? null : const Text(roomLabel),
+          tooltip: roomLabel,
+        ),
         if (showsWall)
           ButtonSegment<String>(
             value: wallId,

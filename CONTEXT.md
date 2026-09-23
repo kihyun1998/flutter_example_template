@@ -123,6 +123,12 @@ _Avoid_: Frame, canvas
 A preview stage scaled to fit the room it is given, captioned with its dimensions and its factor.
 _Avoid_: Stage, window, card
 
+**Room**:
+The mode that draws no viewport at all: the subject gets the room the stage has, at 1:1, and is told
+that is the whole screen. It never scales. It answers what the subject is like to use, which a
+scaled mode shows but cannot let the reader do at real size.
+_Avoid_: Native, unframed, actual size, full size
+
 **Device Wall**:
 The mode that draws every viewport at once, live, over one set of knobs. It answers what changed
 between the widths, which no single-viewport mode can.

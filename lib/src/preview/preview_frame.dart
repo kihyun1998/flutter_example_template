@@ -53,7 +53,7 @@ class PreviewFrame extends StatelessWidget {
             1.0,
             double.infinity,
           ),
-          (constraints.maxHeight - padding.vertical - _labelHeight).clamp(
+          (constraints.maxHeight - padding.vertical - labelHeight).clamp(
             1.0,
             double.infinity,
           ),
@@ -123,10 +123,10 @@ class PreviewFrame extends StatelessWidget {
                       // frame a reader cannot infer from the picture.
                       SizedBox(
                         width: spec.width * scale,
-                        height: _labelHeight,
+                        height: labelHeight,
                         child: Center(
                           child: Text(
-                            _label(scale),
+                            labelFor(spec.size, scale),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -147,17 +147,18 @@ class PreviewFrame extends StatelessWidget {
     );
   }
 
-  static const _labelHeight = 26.0;
+  /// The height reserved under a preview for its caption.
+  static const labelHeight = 26.0;
 
-  /// The dimensions, and the factor when there is one.
+  /// The caption for [size] drawn at [scale]: the dimensions, and the factor.
   ///
   /// Said out loud because a shrunken preview is otherwise indistinguishable
   /// from something genuinely that size: the reader has to know these are 1440
   /// logical pixels drawn at 0.7×, not 1000 pixels drawn honestly.
-  String _label(double scale) {
-    final size = '${spec.width.toInt()} × ${spec.height.toInt()}';
-    if (scale == 1.0) return '$size · 1:1';
-    return '$size · ${scale.toStringAsFixed(2)}×';
+  static String labelFor(Size size, double scale) {
+    final dimensions = '${size.width.toInt()} × ${size.height.toInt()}';
+    if (scale == 1.0) return '$dimensions · 1:1';
+    return '$dimensions · ${scale.toStringAsFixed(2)}×';
   }
 }
 

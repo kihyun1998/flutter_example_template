@@ -7,14 +7,16 @@ a knob region. This territory owns the *assembly*: which regions exist, who deci
 current mode, and what the shell keeps private.
 
 It is a separate territory from the regions it composes because its defects are not their
-defects. Issue #18 is a fact about where state lives, not about how a viewport draws.
+defects. That no consumer could add a stage mode (#18) was a fact about where state lives,
+not about how a viewport draws.
 
 ## Governing decisions
-**None.**
+→ [ADR-0014 — the room is a mode, and it is not the default](../../adr/0014-the-room-is-a-mode-and-not-the-default.md)
 
-Adjacent: ADR-0005 decides that a roster supplying no stage destinations leaves the menu
-alone on the page — it decides an absence in the menu, not the composition. Nothing governs
-the region model, the breakpoint, or what the shell may keep private from a consumer.
+It governs which modes the shell offers, the order they are offered in, and which one it
+opens on. Adjacent: ADR-0005 decides that a roster supplying no stage destinations leaves the
+menu alone on the page — it decides an absence in the menu, not the composition. Nothing
+governs the region model or the breakpoint.
 
 ## Design model
 **Nothing here names a destination.** The set arrives through `ShellDestinations`, and the
@@ -31,11 +33,21 @@ both walk `all` on the same frame rather than holding references that could dive
 **The shell creates the port with its state and disposes it with its state.** What it no
 longer does is know what is in it.
 
+**The toolbar scrolls sideways rather than overflow.** It is one row: the Code control, a
+spacer, the Fit control and the viewport bar. Below the width that row needs, it scrolls.
+Measured 2026-09-23 before the change, at 800 px tall: with the Code control showing, every
+width from 400 to 690 px overflowed, and adding the Room segment moved that to 750 px.
+`test/shell_page_test.dart` walks 400 to 890 px in 10 px steps, with and without the Code
+control.
+
 **Two constants set the layout**: a knob region width and a narrow breakpoint. Both are
 static on the widget, which makes them readable by a consumer and settable by nobody.
 
-**Mode is private state.** `_viewportId`, `_lastViewportId` and the derived `_showingWall`
-live on `_ShellPageState`. This is the design fact behind this territory's central hole.
+**Mode is private state, so the modes are this package's to offer.** `_viewportId`,
+`_lastViewportId` and the derived `_showingWall` and `_showingRoom` live on `_ShellPageState`.
+ADR-0014 keeps it that way: the room was added here rather than by opening the state to
+consumers. The room counts as a single-viewport mode, so a forced exit from the wall returns
+to it, and the Fit control is hidden in it as in the wall.
 
 ## Code
 `lib/src/shell/shell_page.dart` — `ShellPage`
@@ -61,10 +73,8 @@ Never compared to a reference. The Flutter SDK is spec-binding for `Navigator` a
   must lay out inside it
 
 ## Known holes / open
-- **A host cannot add a stage mode, and four separate things close it off.** The mode state
-  is private and unseedable; `ViewportSpec.byId` throws on an unknown id; `StageDestination`
-  carries nothing meaning *draw me unframed*; and the barrel forbids assembling a second
-  shell from the exported parts, which is the thing this package exists to stop. So the
-  missing mode has to be added inside the package or not at all. Tracked: #18.
+- **A host still cannot add a stage mode**, and that is now a decision rather than a hole
+  (ADR-0014): the state is private and unseedable, and `ViewportSpec.byId` throws on an
+  unknown id. A consumer asking for another mode is asking this package.
 - Nothing records why the breakpoint is 900 or the knob region 320. Both are static
   constants with doc-comments describing what they do and not what set them.
