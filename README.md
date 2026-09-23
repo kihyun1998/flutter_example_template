@@ -83,7 +83,7 @@ In your **`example/pubspec.yaml`** — not your package's:
 
 ```yaml
 dependencies:
-  flutter_example_template: ^0.2.0
+  flutter_example_template: ^0.3.0
 ```
 
 Or, to track `main` ahead of a release:
@@ -240,19 +240,19 @@ is the working rules — the mistakes this codebase made and would make again.
 
 ## Status
 
-`0.2.0`, and honest about it: one example, and one consumer besides this repository's own —
-`flutter_dropdown_button`, which adopted the shell against 0.1.0. Everything in this release came
-from that one adoption, and none of it could have come from here: a roster holding no
-`StageDestination`, and a gallery with recipes and no scenarios, are both shapes the example in this
-repository does not have, because it fills every category and opens with a recipe. The questions the
-transplant left open are answered in `docs/adr/` rather than still being weighed; the ones adoption
-is opening were not on that list.
+`0.3.0`, and honest about it: one example, and three consumers besides this repository's own —
+`flutter_dropdown_button` and `flutter_folderview` on 0.2.0, and `flutter_table_plus`, where the
+shell was first built, still on 0.1.0. This release came from the last of those: a table is
+something a reader wants to use and not only look at, and every mode before the room drew it scaled
+— 0.589× on the laptop the desktop viewport is named after (#18). The questions the transplant left
+open are answered in `docs/adr/` rather than still being weighed; the ones adoption is opening were
+not on that list.
 
 **Requires Flutter 3.27.** Measured, not inherited, and held rather than remembered: CI runs both
 suites at that floor and at the current stable, on Linux and on Windows, on every push. 3.24.5 fails
 on exactly one line — `pubspec.yaml` names that line, and says what going lower would cost.
 
-The comments are load-bearing. Measured 2026-09-13: 1,159 of 3,360 lines under `lib/` are comment
+The comments are load-bearing. Measured 2026-09-23: 1,170 of 3,478 lines under `lib/` are comment
 lines, a third of the file. They record measurements with dates, and two explanations that were
 asserted, tested and **withdrawn** — cited in four files, because the retraction travels with
 everything that had leaned on the claim. If a comment looks redundant, assume it is the residue of
