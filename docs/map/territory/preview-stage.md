@@ -1,19 +1,21 @@
 # The preview stage
 
 ## What it is
-Making a subtree believe it is running somewhere it is not. A stage constrains a subtree to
-a named viewport and tells it that is the whole screen; a frame is that stage scaled to fit
-the room available; the wall is every viewport at once over one set of knobs. This territory
-owns *what a viewport is and how it is drawn* — which modes the shell offers, and who may
-switch between them, is [the shell page composition](shell-page-composition.md).
+Making a subtree believe it is running somewhere it is not. A stage constrains a subtree to a
+named viewport and tells it that is the whole screen; a frame is that stage scaled to fit the
+room available; the room is the region at its own size, at 1:1, with no named viewport; the
+wall is every viewport at once over one set of knobs. This territory owns *what a viewport is
+and how it is drawn* — which modes the shell offers, and who may switch between them, is [the
+shell page composition](shell-page-composition.md).
 
 ## Governing decisions
-**None.**
+→ [ADR-0014 — the room is a mode, and it is not the default](../../adr/0014-the-room-is-a-mode-and-not-the-default.md)
 
-Five public types, and not one governing record. Adjacent: ADR-0005 decides that unclaimed
-capabilities are silent, which is why `allowsWall` can be false without leaving a gap — it
-decides drawing, not the viewport model. `device wall` and `screenshot` appear in no record
-in this repository, by title or body.
+It governs the room: that it exists, what it tells the subject, and what it leaves out. The
+other five public types are still governed by no record. Adjacent: ADR-0005 decides that
+unclaimed capabilities are silent, which is why `allowsWall` can be false without leaving a
+gap — it decides drawing, not the viewport model. `screenshot` appears in one record,
+ADR-0014, and only as something it does not cover.
 
 ## Design model
 **A stage never scales; a frame does.** That separation is the model's spine.
@@ -39,15 +41,39 @@ exactly the rows it crosses. And the three frames do not share a scale — each 
 fit into an equal column, so measured 2026-09-01 at 1800px: desktop 0.28x, tablet 0.48x,
 **mobile 1.0x**. The narrowest viewport is the one drawn at full size.
 
-**`ViewportSpec.values` is the only roster of viewports there is**, which is why the wall is
-selected by an id rather than by a fourth `ViewportSpec` that would have to invent a size
-and a chrome policy.
+**The room is honest about size and makes no other claim.** `PreviewRoom` hands the subject
+the region less the caption, and overrides `MediaQuery` to exactly that box, with the insets
+zeroed as `PreviewStage` zeroes them. That override is the part of the room that carries the
+load. Measured 2026-09-23 in the shell, in a 1440 × 900 window: a stage drawn straight into
+the region is told `1440 × 900` and laid out at `888 × 774`. It adds
+**no overlay**. The 0.46× mismatch that
+made `PreviewStage` contain one cannot happen at 1.0, so drag feedback goes to the root
+overlay and can pass over the menu and the knob region, as it would in a real app.
+
+**Every mode builds the stage below its own override**, through a `Builder`, so a stage
+builder's own body is told what the subtree it returns is told. Handed an already-built
+`open.stage(context)`, the body runs with the shell's context instead. Measured 2026-09-23 in
+the mobile viewport before the framed modes were changed: the body was told `1440 × 900` and
+the subtree `390 × 844`. The wall always built it this way.
+
+**What the room buys is honesty, not area.** At 1440 × 900 the framed desktop viewport covers
+848 px of screen and the room covers 888 px, so the difference is almost none. What changes is
+that the subject is no longer told it has 1440.
+
+**`ViewportSpec.values` is the only roster of viewports there is**, which is why the room and
+the wall are selected by an id rather than by a fourth `ViewportSpec` that would have to invent
+a size and a chrome policy.
 
 ## Code
 `lib/src/preview/viewport_spec.dart` — `ViewportSpec`
 `lib/src/preview/preview_stage.dart` — `PreviewStage`, `ViewportBar`
 `lib/src/preview/preview_frame.dart` — `PreviewFrame`
+`lib/src/preview/preview_room.dart` — `PreviewRoom`
 `lib/src/preview/device_wall.dart` — `DeviceWall`
+`test/preview_stage_test.dart` — `ViewportSpec` and `PreviewStage`
+`test/preview_frame_test.dart` — fitting, and interaction through the scale
+`test/device_wall_test.dart` — every viewport at once, every frame live
+`test/preview_room_test.dart` — `PreviewRoom`
 
 ## Reference behaviour
 **None.**
@@ -64,7 +90,7 @@ interchangeable.
 
 ## Blast radius
 → [the shell page composition](shell-page-composition.md) — the mode is chosen there, from
-  private state, and that is where issue #18 lands
+  private state, so a new mode is added there or nowhere
 → [the menu and roster](menu-and-roster.md) — `StageDestination.allowsWall` gates the wall
   per destination
 → [the theme and chrome](theme-and-chrome.md) — `showsChrome` decides whether the shell keeps
@@ -73,11 +99,10 @@ interchangeable.
   these modes
 
 ## Known holes / open
-- **Every mode scales, so no mode shows the subject at the size of the window it is actually
-  running in.** `_stageRegion` has two branches and both scale; `fit: false` renders 1:1 and
-  clips, which the field's own doc-comment says answers a different question. A host cannot
-  add the missing mode: the state is private, `ViewportSpec.byId` throws on an unknown id,
-  `StageDestination` carries nothing meaning *draw me unframed*, and the barrel forbids
-  assembling a second shell out of the exported parts. Measured on `flutter_table_plus` at
-  1440x900: the desktop viewport draws at 0.589x. Tracked: #18.
 - No record decides the viewport set itself — why three, and what would justify a fourth.
+- **The room is untested below the breakpoint**, where the stage region is a full-width tab.
+- The caption's text style is written out in both `PreviewFrame` and `PreviewRoom`.
+- **On a phone, the room tells the subject there are no insets.** A home indicator at the
+  bottom of the window covers about 8 px of the subject's box, by arithmetic from a 34 px
+  inset and the 26 px caption; it has not been measured on a device. On a desktop window the
+  insets are zero and nothing differs. Left as it is, by the maintainer's call on 2026-09-23.

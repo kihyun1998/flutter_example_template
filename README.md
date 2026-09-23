@@ -16,6 +16,10 @@ package removed. You supply what to demonstrate; the shell draws everything arou
 - **A preview stage** that renders your widget at desktop, tablet and phone widths — constrained
   *and* told that is the whole screen, with its own `Overlay` so tooltips and drags stay inside the
   frame.
+- **A Room**: the stage region at its own size, at 1:1, in place of a named viewport — for using
+  your widget at real pixels rather than looking at it shrunk. Constrained and told that is the
+  whole screen, like the named viewports; never scaled and with no `Overlay` of its own, unlike
+  them, so a drag or a tooltip behaves as it would in your app.
 - **A Device Wall**: all three viewports at once, live, over one shared state. The single-viewport
   modes answer *what does this look like at that width*; the wall answers *what changed between
   them*.
@@ -200,8 +204,8 @@ however your knob region wants.
 
 ## The pieces, used on their own
 
-`PreviewStage`, `PreviewFrame`, `DeviceWall`, `ViewportSpec`, `CodePane` and `MetricsPanel` are all
-exported and none of them requires the shell. The highlighting under `CodePane` is
+`PreviewStage`, `PreviewFrame`, `PreviewRoom`, `DeviceWall`, `ViewportSpec`, `CodePane` and
+`MetricsPanel` are all exported and none of them requires the shell. The highlighting under `CodePane` is
 [`flutter_syntax_highlight`](https://pub.dev/packages/flutter_syntax_highlight) — a dependency
 rather than a copy, see ADR-0012 — whose tokenizer is a pure function you can test without pumping
 a widget. What a token *looks* like stays here.

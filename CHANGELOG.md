@@ -1,3 +1,45 @@
+## Unreleased
+
+**Added**
+
+* A stage mode, **Room**, between the phone viewport and the Device Wall: the
+  stage region at its own size, at 1:1, in place of a named viewport. Every mode
+  before it scaled, so a reader could look at a subject but never use it at real
+  size — at 1440 × 900 the desktop viewport draws at 0.589×. The room never
+  scales, hands the subject the region less its caption, and tells it through
+  `MediaQuery` that this box is the whole screen. Without that, a stage drawn
+  straight into the region is told 1440 × 900 while it is laid out at 888 × 774,
+  and a consumer's branch on the screen size takes the wrong arm. It adds no
+  overlay of its own, has no Fit control, and is offered for every destination.
+  The shell still opens on the desktop viewport. ADR-0014 records why. (#18)
+* `PreviewRoom`, the widget behind the mode, exported like `PreviewFrame` and
+  `DeviceWall` and usable without the shell.
+* `PreviewFrame.labelHeight` and `PreviewFrame.labelFor`, the caption both of
+  them share.
+
+**Fixed**
+
+* A destination's `stage` builder is now told the viewport it is drawn in,
+  in the framed modes as well as the wall. Its own body ran with the shell's
+  context, so `MediaQuery.sizeOf(context)` read there answered with the window
+  — 1440 × 900 in the mobile viewport, while the widgets it returned were told
+  390 × 844. A builder that branches on the screen size in its body now takes
+  the arm the viewport calls for.
+* The stage's toolbar scrolls sideways instead of overflowing when the window
+  is too narrow for it. Measured in 0.2.0 at 800 px tall, with the Code control
+  showing: every width from 400 to 690 px overflowed. The Room segment would
+  have widened that to 750 px, and started it at 400–450 px for a destination
+  with no Code control.
+
+**Also in this release**
+
+* `PreviewStage`, `PreviewFrame`, `ViewportSpec` and `DeviceWall` have suites
+  here. They had none: the ones that held them were left behind in the
+  repository the shell was extracted from, and the "interaction survives the
+  scale" test their doc-comments cite was among them. The properties are
+  carried over without the table they were written against, and each test was
+  seen failing against a mutation of the code it guards.
+
 ## 0.2.0
 
 **Changed**

@@ -42,12 +42,12 @@ These exist in no node file, and they are the headline.
 
 | | |
 |---|---|
-| Public types | **31**, across 20 files, behind one barrel |
-| Decision records | **13** |
-| Territories with **no governing record** | **4 of 9** — preview stage, settings panel, metrics panel, shell page composition |
+| Public types | **32**, across 21 files, behind one barrel |
+| Decision records | **14** |
+| Territories with **no governing record** | **2 of 9** — settings panel, metrics panel |
 | Territories with **no reference comparison** | **9 of 9** |
 | Worst-covered concept | `theme` — in **5** records, the subject of **none**. It greps as covered, and it has no entry in `CONTEXT.md`'s glossary either |
-| Concepts in **no** record at all | `device wall`, `screenshot` — zero hits, title or body |
+| Concepts in **no** record at all | `device wall` — zero hits, title or body. `screenshot` appears once, in ADR-0014, as something that record does not cover |
 | Open issues | **1** (#18); 13 closed |
 | Largest file | 477 lines, **14%** of its layer — no god-file is hiding several territories |
 
@@ -78,10 +78,9 @@ Both are now invariant nodes, reachable from every territory they hold in.
 
 ## What this map cannot answer
 
-- **Issues are not nodes.** Only `.md` files in this repo are. #18 lives as *text inside*
-  [the preview stage](territory/preview-stage.md) and
-  [the shell page composition](territory/shell-page-composition.md), and it will not appear
-  in a graph view. Issues are cited as **evidence** — an observation that stays true after
+- **Issues are not nodes.** Only `.md` files in this repo are. #18 appears only as a citation
+  inside [the shell page composition](territory/shell-page-composition.md) and ADR-0014, and
+  it will not appear in a graph view. Issues are cited as **evidence** — an observation that stays true after
   the issue closes — with the number demoted to a tracking pointer. A line that would become
   false on close is written the other way round.
 - **Source files are not nodes.** `## Code` lists symbols as text.
@@ -143,7 +142,7 @@ ls docs/map/territory/ docs/map/invariant/          # what exists
 
 # Scope every sentinel query to its heading — the same sentinel marks three
 # different holes, and an unscoped query reports the best-governed territory
-# in the repo as ungoverned. Verified: scoped returns 4, unscoped returns 9.
+# in the repo as ungoverned. Verified: scoped returns 2, unscoped returns 9.
 rg -lU '## Governing decisions\r?\n\r?\n?\*\*None\.\*\*' docs/map/territory/
 rg -lU '## Reference behaviour\r?\n\r?\n?\*\*None\.\*\*'  docs/map/territory/
 rg -lU '## Code\r?\n\r?\n?\*\*None\.\*\*'                 docs/map/territory/

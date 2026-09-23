@@ -23,7 +23,7 @@ code can read**, and a second copy was made anyway.
 → [the menu and roster](../territory/menu-and-roster.md) — the Roster concept carries the
   warning in its own glossary entry: the danger is being kept by hand rather than read
 → [the preview stage](../territory/preview-stage.md) — `ViewportSpec.values` stays the only
-  roster of viewports there is, which is why the wall is an id rather than a fourth spec
+  roster of viewports there is, which is why the wall and the room are ids rather than more specs
 → [the theme and chrome](../territory/theme-and-chrome.md) — `example_theme_test.dart` keeps a
   hand-written map of styled surfaces, with the consequence written on it
 → [the published artifact](../territory/published-artifact.md) — the import allow-list is a
