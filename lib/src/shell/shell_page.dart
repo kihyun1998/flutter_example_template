@@ -336,6 +336,7 @@ class _ShellPageState extends State<ShellPage> {
                   // content lazily costs three times what is on screen rather
                   // than three times the data — measured, and judged not worth
                   // binding the knob pane to the shell's viewport state.
+                  showsRoom: true,
                   showsWall: open.allowsWall,
                   selectedId: _viewportId,
                   onChanged: (id) => setState(() {

@@ -60,6 +60,11 @@ argument does not reopen these; the maintainer does.
 exported. The caption is shared by making `PreviewFrame.labelHeight` and `PreviewFrame.labelFor`
 public rather than copying them. The caption's text style is still written out in both widgets.
 
+`ViewportBar` offers the room only when its host passes `showsRoom`, which defaults to false for the
+reason `showsWall` does: a host that draws one frame has no room to offer, and would hand the id to
+`ViewportSpec.byId`, which throws on it. `ShellPage` passes true. This is a derivation, added before
+0.3.0 was published.
+
 **This record does not cover** what the room looks like below `ShellPage.narrowBreakpoint`, where
 the stage region is a full-width tab. The tests cover only the wide layout. The pub.dev screenshots
 are not covered either, and no capture of the room exists. A consumer constrained to `^0.1.0` or
