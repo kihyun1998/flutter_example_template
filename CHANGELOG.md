@@ -14,6 +14,11 @@
   The shell still opens on the desktop viewport. ADR-0014 records why. (#18)
 * `PreviewRoom`, the widget behind the mode, exported like `PreviewFrame` and
   `DeviceWall` and usable without the shell.
+* `ViewportBar.roomId`, `ViewportBar.roomLabel` and `ViewportBar.showsRoom`.
+  The room is offered only where a host asks for it, as the wall is: a
+  `ViewportBar` used on its own keeps the three named viewports, so a host that
+  passes the selection to `ViewportSpec.byId` is never handed an id it throws
+  on. `ShellPage` asks.
 * `PreviewFrame.labelHeight` and `PreviewFrame.labelFor`, the caption both of
   them share.
 

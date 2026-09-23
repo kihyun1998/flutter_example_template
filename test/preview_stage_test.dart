@@ -52,6 +52,44 @@ void main() {
     });
   });
 
+  group('ViewportBar', () {
+    Future<List<String>> segments(WidgetTester t, ViewportBar bar) async {
+      await t.pumpWidget(MaterialApp(home: Scaffold(body: bar)));
+      return t
+          .widget<SegmentedButton<String>>(find.byType(SegmentedButton<String>))
+          .segments
+          .map((s) => s.value)
+          .toList();
+    }
+
+    testWidgets('offers the named viewports alone unless asked for more', (
+      t,
+    ) async {
+      final bar = ViewportBar(selectedId: 'desktop', onChanged: (_) {});
+
+      expect(await segments(t, bar), ['desktop', 'tablet', 'mobile']);
+    });
+
+    testWidgets('offers the room before the wall when asked for both', (
+      t,
+    ) async {
+      final bar = ViewportBar(
+        selectedId: 'desktop',
+        onChanged: (_) {},
+        showsRoom: true,
+        showsWall: true,
+      );
+
+      expect(await segments(t, bar), [
+        'desktop',
+        'tablet',
+        'mobile',
+        'room',
+        'all',
+      ]);
+    });
+  });
+
   group('PreviewStage', () {
     testWidgets('lays the child out at the size and reports that size', (
       t,

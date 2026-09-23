@@ -135,6 +135,7 @@ class ViewportBar extends StatelessWidget {
     required this.selectedId,
     required this.onChanged,
     this.compact = false,
+    this.showsRoom = false,
     this.showsWall = false,
   });
 
@@ -164,6 +165,12 @@ class ViewportBar extends StatelessWidget {
   /// is shared with the Preview / Code control on its left, so this one has to
   /// earn its width.
   final bool compact;
+
+  /// Whether the room is offered as a mode.
+  ///
+  /// False by default for the reason [showsWall] is: a host that draws one
+  /// frame has no room to offer.
+  final bool showsRoom;
 
   /// Whether the wall is offered as a mode.
   ///
@@ -202,12 +209,13 @@ class ViewportBar extends StatelessWidget {
             label: compact ? null : Text(v.label),
             tooltip: v.label,
           ),
-        ButtonSegment<String>(
-          value: roomId,
-          icon: const Icon(Icons.open_in_full),
-          label: compact ? null : const Text(roomLabel),
-          tooltip: roomLabel,
-        ),
+        if (showsRoom)
+          ButtonSegment<String>(
+            value: roomId,
+            icon: const Icon(Icons.open_in_full),
+            label: compact ? null : const Text(roomLabel),
+            tooltip: roomLabel,
+          ),
         if (showsWall)
           ButtonSegment<String>(
             value: wallId,

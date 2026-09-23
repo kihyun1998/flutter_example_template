@@ -60,6 +60,10 @@ the subtree `390 × 844`. The wall always built it this way.
 848 px of screen and the room covers 888 px, so the difference is almost none. What changes is
 that the subject is no longer told it has 1440.
 
+**The bar offers the room and the wall only when asked.** `ViewportBar.showsRoom` and
+`showsWall` both default to false, so a host that draws one frame keeps the three named
+viewports and never hands `ViewportSpec.byId` an id it throws on. `ShellPage` asks for both.
+
 **`ViewportSpec.values` is the only roster of viewports there is**, which is why the room and
 the wall are selected by an id rather than by a fourth `ViewportSpec` that would have to invent
 a size and a chrome policy.

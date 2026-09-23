@@ -205,10 +205,10 @@ however your knob region wants.
 ## The pieces, used on their own
 
 `PreviewStage`, `PreviewFrame`, `PreviewRoom`, `DeviceWall`, `ViewportSpec`, `CodePane` and
-`MetricsPanel` are all exported and none of them requires the shell. The highlighting under `CodePane` is
-[`flutter_syntax_highlight`](https://pub.dev/packages/flutter_syntax_highlight) — a dependency
-rather than a copy, see ADR-0012 — whose tokenizer is a pure function you can test without pumping
-a widget. What a token *looks* like stays here.
+`MetricsPanel` are all exported and none of them requires the shell. The highlighting under
+`CodePane` is [`flutter_syntax_highlight`](https://pub.dev/packages/flutter_syntax_highlight) — a
+dependency rather than a copy, see ADR-0012 — whose tokenizer is a pure function you can test
+without pumping a widget. What a token *looks* like stays here.
 
 ## The example
 
@@ -233,7 +233,8 @@ example/lib/main.dart    the one file that has to know this shell exists
 - the Code pane has no line numbers;
 - this package is depended on rather than copied;
 - the SDK floor is 3.27.0 though the code alone would reach 3.22, and the import allow-list is
-  three entries rather than two.
+  three entries rather than two;
+- the shell opens on the desktop viewport, not on the room.
 
 [`CONTEXT.md`](./CONTEXT.md) is the vocabulary. [`docs/agents/lessons.md`](./docs/agents/lessons.md)
 is the working rules — the mistakes this codebase made and would make again.
@@ -254,6 +255,6 @@ on exactly one line — `pubspec.yaml` names that line, and says what going lowe
 
 The comments are load-bearing. Measured 2026-09-23: 1,170 of 3,478 lines under `lib/` are comment
 lines, a third of the file. They record measurements with dates, and two explanations that were
-asserted, tested and **withdrawn** — cited in four files, because the retraction travels with
-everything that had leaned on the claim. If a comment looks redundant, assume it is the residue of
+asserted, tested and **withdrawn** — cited in every file that had leaned on the claim, because the
+retraction travels with it. If a comment looks redundant, assume it is the residue of
 something expensive before assuming it is noise.
