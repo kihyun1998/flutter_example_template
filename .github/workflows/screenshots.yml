@@ -16,6 +16,17 @@
 # **The images are uploaded, not committed.** A run that produces different
 # pictures is a thing for somebody to look at; a bot that commits screenshots is
 # a bot that can quietly replace the front page.
+#
+# **What this job uploads is a Linux capture, and the committed images are macOS
+# ones.** So the artifact is never byte-comparable to what is in the tree, by
+# design and permanently — look at it for whether the UI still exists and the
+# shots still reach it, never for whether it matches. The paragraph above
+# already guessed at this ("rendering differences between this runner and
+# whichever machine last committed the images"). It guessed the right conclusion
+# from the wrong cause: what actually moves is layout, not rendering. Flutter
+# web takes `defaultTargetPlatform` from the user agent and Material takes
+# `AppBar.centerTitle` from that, so the title is centred on a Mac and left
+# everywhere else (#14). `tool/screenshots.sh` carries the rule.
 
 name: Screenshots
 
@@ -49,10 +60,14 @@ jobs:
 
       - run: flutter --version
 
-      # The script defaults `CHROME` to a macOS path, and that default is the
-      # whole of its platform dependence — it ran unmodified on Windows with
-      # this one variable set. Google Chrome ships on this runner image, so the
-      # path is asked for rather than written down.
+      # The script defaults `CHROME` to a macOS path. Google Chrome ships on
+      # this runner image, so the path is asked for rather than written down.
+      #
+      # This comment used to add that the path was "the whole of its platform
+      # dependence — it ran unmodified on Windows with this one variable set",
+      # and that was measured on the exit code alone. It is false about the
+      # output: the app bar title changes side with the platform whatever
+      # CHROME points at (#14). Running is portable; the captures are not.
       - name: Capture
         run: |
           export CHROME="$(command -v google-chrome)"

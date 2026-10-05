@@ -23,6 +23,7 @@ library;
 export 'src/metrics/metrics_panel.dart';
 export 'src/preview/device_wall.dart';
 export 'src/preview/preview_frame.dart';
+export 'src/preview/preview_room.dart';
 export 'src/preview/preview_stage.dart';
 export 'src/preview/viewport_spec.dart';
 export 'src/settings/feature_detail_pane.dart';

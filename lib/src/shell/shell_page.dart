@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../preview/device_wall.dart';
 import '../preview/preview_frame.dart';
+import '../preview/preview_room.dart';
 import '../preview/preview_stage.dart';
 import '../preview/viewport_spec.dart';
 import '../theme/theme_mode_button.dart';
@@ -90,11 +91,9 @@ class _ShellPageState extends State<ShellPage> {
       .firstOrNull
       ?.id;
 
-  /// A [ViewportSpec.id], or [ViewportBar.wallId] for the Device Wall.
+  /// A [ViewportSpec.id], [ViewportBar.roomId] for the Room, or
+  /// [ViewportBar.wallId] for the Device Wall.
   String _viewportId = ViewportSpec.desktop.id;
-  String _lastViewportId = ViewportSpec.desktop.id;
-
-  bool get _showingWall => _viewportId == ViewportBar.wallId;
 
   /// The last single-viewport mode chosen.
   ///
@@ -103,6 +102,11 @@ class _ShellPageState extends State<ShellPage> {
   /// picking a segment *is* the choice — but the forced one used to land
   /// on `desktop` whatever the reader had been looking at, which is a constant
   /// standing in for a decision.
+  String _lastViewportId = ViewportSpec.desktop.id;
+
+  bool get _showingWall => _viewportId == ViewportBar.wallId;
+
+  bool get _showingRoom => _viewportId == ViewportBar.roomId;
 
   /// Shrink the whole viewport into view, rather than showing a 1:1 slice of it.
   ///
@@ -259,7 +263,7 @@ class _ShellPageState extends State<ShellPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
+        _ScrollsWhenNarrow(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
           child: Row(
             children: [
@@ -295,7 +299,9 @@ class _ShellPageState extends State<ShellPage> {
                 // be, so 1:1 there would be three clipped slices at three
                 // arbitrary widths — a control that can only make the view
                 // worse is one the toolbar should not be offering.
-                if (!_showingWall) ...[
+                //
+                // The room has none either: it is never scaled.
+                if (!_showingWall && !_showingRoom) ...[
                   Tooltip(
                     message: _fit
                         ? 'Shrink the whole viewport into view'
@@ -330,6 +336,7 @@ class _ShellPageState extends State<ShellPage> {
                   // content lazily costs three times what is on screen rather
                   // than three times the data — measured, and judged not worth
                   // binding the knob pane to the shell's viewport state.
+                  showsRoom: true,
                   showsWall: open.allowsWall,
                   selectedId: _viewportId,
                   onChanged: (id) => setState(() {
@@ -357,14 +364,44 @@ class _ShellPageState extends State<ShellPage> {
                       // layouts over one set of knobs, which is the destination
                       // built three times.
                       ? DeviceWall(stage: open.stage)
+                      : _showingRoom
+                      ? PreviewRoom(child: Builder(builder: open.stage))
                       : PreviewFrame(
                           spec: ViewportSpec.byId(_viewportId),
                           fit: _fit,
-                          child: open.stage(context),
+                          child: Builder(builder: open.stage),
                         ),
                 ),
         ),
       ],
+    );
+  }
+}
+
+/// [child] across the whole width when it fits, and scrolled sideways when it
+/// does not.
+class _ScrollsWhenNarrow extends StatelessWidget {
+  const _ScrollsWhenNarrow({required this.padding, required this.child});
+
+  final EdgeInsets padding;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: padding,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: (constraints.maxWidth - padding.horizontal).clamp(
+              0.0,
+              double.infinity,
+            ),
+          ),
+          child: IntrinsicWidth(child: child),
+        ),
+      ),
     );
   }
 }

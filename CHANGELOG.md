@@ -1,4 +1,65 @@
-## Unreleased
+## 0.3.0
+
+**Added**
+
+* A stage mode, **Room**, between the phone viewport and the Device Wall: the
+  stage region at its own size, at 1:1, in place of a named viewport. Every mode
+  before it scaled, so a reader could look at a subject but never use it at real
+  size — at 1440 × 900 the desktop viewport draws at 0.589×. The room never
+  scales, hands the subject the region less its caption, and tells it through
+  `MediaQuery` that this box is the whole screen. Without that, a stage drawn
+  straight into the region is told 1440 × 900 while it is laid out at 888 × 774,
+  and a consumer's branch on the screen size takes the wrong arm. It adds no
+  overlay of its own, has no Fit control, and is offered for every destination.
+  The shell still opens on the desktop viewport. ADR-0014 records why. (#18)
+* `PreviewRoom`, the widget behind the mode, exported like `PreviewFrame` and
+  `DeviceWall` and usable without the shell.
+* `ViewportBar.roomId`, `ViewportBar.roomLabel` and `ViewportBar.showsRoom`.
+  The room is offered only where a host asks for it, as the wall is: a
+  `ViewportBar` used on its own keeps the three named viewports, so a host that
+  passes the selection to `ViewportSpec.byId` is never handed an id it throws
+  on. `ShellPage` asks.
+* `PreviewFrame.labelHeight` and `PreviewFrame.labelFor`, the caption both of
+  them share.
+
+**Fixed**
+
+* A destination's `stage` builder is now told the viewport it is drawn in,
+  in the framed modes as well as the wall. Its own body ran with the shell's
+  context, so `MediaQuery.sizeOf(context)` read there answered with the window
+  — 1440 × 900 in the mobile viewport, while the widgets it returned were told
+  390 × 844. A builder that branches on the screen size in its body now takes
+  the arm the viewport calls for.
+* The stage's toolbar scrolls sideways instead of overflowing when the window
+  is too narrow for it. Measured in 0.2.0 at 800 px tall, with the Code control
+  showing: every width from 400 to 690 px overflowed. The Room segment would
+  have widened that to 750 px, and started it at 400–450 px for a destination
+  with no Code control.
+
+**Also in this release**
+
+* `PreviewStage`, `PreviewFrame`, `ViewportSpec` and `DeviceWall` have suites
+  here. They had none: the ones that held them were left behind in the
+  repository the shell was extracted from, and the "interaction survives the
+  scale" test their doc-comments cite was among them. The properties are
+  carried over without the table they were written against, and each test was
+  seen failing against a mutation of the code it guards.
+
+## 0.2.0
+
+**Changed**
+
+* `ShellMenu` no longer draws a header, or a *nothing here yet* line, for a
+  category the roster left empty. A category cannot be claimed — `ShellCategory`
+  is a fixed enum and the roster is the only input — so an empty one is a
+  capability nothing supplied, and ADR-0005 already said those draw nothing. A
+  menu now grows a section when the first destination of that kind arrives,
+  which is the cost. Reported against 0.1.0 by a consumer with eleven recipes
+  and no scenarios, whose menu got emptier-looking as its example got better.
+  (#11)
+* A roster holding nothing at all says so once, in the menu, rather than three
+  times by category. With the fix below that state is the whole screen, and it
+  is the one a reader cannot tell from a build that failed.
 
 **Fixed**
 
@@ -9,6 +70,20 @@
   tab bar over them. ADR-0005 records why those are absent rather than empty.
   Reported against 0.1.0 by a consumer adopting the shell before its first
   recipe existed, which is the one shape that could not start. (#10)
+
+**Also in this release**
+
+Neither of these changes what a consumer gets; both are the repository holding
+itself to what it already claims.
+
+* `tool/screenshots.sh` waits for two identical consecutive frames before it
+  captures, rather than for the semantics tree to report the state. It used to
+  photograph whatever animation phase the label check happened to land on, and
+  the README images moved for that rather than for any UI change (#14).
+* The capture platform is macOS, and it is now written down and announced
+  instead of implied. The committed set had been captured on two machines, and
+  Material centres an `AppBar` title on a Mac and left-aligns it everywhere
+  else — 99.5% of the drift in `code-pane.png` was that one line (#14).
 
 ## 0.1.0
 

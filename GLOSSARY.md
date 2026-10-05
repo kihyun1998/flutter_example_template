@@ -83,7 +83,8 @@ A destination the shell draws itself, in its stage and its knob region.
 A destination that opens on its own route. The shell hands over rather than absorbing it.
 
 **Category**:
-One of the three groups the menu shows. Two name content and the third names a hosting kind.
+One of the three groups a menu can show. Two name content and the third names a hosting kind. A
+category no destination claims is not drawn — it is not a slot standing open (ADR-0005).
 _Avoid_: Section, group (a Group is a settings-panel term)
 
 **Recipe**:
@@ -121,6 +122,12 @@ _Avoid_: Frame, canvas
 **Preview frame**:
 A preview stage scaled to fit the room it is given, captioned with its dimensions and its factor.
 _Avoid_: Stage, window, card
+
+**Room**:
+The mode that draws no viewport at all: the subject gets the room the stage has, at 1:1, and is told
+that is the whole screen. It never scales. It answers what the subject is like to use, which a
+scaled mode shows but cannot let the reader do at real size.
+_Avoid_: Native, unframed, actual size, full size
 
 **Device Wall**:
 The mode that draws every viewport at once, live, over one set of knobs. It answers what changed

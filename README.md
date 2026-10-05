@@ -16,6 +16,10 @@ package removed. You supply what to demonstrate; the shell draws everything arou
 - **A preview stage** that renders your widget at desktop, tablet and phone widths — constrained
   *and* told that is the whole screen, with its own `Overlay` so tooltips and drags stay inside the
   frame.
+- **A Room**: the stage region at its own size, at 1:1, in place of a named viewport — for using
+  your widget at real pixels rather than looking at it shrunk. Constrained and told that is the
+  whole screen, like the named viewports; never scaled and with no `Overlay` of its own, unlike
+  them, so a drag or a tooltip behaves as it would in your app.
 - **A Device Wall**: all three viewports at once, live, over one shared state. The single-viewport
   modes answer *what does this look like at that width*; the wall answers *what changed between
   them*.
@@ -54,6 +58,11 @@ of producing a confidently wrong picture. The Code pane's shot checks the pictur
 its content is painted to a canvas that no label can see. Rerun it after anything that changes the
 UI: a screenshot of something that has since moved is a citation that no longer says anything.
 
+**Capture them on macOS.** Flutter web reads `defaultTargetPlatform` off the user agent and Material
+reads `AppBar.centerTitle` off that, so a title that is centred here sits hard left in a capture made
+anywhere else — a layout difference no amount of looking at the picture explains. The script says so
+and prints a notice when it is run elsewhere; running it there is fine, committing the result is not.
+
 ## The claim it holds itself to
 
 **Nothing in this package names what it demonstrates.** That is not a style preference; it is the
@@ -74,7 +83,7 @@ In your **`example/pubspec.yaml`** — not your package's:
 
 ```yaml
 dependencies:
-  flutter_example_template: ^0.1.0
+  flutter_example_template: ^0.3.0
 ```
 
 Or, to track `main` ahead of a release:
@@ -135,6 +144,10 @@ Any mix of the two kinds is a roster, including none of one. A gallery that list
 than drawing those two empty — so you can adopt the shell before you have written your first
 recipe, which is when a gallery is most useful to somebody still deciding.
 
+The menu follows the same rule: a category no destination names is not drawn, so a gallery of
+recipes alone shows one heading rather than one and two apologies. Your menu grows a section when
+the first scenario or page arrives. A roster with nothing in it yet says so, once.
+
 `source` is optional and null is the ordinary answer. Pass it only where the destination *is* one
 self-contained file — offering a Code pane over something assembled from several would have to pick
 one of them and call it the source.
@@ -191,11 +204,11 @@ however your knob region wants.
 
 ## The pieces, used on their own
 
-`PreviewStage`, `PreviewFrame`, `DeviceWall`, `ViewportSpec`, `CodePane` and `MetricsPanel` are all
-exported and none of them requires the shell. The highlighting under `CodePane` is
-[`flutter_syntax_highlight`](https://pub.dev/packages/flutter_syntax_highlight) — a dependency
-rather than a copy, see ADR-0012 — whose tokenizer is a pure function you can test without pumping
-a widget. What a token *looks* like stays here.
+`PreviewStage`, `PreviewFrame`, `PreviewRoom`, `DeviceWall`, `ViewportSpec`, `CodePane` and
+`MetricsPanel` are all exported and none of them requires the shell. The highlighting under
+`CodePane` is [`flutter_syntax_highlight`](https://pub.dev/packages/flutter_syntax_highlight) — a
+dependency rather than a copy, see ADR-0012 — whose tokenizer is a pure function you can test
+without pumping a widget. What a token *looks* like stays here.
 
 ## The example
 
@@ -220,22 +233,28 @@ example/lib/main.dart    the one file that has to know this shell exists
 - the Code pane has no line numbers;
 - this package is depended on rather than copied;
 - the SDK floor is 3.27.0 though the code alone would reach 3.22, and the import allow-list is
-  three entries rather than two.
+  three entries rather than two;
+- the shell opens on the desktop viewport, not on the room.
 
 [`CONTEXT.md`](./CONTEXT.md) is the vocabulary. [`docs/agents/lessons.md`](./docs/agents/lessons.md)
 is the working rules — the mistakes this codebase made and would make again.
 
 ## Status
 
-`0.1.0`, and honest about it: one example, and one consumer — this repository's own. The questions
-the transplant left open are answered in `docs/adr/` rather than still being weighed.
+`0.3.0`, and honest about it: one example, and three consumers besides this repository's own —
+`flutter_dropdown_button` and `flutter_folderview` on 0.2.0, and `flutter_table_plus`, where the
+shell was first built, still on 0.1.0. This release came from the last of those: a table is
+something a reader wants to use and not only look at, and every mode before the room drew it scaled
+— 0.589× on the laptop the desktop viewport is named after (#18). The questions the transplant left
+open are answered in `docs/adr/` rather than still being weighed; the ones adoption is opening were
+not on that list.
 
 **Requires Flutter 3.27.** Measured, not inherited, and held rather than remembered: CI runs both
 suites at that floor and at the current stable, on Linux and on Windows, on every push. 3.24.5 fails
 on exactly one line — `pubspec.yaml` names that line, and says what going lower would cost.
 
-The comments are load-bearing. Measured 2026-09-07: 1,088 of 3,280 lines under `lib/` are comment
+The comments are load-bearing. Measured 2026-09-23: 1,170 of 3,478 lines under `lib/` are comment
 lines, a third of the file. They record measurements with dates, and two explanations that were
-asserted, tested and **withdrawn** — cited in four files, because the retraction travels with
-everything that had leaned on the claim. If a comment looks redundant, assume it is the residue of
+asserted, tested and **withdrawn** — cited in every file that had leaned on the claim, because the
+retraction travels with it. If a comment looks redundant, assume it is the residue of
 something expensive before assuming it is noise.

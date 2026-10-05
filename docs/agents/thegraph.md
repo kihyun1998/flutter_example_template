@@ -13,10 +13,10 @@ supplies one through three ports.
 
 | Source | Informs | Reached by | Binding |
 |---|---|---|---|
-| Flutter SDK | how it works | its source tree at `D:\flutter\packages\` — raw | spec |
-| `flutter_syntax_highlight` | how it works | the sibling checkout at `D:\github\flutter_syntax_highlight` — raw | spec |
+| Flutter SDK | how it works | `packages/` under the SDK root (`flutter` on PATH) — raw | spec |
+| `flutter_syntax_highlight` | how it works | the sibling checkout beside this repo — raw | spec |
 | pub.dev package layout and publishing rules | where files go | dart.dev docs — **summarized** | spec |
-| The maintainer's other `flutter_*` packages | where files go | their real trees under `D:\github\` — raw | example |
+| The maintainer's other `flutter_*` packages | where files go | the sibling checkouts beside this repo — raw | example |
 
 **Informs** routes it: *how it works* is read while building and reviewing, *where files
 go* while deciding a file's home.

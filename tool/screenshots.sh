@@ -12,6 +12,29 @@
 # protocol over Node's own WebSocket, because a tool that needs a dependency
 # tree is a tool that stops being rerun.
 #
+# **The committed images are macOS captures, and only macOS reproduces them.**
+# Flutter web reads `defaultTargetPlatform` off the user agent, and Material
+# reads that for its adaptive defaults — `AppBar.centerTitle` among them. So the
+# app bar title sits centred in a capture made on a Mac and hard left in one
+# made anywhere else, and that is a layout difference, not a rendering one: it
+# survives any zoom, any encoder, any amount of squinting at the picture.
+#
+# Measured on `code-pane.png` (#14). Of 7129 pixels differing from the committed
+# capture, 7093 — 99.5% — lie in the top 100 rows, which is the app bar and
+# nothing else; the remaining 36 are scattered antialiasing. The guess before
+# the measurement was fonts, and fonts are not it. The Code pane's own text
+# renders the same on both.
+#
+# That is how this was found. `code-pane.png` was recaptured on its own, off a
+# Mac, while the other three stayed macOS, and from then on every run on every
+# machine moved some subset of the four. A reviewer who sees files move on every
+# run stops reading them, which is the one thing
+# `.github/workflows/screenshots.yml` exists to preserve.
+#
+# Capturing on another platform is fine — that is what CI does, on Linux, and it
+# is looking for a shot it cannot reach rather than for a picture. What is not
+# fine is committing the result. The notice below says so where it matters.
+#
 # It exits non-zero when a shot could not be reached. That is the point of it:
 # the driver presses controls by their semantics label and checks what is on
 # screen before it captures, so a moved menu row fails the run instead of
@@ -25,6 +48,17 @@ CHROME="${CHROME:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
 
 [ -x "$CHROME" ] || { echo "Chrome not found at: $CHROME" >&2; exit 1; }
 command -v node >/dev/null || { echo "node not found" >&2; exit 1; }
+
+# A notice, not a failure. CI runs this on Linux on purpose and has to stay
+# green; the person who needs telling is the one about to `git add` four files
+# that will look like a UI change and are not one.
+if [ "$(uname -s)" != "Darwin" ]; then
+  echo "note: the committed images are macOS captures. These will differ from" >&2
+  echo "      them wherever an app bar is in shot — Material centres the title" >&2
+  echo "      on a Mac and left-aligns it everywhere else — rather than for" >&2
+  echo "      anything you changed. Look at them, but do not commit them from" >&2
+  echo "      here. See the header, and #14." >&2
+fi
 
 # Ports are taken, not assumed. A fixed debugger port attaches to whatever
 # Chrome already had one open — someone's own browser, photographed instead of

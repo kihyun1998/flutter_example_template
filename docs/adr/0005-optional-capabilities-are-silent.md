@@ -28,3 +28,18 @@ returning an empty widget from it has claimed the knob region, and the region is
 way a `PresetBar` over a host that declares one empty preset would still be a bar. This silence is
 about what was never supplied, never about what came back empty, and a rule stated only on one side
 of that pair is the side it fails on next.
+
+**A menu category cannot be claimed, which settles which side of that pair it falls on.**
+`ShellCategory` is a fixed enum and the roster is the only input a host has, so nothing can say
+"scenarios, and none yet" — every empty category is one nothing was supplied for, and `ShellMenu`
+now draws no header for one. It used to draw a header over a *nothing here yet*, which is the empty
+strip with a rule under it this decision rejects for `PresetBar` by name (#11). Found the same way
+as #10: the rule was already written and had never been read as reaching the menu, because it was
+written about ports and a category is not one.
+
+**A roster with nothing in it at all is not this rule, and gets a line.** An unclaimed capability is
+a part of a page; an empty roster is the page, since the shell draws the menu alone at full width
+for one. Silence there is a blank screen, which a reader cannot tell from a failed build — so the
+menu says once that it has nothing to point at, and stops the moment the roster holds anything. The
+distinction this rests on is *capability* versus *whole page*, and it is the boundary to argue with
+if this ever looks like the old empty state coming back.
