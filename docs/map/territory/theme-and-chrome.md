@@ -5,7 +5,7 @@ The gallery's own interface around the subject — the app bar, the menu, the pa
 operates — and the rule that it carries no colour of its own. It themes the *application*;
 the subject's own theme is the consumer's, built from its settings.
 
-**This territory has no entry in [`CONTEXT.md`](../../../CONTEXT.md)'s glossary.** Five areas
+**This territory has no entry in [`GLOSSARY.md`](../../../GLOSSARY.md)'s glossary.** Five areas
 are defined there and this is not one of them, which is consistent with what the records
 show: it is the least-named area in a repository whose central discipline is naming.
 

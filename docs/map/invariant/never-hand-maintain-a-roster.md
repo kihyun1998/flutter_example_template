@@ -43,7 +43,7 @@ label which is which.** An unlabelled hand list is the violation; a labelled one
 
 ## Discovery history
 → [`lessons.md` — never hand-maintain a roster](../../agents/lessons.md#never-hand-maintain-a-roster)
-→ [`CONTEXT.md`](../../../CONTEXT.md) — the Roster entry carries the warning in the glossary
+→ [`GLOSSARY.md`](../../../GLOSSARY.md) — the Roster entry carries the warning in the glossary
 
 - The seam test named three areas against a tree of five, wrong on the day it was written.
 - `ViewportSpec.values` is the positive case, and it is *why* the wall is selected by id: a

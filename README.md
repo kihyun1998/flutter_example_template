@@ -236,7 +236,7 @@ example/lib/main.dart    the one file that has to know this shell exists
   three entries rather than two;
 - the shell opens on the desktop viewport, not on the room.
 
-[`CONTEXT.md`](./CONTEXT.md) is the vocabulary. [`docs/agents/lessons.md`](./docs/agents/lessons.md)
+[`GLOSSARY.md`](./GLOSSARY.md) is the vocabulary. [`docs/agents/lessons.md`](./docs/agents/lessons.md)
 is the working rules — the mistakes this codebase made and would make again.
 
 ## Status

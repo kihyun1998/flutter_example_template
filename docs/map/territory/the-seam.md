@@ -7,7 +7,7 @@ asked, in which direction, and who owns the state behind it. It does not own wha
 pane draws; the panes are [the settings panel](settings-panel.md) and
 [the menu and roster](menu-and-roster.md), and they are the seam's two largest customers.
 
-The vocabulary is [`CONTEXT.md`](../../../CONTEXT.md)'s: Port, Host, Seam, Zone, Barrel.
+The vocabulary is [`GLOSSARY.md`](../../../GLOSSARY.md)'s: Port, Host, Seam, Zone, Barrel.
 
 ## Governing decisions
 → [ADR-0001 — the gallery names no subject](../../adr/0001-the-gallery-names-no-subject.md)

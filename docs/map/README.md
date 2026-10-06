@@ -46,7 +46,7 @@ These exist in no node file, and they are the headline.
 | Decision records | **14** |
 | Territories with **no governing record** | **2 of 9** — settings panel, metrics panel |
 | Territories with **no reference comparison** | **9 of 9** |
-| Worst-covered concept | `theme` — in **5** records, the subject of **none**. It greps as covered, and it has no entry in `CONTEXT.md`'s glossary either |
+| Worst-covered concept | `theme` — in **5** records, the subject of **none**. It greps as covered, and it has no entry in `GLOSSARY.md`'s glossary either |
 | Concepts in **no** record at all | `device wall` — zero hits, title or body. `screenshot` appears once, in ADR-0014, as something that record does not cover |
 | Open issues | **1** (#18); 13 closed |
 | Largest file | 477 lines, **14%** of its layer — no god-file is hiding several territories |
