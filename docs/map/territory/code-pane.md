@@ -11,9 +11,10 @@ are looking at is the thing that ran.
 → [ADR-0012 — the tokenizer is a dependency, and the allow-list is three](../../adr/0012-the-tokenizer-is-a-dependency.md)
 → [ADR-0015 — the floor is 3.32, and the allow-list is four](../../adr/0015-the-floor-is-3-32-and-the-allow-list-is-four.md)
 
-Well governed for a single-type territory, and both records are narrow: one decides an
-absence, the other decides ownership of highlighting. Neither decides the loading model or
-the failure model, which is where this territory's holes are.
+Well governed for a single-type territory, and all three records are narrow: one decides an
+absence, one decides ownership of highlighting, and one decides the wheel motion and the floor
+it brought. None decides the loading model or the failure model, which is where this
+territory's holes are.
 
 ## Design model
 **The source is read from the bundle, not from disk.** `StageDestination.source` names an
@@ -26,7 +27,8 @@ one frame when that happens — so a narrower wrap would flash the previous file
 against the new file's path bar.
 
 **Highlighting is a dependency, not code here.** `flutter_syntax_highlight` owns tokenizing;
-this package owns the pane. ADR-0012 records that the import allow-list is three entries.
+this package owns the pane. ADR-0012 took the import allow-list to three entries, and
+ADR-0015 to four.
 
 **A wheel glides on both axes, and nothing else does.** Both of the pane's scroll views take
 a `SmoothScrollController`, so a wheel notch animates down the file and along a long line.

@@ -111,19 +111,25 @@ void main() {
       expect(position.pixels, 60);
     });
 
-    testWidgets('glides sideways along a long line the same way', (
+    testWidgets('held with Shift, glides sideways along a long line', (
       tester,
     ) async {
       await pumpLong(tester);
       final position = _position(tester, Axis.horizontal);
 
-      await _wheel(tester, const Offset(60, 0));
-      await tester.pump(const Duration(milliseconds: 16));
-      expect(position.pixels, greaterThan(0));
-      expect(position.pixels, lessThan(60));
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+      try {
+        await _wheel(tester, const Offset(0, 60));
+        await tester.pump(const Duration(milliseconds: 16));
+        expect(position.pixels, greaterThan(0));
+        expect(position.pixels, lessThan(60));
 
-      await tester.pumpAndSettle();
-      expect(position.pixels, 60);
+        await tester.pumpAndSettle();
+        expect(position.pixels, 60);
+        expect(_position(tester, Axis.vertical).pixels, 0);
+      } finally {
+        await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+      }
     });
 
     testWidgets('leaves a drag to follow the finger directly', (tester) async {

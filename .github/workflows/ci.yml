@@ -15,9 +15,10 @@
 #   inverse. The maintainer's machine is Windows, so Linux is the new information.
 #
 # Deliberately not here: `dart format --set-exit-if-changed`. The tree is
-# formatted by exactly one SDK and no other agrees — Dart 3.11.5 rewrites 9 of
-# these 36 files, Dart 3.6.0 rewrites 17 — so that gate would be red on every leg
-# but one. ADR-0011 records the measurement.
+# formatted by exactly one SDK, Dart 3.11.5, and no other is known to agree — at
+# the old floor, Dart 3.6.0 rewrote 17 of 36 files — so that gate would be red on
+# every leg but the one that SDK happens to match. ADR-0011 records the
+# measurement, ADR-0015 the reformat.
 #
 # Also not here: `tool/screenshots.sh`. It needs Chrome and a web build, and it
 # is the check that would catch a UI change silently invalidating the README.
