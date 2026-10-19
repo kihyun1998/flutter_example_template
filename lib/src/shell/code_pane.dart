@@ -351,7 +351,7 @@ class _CodeState extends State<_Code> {
   /// controller also gives the [Scrollbar] something unambiguous to track.
   final _vertical = SmoothScrollController();
 
-  /// The horizontal axis's, so a long line glides as the file does.
+  /// The horizontal axis's, beside [_vertical].
   final _horizontal = SmoothScrollController();
 
   /// Cached because tokens are the expensive, stable half; the styles are the
