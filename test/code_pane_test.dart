@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -129,6 +130,54 @@ void main() {
         expect(_position(tester, Axis.vertical).pixels, 0);
       } finally {
         await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+      }
+    });
+
+    testWidgets('glides when turned over the scrollbar track, too', (
+      tester,
+    ) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+      try {
+        await pumpLong(tester);
+        final position = _position(tester, Axis.vertical);
+        final box = tester.getRect(find.byType(Scrollbar).first);
+        final track = Offset(box.right - 3, box.center.dy);
+        final view = tester.renderObject(
+          find.byWidgetPredicate(
+            (w) =>
+                w is SingleChildScrollView &&
+                w.scrollDirection == Axis.vertical,
+          ),
+        );
+
+        final pointer = TestPointer(1, PointerDeviceKind.mouse);
+        await tester.sendEventToBinding(pointer.hover(track));
+        await tester.pumpAndSettle();
+        expect(
+          tester
+              .hitTestOnBinding(track)
+              .path
+              .any((entry) => identical(entry.target, view)),
+          isFalse,
+          reason: 'the view takes the wheel here, so the track is not reached',
+        );
+
+        tester.binding.handlePointerEvent(
+          PointerScrollEvent(
+            kind: PointerDeviceKind.mouse,
+            position: track,
+            scrollDelta: const Offset(0, 60),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 16));
+        expect(position.pixels, greaterThan(0));
+        expect(position.pixels, lessThan(60));
+
+        await tester.pumpAndSettle();
+        expect(position.pixels, 60);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
       }
     });
 

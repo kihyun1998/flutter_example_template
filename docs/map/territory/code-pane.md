@@ -62,6 +62,12 @@ more steps. What is left is the capture.
   for, so the pane stays on its empty loading frame and the test finds no `Scrollable`.
   A wheel event in a test needs `kind: PointerDeviceKind.mouse` — the default pointer is
   touch, and touch is never animated.
+  The wheel over the scrollbar track is a separate path, and only a desktop one: the view
+  registers for the wheel before the scrollbar does, so the track takes it only once a
+  hover has revealed it and the view has left the hit path — the test checks that first, or
+  it re-measures the plain wheel. On a desktop platform the default scroll behaviour also
+  adds scrollbars to the pane's other scroll views, so `find.byType(Scrollbar)` finds three
+  and the pane's own is the first.
 
 ## Reference behaviour
 **None.**
