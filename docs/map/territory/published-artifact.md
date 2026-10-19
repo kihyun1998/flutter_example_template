@@ -13,6 +13,7 @@ Its failures are the kind nothing local catches — they appear to someone who w
 → [ADR-0010 — two gates considered and declined](../../adr/0010-two-gates-declined.md)
 → [ADR-0011 — the SDK floor is measured, and one line sets it](../../adr/0011-the-sdk-floor-is-measured.md)
 → [ADR-0012 — the tokenizer is a dependency, and the allow-list is three](../../adr/0012-the-tokenizer-is-a-dependency.md)
+→ [ADR-0015 — the floor is 3.32, and the allow-list is four](../../adr/0015-the-floor-is-3-32-and-the-allow-list-is-four.md)
 
 ## Design model
 **Depended on, not copied.** The name says template; the shape — a barrel, `src/`, three
@@ -62,7 +63,8 @@ thing*, and a summarized source cannot settle a question outright.
   font contract stated in the README
 
 ## Known holes / open
-- **ADR-0007 states a two-entry allow-list; the code has three and ADR-0012 raised it.**
+- **ADR-0007 states a two-entry allow-list; the code has four — ADR-0012 raised it to three
+  and ADR-0015 to four.**
   Neither record links to the other — no decision record in this repository links to another
   — so a reader arriving at 0007 gets a stale number with nothing pointing onward. The
   decision is superseded; its text is not marked.

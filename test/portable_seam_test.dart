@@ -49,10 +49,14 @@ const _zoneInternals = 'src/';
 /// `flutter_syntax_highlight` is the tokenizer that used to sit under `src/` as
 /// a copy, and ADR-0012 records what taking it cost against what the copy was
 /// costing instead.
+///
+/// The fourth is `flutter_smooth_wheel_scroll`, the Code pane's wheel motion;
+/// ADR-0015 records it and the floor it moved.
 const _allowedExternal = [
   'dart:',
   'package:flutter/',
   'package:flutter_syntax_highlight/',
+  'package:flutter_smooth_wheel_scroll/',
 ];
 
 List<File> _dartFilesUnder(String dir) =>

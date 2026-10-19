@@ -7,8 +7,8 @@
 #
 # Two axes, and both have already caught something:
 #
-# - **SDK.** `pubspec.yaml` says `>=3.27.0`, measured. Nothing but a run at 3.27.0
-#   keeps that true, and the line that sets it is one line deep in a theme.
+# - **SDK.** `pubspec.yaml` says `>=3.32.0`, measured. Nothing but a run at 3.32.0
+#   keeps that true, and what sets it is two dependencies' own manifests.
 # - **Platform.** The barrel/tree property was red on Windows from the day it was
 #   written, because it compared `listSync` paths against `export` strings. A
 #   Linux-only workflow would not have seen it; a Windows-only one would miss the
@@ -43,7 +43,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         # "" takes the channel's latest; the pin is the floor `pubspec.yaml`
         # declares. Raising that floor means editing this line in the same commit.
-        flutter: ["3.27.0", ""]
+        flutter: ["3.32.0", ""]
 
     steps:
       - uses: actions/checkout@v4

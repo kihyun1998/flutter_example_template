@@ -1,3 +1,19 @@
+## Unreleased
+
+**Breaking: the SDK floor is now Flutter 3.32 / Dart 3.8** (was 3.27 / 3.6).
+On Flutter 3.27–3.31, stay on 0.3.0. Nothing in the public API changed.
+
+**Changed**
+
+* The Code pane glides on a mouse wheel instead of jumping a notch at a time,
+  down the file and along a long line alike. Dragging, the scrollbar, the
+  keyboard and a trackpad move exactly as before. The motion comes from
+  `flutter_smooth_wheel_scroll`, now a dependency. The shell does not install
+  `SmoothWheelBinding`: how far a notch travels is set in your own `main()`.
+  Nothing outside the Code pane changed, and a subject's own scroll views in
+  the stage least of all. ADR-0015 records the move. (#24)
+* `flutter_syntax_highlight` is now `^0.3.0`. Its tokenizer is unchanged.
+
 ## 0.3.0
 
 **Added**

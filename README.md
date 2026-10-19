@@ -232,8 +232,8 @@ example/lib/main.dart    the one file that has to know this shell exists
 - the chrome font is a parameter, and the palette is not;
 - the Code pane has no line numbers;
 - this package is depended on rather than copied;
-- the SDK floor is 3.27.0 though the code alone would reach 3.22, and the import allow-list is
-  three entries rather than two;
+- the SDK floor is 3.32.0, set by two dependencies rather than by the code, and the import
+  allow-list is four entries rather than two;
 - the shell opens on the desktop viewport, not on the room.
 
 [`GLOSSARY.md`](./GLOSSARY.md) is the vocabulary. [`docs/agents/lessons.md`](./docs/agents/lessons.md)
@@ -249,9 +249,10 @@ something a reader wants to use and not only look at, and every mode before the 
 open are answered in `docs/adr/` rather than still being weighed; the ones adoption is opening were
 not on that list.
 
-**Requires Flutter 3.27.** Measured, not inherited, and held rather than remembered: CI runs both
-suites at that floor and at the current stable, on Linux and on Windows, on every push. 3.24.5 fails
-on exactly one line — `pubspec.yaml` names that line, and says what going lower would cost.
+**Requires Flutter 3.32.** Measured, not inherited, and held rather than remembered: CI runs both
+suites at that floor and at the current stable, on Linux and on Windows, on every push. The floor is
+the two dependencies' — `pubspec.yaml` names them, and on Flutter 3.27–3.31 the last release that
+resolves is 0.3.0.
 
 The comments are load-bearing. Measured 2026-09-23: 1,170 of 3,478 lines under `lib/` are comment
 lines, a third of the file. They record measurements with dates, and two explanations that were
