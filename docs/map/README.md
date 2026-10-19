@@ -171,7 +171,9 @@ A third was the first kind again, on Windows (#28): the root came from a URL's `
 was fixed it still classified every note as a hub and selected no invariants — `ok`, with
 the section and reciprocity checks never run. That is why the result now names its scope
 (`ok — 15 note(s), 5 invariant(s)`) and why finding no notes is a failure rather than a pass.
-Read the counts, not the `ok`.
+Read the counts, not the `ok`. Zero invariants is reported and not failed — the maintainer's
+call on #28, made knowing that a renamed `invariant/` with every link rewritten would pass with
+reciprocity unchecked; today the links such a rename breaks catch it first.
 
 <!-- grill-map build stamp: SKILL.md sha256:b647f0ba1b0d (no revision available) -->
 <!-- ~/.claude/skills is not a git checkout on this machine, so `git log <stamp>..HEAD`
