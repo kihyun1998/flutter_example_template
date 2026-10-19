@@ -2,7 +2,9 @@
 library;
 
 import 'dart:async';
+import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smooth_wheel_scroll/flutter_smooth_wheel_scroll.dart';
@@ -443,33 +445,73 @@ class _CodeState extends State<_Code> {
   Widget build(BuildContext context) {
     // Code does not wrap — a wrapped line is a different line. So it scrolls on
     // both axes, inside this region and never by moving the shell around it.
-    return Scrollbar(
+    //
+    // The horizontal bar is outermost, so it sits at the bottom of the pane
+    // rather than the bottom of the file, and hears its view one level down.
+    return MediaQuery(
+      // Both bars read their insets from here.
+      data: MediaQuery.of(
+        context,
+      ).copyWith(padding: _clearOfSystemGestures(context)),
+      child: Scrollbar(
+        controller: _horizontal,
+        interactive: true,
+        thumbVisibility: _dragSelects,
+        notificationPredicate: (notification) => notification.depth == 1,
+        child: Scrollbar(
+          controller: _vertical,
+          child: ScrollConfiguration(
+            // The pane draws its own two bars and no others.
+            behavior: ScrollConfiguration.of(
+              context,
+            ).copyWith(scrollbars: false),
+            child: _views(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Whether a sideways drag over the text goes to selection, not scrolling.
+  bool get _dragSelects => switch (defaultTargetPlatform) {
+    TargetPlatform.android || TargetPlatform.fuchsia => true,
+    _ => false,
+  };
+
+  /// The inherited padding, raised at the bottom to clear the system's gesture
+  /// area where the pane meets the bottom edge of the screen.
+  EdgeInsets _clearOfSystemGestures(BuildContext context) {
+    final padding = MediaQuery.paddingOf(context);
+    if (padding.bottom == 0) return padding;
+    final gestures = MediaQuery.systemGestureInsetsOf(context).bottom;
+    return padding.copyWith(bottom: math.max(padding.bottom, gestures));
+  }
+
+  Widget _views() {
+    return SingleChildScrollView(
       controller: _vertical,
       child: SingleChildScrollView(
-        controller: _vertical,
-        child: SingleChildScrollView(
-          controller: _horizontal,
-          scrollDirection: Axis.horizontal,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: SelectableText.rich(
-              // The root span carries no style of its own: `SelectableText`
-              // wraps whatever it is given as `TextSpan(style: style, children:
-              // [yours])`, so the face below is what every token inherits and
-              // what `EditableText.style` reports.
-              TextSpan(
-                children: [
-                  for (final token in _tokens)
-                    TextSpan(text: token.text, style: _styleFor(token.kind)),
-                ],
-              ),
-              style: TextStyle(
-                fontSize: 12.5,
-                height: 1.45,
-                fontFamily: CodePane.monoFamily,
-                fontFamilyFallback: CodePane.monoFallback,
-                color: widget.scheme.onSurface,
-              ),
+        controller: _horizontal,
+        scrollDirection: Axis.horizontal,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SelectableText.rich(
+            // The root span carries no style of its own: `SelectableText`
+            // wraps whatever it is given as `TextSpan(style: style, children:
+            // [yours])`, so the face below is what every token inherits and
+            // what `EditableText.style` reports.
+            TextSpan(
+              children: [
+                for (final token in _tokens)
+                  TextSpan(text: token.text, style: _styleFor(token.kind)),
+              ],
+            ),
+            style: TextStyle(
+              fontSize: 12.5,
+              height: 1.45,
+              fontFamily: CodePane.monoFamily,
+              fontFamilyFallback: CodePane.monoFallback,
+              color: widget.scheme.onSurface,
             ),
           ),
         ),
