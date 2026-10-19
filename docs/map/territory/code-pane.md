@@ -9,6 +9,7 @@ are looking at is the thing that ran.
 ## Governing decisions
 → [ADR-0009 — no line numbers in the Code pane](../../adr/0009-no-line-numbers-in-the-code-pane.md)
 → [ADR-0012 — the tokenizer is a dependency, and the allow-list is three](../../adr/0012-the-tokenizer-is-a-dependency.md)
+→ [ADR-0015 — the floor is 3.32, and the allow-list is four](../../adr/0015-the-floor-is-3-32-and-the-allow-list-is-four.md)
 
 Well governed for a single-type territory, and both records are narrow: one decides an
 absence, the other decides ownership of highlighting. Neither decides the loading model or
@@ -27,6 +28,20 @@ against the new file's path bar.
 **Highlighting is a dependency, not code here.** `flutter_syntax_highlight` owns tokenizing;
 this package owns the pane. ADR-0012 records that the import allow-list is three entries.
 
+**A wheel glides on both axes, and nothing else does.** Both of the pane's scroll views take
+a `SmoothScrollController`, so a wheel notch animates down the file and along a long line.
+Drag, scrollbar, keyboard and trackpad input are the plain controller's — the package
+animates only a `PointerScrollEvent` of kind `mouse`. It stops at the pane: the stage is
+where the subject's own scroll views live, and chrome that scrolled differently from the
+subject inside it would have the reader judging one against the other. Both axes was the
+maintainer's call on #24, over vertical-only; ADR-0015 holds the rest.
+
+**Switching recipe starts the new one at its top, and that is structural.** While the
+replacement future is unsettled the pane draws `SizedBox.shrink`, which unmounts `_Code` and
+with it both controllers — a glide in flight is disposed with them. A change that kept the
+code mounted across the load (drawing the previous data while waiting) would carry the old
+offset into the new file; a test holds this.
+
 **The failure model is the trap, and the file names it.** *A pane that renders empty on error
 is indistinguishable from a pane that loaded an empty file.* That sentence is the reason the
 screenshot tooling shipped a blank picture to pub.dev for every release in which it existed —
@@ -39,7 +54,12 @@ more steps. What is left is the capture.
 
 ## Code
 `lib/src/shell/code_pane.dart` — `CodePane`
-`test/code_pane_test.dart` — the bundle-loading behaviour, against a fake asset bundle
+`test/code_pane_test.dart` — the bundle-loading behaviour, against a fake asset bundle, and
+  the wheel on both axes. A fixture over 50 KB never loads there: `CachingAssetBundle`
+  decodes a string that large on an isolate, which a widget test's fake clock never waits
+  for, so the pane stays on its empty loading frame and the test finds no `Scrollable`.
+  A wheel event in a test needs `kind: PointerDeviceKind.mouse` — the default pointer is
+  touch, and touch is never animated.
 
 ## Reference behaviour
 **None.**

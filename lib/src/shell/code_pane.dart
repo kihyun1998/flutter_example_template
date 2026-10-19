@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_smooth_wheel_scroll/flutter_smooth_wheel_scroll.dart';
 import 'package:flutter_syntax_highlight/flutter_syntax_highlight.dart';
 
 /// Renders the bytes of [assetPath], not a copy of them.
@@ -348,7 +349,10 @@ class _CodeState extends State<_Code> {
   /// [Scrollable] of its own. With `primary` set, two scroll views claim the
   /// same [PrimaryScrollController] and the framework asserts. Naming the
   /// controller also gives the [Scrollbar] something unambiguous to track.
-  final _controller = ScrollController();
+  final _vertical = SmoothScrollController();
+
+  /// The horizontal axis's, so a long line glides as the file does.
+  final _horizontal = SmoothScrollController();
 
   /// Cached because tokens are the expensive, stable half; the styles are the
   /// cheap half that has to follow the theme.
@@ -383,7 +387,8 @@ class _CodeState extends State<_Code> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _vertical.dispose();
+    _horizontal.dispose();
     super.dispose();
   }
 
@@ -443,10 +448,11 @@ class _CodeState extends State<_Code> {
     // Code does not wrap — a wrapped line is a different line. So it scrolls on
     // both axes, inside this region and never by moving the shell around it.
     return Scrollbar(
-      controller: _controller,
+      controller: _vertical,
       child: SingleChildScrollView(
-        controller: _controller,
+        controller: _vertical,
         child: SingleChildScrollView(
+          controller: _horizontal,
           scrollDirection: Axis.horizontal,
           child: Padding(
             padding: const EdgeInsets.all(16),
