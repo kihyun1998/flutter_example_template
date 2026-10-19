@@ -10,7 +10,7 @@
 // Usage:  node docs/map/mapcheck.mjs [file ...]     (no args = every note)
 
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs'
-import { join, dirname, resolve, relative, sep } from 'node:path'
+import { join, dirname, resolve, relative, sep, posix as posixPath } from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
@@ -19,6 +19,15 @@ const MAP = join(ROOT, 'docs/map')
 
 // A path relative to the repository root, with `/` between segments on every platform.
 const posix = (file) => relative(ROOT, file).split(sep).join('/')
+
+// A relative link's target, resolved the way GitHub resolves it: from the note's own path,
+// with `/` between segments, so every platform reaches the same verdict.
+const linkTarget = (file, path) =>
+  path === '' ? file : join(ROOT, posixPath.join(posixPath.dirname(posix(file)), path))
+
+// The body of a `## ` section: up to the next `## ` heading or the true end of the note.
+const section = (src, heading) =>
+  src.match(new RegExp(`^## ${heading}\\s*$([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm'))
 
 const TERRITORY_SECTIONS = [
   'What it is',
@@ -125,7 +134,11 @@ function check(file) {
     const href = m[1]
     if (/^(https?:|mailto:)/.test(href)) continue
     const [path, frag] = href.split('#')
-    const target = path === '' ? file : resolve(dirname(file), path)
+    if (path.includes('\\')) {
+      problems.push(`${lineOf(m.index)}: link uses \\ — GitHub separates with / only — ${href}`)
+      continue
+    }
+    const target = linkTarget(file, path)
     if (!existsSync(target)) {
       problems.push(`${lineOf(m.index)}: link target missing — ${href}`)
       continue
@@ -138,7 +151,7 @@ function check(file) {
 
   // 3. Every symbol named under `## Code` resolves somewhere in the tracked tree.
   //    `**None.**` stands the check down: a territory can be recorded and not built.
-  const code = src.match(/^## Code\s*$([\s\S]*?)(?=^## |\Z)/m)
+  const code = section(src, 'Code')
   if (code && !/\*\*None\.\*\*/.test(code[1])) {
     const body = raw.slice(code.index, code.index + code[0].length)
     for (const m of body.matchAll(/`([A-Za-z_][\w./]*(?:\s*—\s*)?)`/g)) {
@@ -151,7 +164,10 @@ function check(file) {
     }
     for (const m of body.matchAll(/`([\w/]+\.(?:dart|mjs|sh))`/g)) {
       if (!tracked) inTree('__prime__')
-      if (!tracked.some((f) => f.endsWith(m[1]))) problems.push(`file not in tree — ${m[1]}`)
+      // Whole path segments only: `b.dart` names `a/b.dart`, never `ab.dart`.
+      if (!tracked.some((f) => f === m[1] || f.endsWith(`/${m[1]}`))) {
+        problems.push(`file not in tree — ${m[1]}`)
+      }
     }
     if (/:\d+\b/.test(body.replace(/\d{4}-\d{2}-\d{2}/g, ''))) {
       problems.push('line number under ## Code — use `file — Symbol`, never a line number')
@@ -172,14 +188,12 @@ function reciprocity() {
   const invariants = mdFiles(MAP).filter((f) => posix(f).includes('/invariant/'))
   for (const inv of invariants) {
     const src = blankCode(readFileSync(inv, 'utf8'))
-    const sec = src.match(/^## Territories it holds in\s*$([\s\S]*?)(?=^## |\Z)/m)
+    const sec = section(src, 'Territories it holds in')
     if (!sec) continue
     for (const m of sec[1].matchAll(/\[[^\]\n]*\]\(([^)#\s]+)\)/g)) {
-      const terr = resolve(dirname(inv), m[1])
+      const terr = linkTarget(inv, m[1])
       if (!existsSync(terr)) continue
-      const back = blankCode(readFileSync(terr, 'utf8')).match(
-        /^## Cross-cutting invariants\s*$([\s\S]*?)(?=^## |\Z)/m,
-      )
+      const back = section(blankCode(readFileSync(terr, 'utf8')), 'Cross-cutting invariants')
       const name = posix(inv).split('/').pop()
       if (!back || !back[1].includes(name)) {
         problems.push(
