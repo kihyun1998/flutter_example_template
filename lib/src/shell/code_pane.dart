@@ -448,9 +448,8 @@ class _CodeState extends State<_Code> {
     // Code does not wrap — a wrapped line is a different line. So it scrolls on
     // both axes, inside this region and never by moving the shell around it.
     return Scrollbar(
-      controller: _vertical,
       child: SingleChildScrollView(
-        controller: _vertical,
+        primary: true,
         child: SingleChildScrollView(
           controller: _horizontal,
           scrollDirection: Axis.horizontal,
