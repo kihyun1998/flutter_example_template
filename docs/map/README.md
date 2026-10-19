@@ -147,7 +147,7 @@ rg -lU '## Governing decisions\r?\n\r?\n?\*\*None\.\*\*' docs/map/territory/
 rg -lU '## Reference behaviour\r?\n\r?\n?\*\*None\.\*\*'  docs/map/territory/
 rg -lU '## Code\r?\n\r?\n?\*\*None\.\*\*'                 docs/map/territory/
 
-node docs/map/mapcheck.mjs                          # links, anchors, symbols, reciprocity
+node docs/map/mapcheck.mjs                          # sections, links, anchors, symbols, reciprocity
 ```
 
 ## The gate
@@ -165,6 +165,13 @@ before reading headings, which made the anchor for a heading containing `` `slee
 unresolvable and would have condemned a correct link. **Do not act on a first run** — verify
 the passing direction in the same session, and prefer fixing the document only after the
 checker has been shown to be right.
+
+A third was the first kind again, on Windows (#28): the root came from a URL's `pathname`
+(`/D:/…`) and every path test assumed `/`, so it found no notes at all, and once the root
+was fixed it still classified every note as a hub and selected no invariants — `ok`, with
+the section and reciprocity checks never run. That is why the result now names its scope
+(`ok — 15 note(s), 5 invariant(s)`) and why finding no notes is a failure rather than a pass.
+Read the counts, not the `ok`.
 
 <!-- grill-map build stamp: SKILL.md sha256:b647f0ba1b0d (no revision available) -->
 <!-- ~/.claude/skills is not a git checkout on this machine, so `git log <stamp>..HEAD`
