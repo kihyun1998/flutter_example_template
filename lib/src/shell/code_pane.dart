@@ -343,12 +343,8 @@ class _Code extends StatefulWidget {
 }
 
 class _CodeState extends State<_Code> {
-  /// Explicit, not `primary: true`.
-  ///
-  /// [SelectableText] builds an [EditableText], which brings a vertical
-  /// [Scrollable] of its own. With `primary` set, two scroll views claim the
-  /// same [PrimaryScrollController] and the framework asserts. Naming the
-  /// controller also gives the [Scrollbar] something unambiguous to track.
+  /// The vertical axis's, explicit rather than `primary: true`, and the one the
+  /// [Scrollbar] tracks.
   final _vertical = SmoothScrollController();
 
   /// The horizontal axis's, beside [_vertical].

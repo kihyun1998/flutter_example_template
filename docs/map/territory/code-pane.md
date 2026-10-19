@@ -38,6 +38,42 @@ where the subject's own scroll views live, and chrome that scrolled differently 
 subject inside it would have the reader judging one against the other. Both axes was the
 maintainer's call on #24, over vertical-only; ADR-0015 holds the rest.
 
+**The vertical controller is explicit, and one reason once given for that was false.** The
+reason that holds is measured: a `primary: true` view takes the route's plain `ScrollController`, so
+the wheel stops gliding — switched over, the glide-down and the scrollbar-track tests fail,
+and those two tests are what keeps the controller explicit. The `Scrollbar` is also handed the
+controller it tracks rather than finding one; that is legibility, not necessity, because a
+`Scrollbar` with no controller finds the primary and worked in every probe below.
+
+The withdrawn reason: the controller's comment said that with `primary` set, the inner
+`Scrollable` that `SelectableText` brings and the pane's view "claim the same
+`PrimaryScrollController` and the framework asserts". They do not. `SelectableText` gives its
+`EditableText` no controller, so that `Scrollable` scrolls on one of its own and never reads
+the primary. And a `SingleChildScrollView` that takes the primary wraps its subtree in
+`PrimaryScrollController.none`, so nothing under it can share it anyway. Measured on #27 with
+the vertical view switched to `primary: true` and the `Scrollbar` given no controller:
+
+| Flutter | platform | enclosing `PrimaryScrollController` | exception | `positions` |
+|---|---|---|---|---|
+| 3.32.0 | Android | no / yes | none | 1 |
+| 3.32.0 | Windows | no / yes | none | 1 |
+| 3.41.9 | Android | no / yes | none | 1 |
+| 3.41.9 | Windows | no / yes | none | 1 |
+| 3.47.7 | Android | no / yes | none | 1 |
+| 3.47.7 | Windows | no / yes | none | 1 |
+
+3.41.9 ran on the maintainer's Windows machine; 3.32.0 and 3.47.7 ran on CI's Ubuntu and
+Windows hosts, from a probe branch that was never merged, and agreed on both. The same runs
+are where the glide tests failed under `primary: true`.
+
+The probe can see the assert: handing the horizontal view the same primary controller
+directly gives `positions` 2 on all four 3.41.9 rows, and on Windows *"The PrimaryScrollController is
+attached to more than one ScrollPosition"*. The pane's structure cannot produce that.
+
+The claim crossed repositories before it was withdrawn here. `flutter_syntax_highlight`
+carried it as what "the reference implementation", this pane, gives as a reason, measured it
+false on 2026-09-06, and retracted it in `SyntaxText`'s docs, keeping the `Scrollbar` reason.
+
 **Switching recipe starts the new one at its top, and that is structural.** While the
 replacement future is unsettled the pane draws `SizedBox.shrink`, which unmounts `_Code` and
 with it both controllers — a glide in flight is disposed with them. A change that kept the
