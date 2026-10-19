@@ -10,11 +10,15 @@
 // Usage:  node docs/map/mapcheck.mjs [file ...]     (no args = every note)
 
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs'
-import { join, dirname, resolve, relative } from 'node:path'
+import { join, dirname, resolve, relative, sep } from 'node:path'
 import { execFileSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 
-const ROOT = resolve(dirname(new URL(import.meta.url).pathname), '../..')
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const MAP = join(ROOT, 'docs/map')
+
+// A path relative to the repository root, with `/` between segments on every platform.
+const posix = (file) => relative(ROOT, file).split(sep).join('/')
 
 const TERRITORY_SECTIONS = [
   'What it is',
@@ -97,7 +101,7 @@ function check(file) {
   const raw = readFileSync(file, 'utf8')
   const src = blankCode(raw)
   const heads = blankFences(raw) // section names may legitimately contain code spans
-  const rel = relative(ROOT, file)
+  const rel = posix(file)
   const lineOf = (idx) => src.slice(0, idx).split('\n').length
 
   const kind = rel.includes('/territory/')
@@ -165,7 +169,7 @@ function reciprocity() {
   // Select by path shape over the whole map tree, not by a hardcoded directory: a gate
   // handed a fixed root reports success over that root and not over the map, and the
   // first draft of this function scanned an empty directory and exited 0.
-  const invariants = mdFiles(MAP).filter((f) => f.includes('/invariant/'))
+  const invariants = mdFiles(MAP).filter((f) => posix(f).includes('/invariant/'))
   for (const inv of invariants) {
     const src = blankCode(readFileSync(inv, 'utf8'))
     const sec = src.match(/^## Territories it holds in\s*$([\s\S]*?)(?=^## |\Z)/m)
@@ -176,15 +180,15 @@ function reciprocity() {
       const back = blankCode(readFileSync(terr, 'utf8')).match(
         /^## Cross-cutting invariants\s*$([\s\S]*?)(?=^## |\Z)/m,
       )
-      const name = relative(ROOT, inv).split('/').pop()
+      const name = posix(inv).split('/').pop()
       if (!back || !back[1].includes(name)) {
         problems.push(
-          `${relative(ROOT, terr)}: does not claim back ${name} (one-way edge, invisible from the territory)`,
+          `${posix(terr)}: does not claim back ${name} (one-way edge, invisible from the territory)`,
         )
       }
     }
   }
-  return problems
+  return { problems, invariants: invariants.length }
 }
 
 const args = process.argv.slice(2)
@@ -194,17 +198,23 @@ for (const f of files) {
   const p = check(f)
   if (p.length) {
     bad += p.length
-    console.log(`\n${relative(ROOT, f)}`)
+    console.log(`\n${posix(f)}`)
     for (const x of p) console.log(`  ${x}`)
   }
 }
+let scope = `${files.length} note(s)`
 if (!args.length) {
-  const r = reciprocity()
+  const { problems: r, invariants } = reciprocity()
+  scope += `, ${invariants} invariant(s)`
   if (r.length) {
     bad += r.length
     console.log('\nreciprocity')
     for (const x of r) console.log(`  ${x}`)
   }
 }
-console.log(bad ? `\n${bad} problem(s) in ${files.length} file(s)` : `ok — ${files.length} file(s)`)
+if (!files.length) {
+  console.log(`no notes found under ${MAP} — nothing was checked`)
+  process.exit(1)
+}
+console.log(bad ? `\n${bad} problem(s) in ${scope}` : `ok — ${scope}`)
 process.exit(bad ? 1 : 0)
