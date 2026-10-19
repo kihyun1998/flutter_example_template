@@ -64,18 +64,22 @@ void main() {
   tearDown(() => destinations.dispose());
 
   group('a pasteable file names no shell', () {
-    test('there is something to check, and the rule is not walking nothing', () {
-      // The rules below are filters over whatever `withSource` holds, so an
-      // empty list would report no offences and pass. Nothing else here can
-      // tell "clean" from "not looked at".
-      expect(
-        withSource,
-        isNotEmpty,
-        reason: 'No destination declares a source, so the rules below assert '
-            'nothing. Either the recipes lost their sources or this suite is '
-            'guarding an empty tree.',
-      );
-    });
+    test(
+      'there is something to check, and the rule is not walking nothing',
+      () {
+        // The rules below are filters over whatever `withSource` holds, so an
+        // empty list would report no offences and pass. Nothing else here can
+        // tell "clean" from "not looked at".
+        expect(
+          withSource,
+          isNotEmpty,
+          reason:
+              'No destination declares a source, so the rules below assert '
+              'nothing. Either the recipes lost their sources or this suite is '
+              'guarding an empty tree.',
+        );
+      },
+    );
 
     test('every source a destination points at exists and is bundled', () {
       for (final destination in withSource) {
@@ -88,7 +92,8 @@ void main() {
         expect(
           _declaredAssets(),
           contains(path),
-          reason: '${destination.id} points at $path, which pubspec.yaml does '
+          reason:
+              '${destination.id} points at $path, which pubspec.yaml does '
               'not declare as an asset. It resolves in the tree and fails in '
               'the bundle, which is a failure only a running app reports.',
         );
@@ -110,7 +115,8 @@ void main() {
       expect(
         offences,
         isEmpty,
-        reason: 'A recipe that imports the shell is not pasteable, and the '
+        reason:
+            'A recipe that imports the shell is not pasteable, and the '
             'Code pane offers it as though it were.\nEach line below breaks '
             'that:\n  ${offences.join('\n  ')}',
       );
@@ -130,7 +136,8 @@ void main() {
         expect(
           _importsOf(file),
           hasLength(lines),
-          reason: '${file.path} has $lines import lines but the rule parsed '
+          reason:
+              '${file.path} has $lines import lines but the rule parsed '
               '${_importsOf(file).length} of them — the unparsed ones are '
               'exempt without saying so.',
         );

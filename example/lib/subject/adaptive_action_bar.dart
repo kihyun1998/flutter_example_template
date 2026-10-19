@@ -87,7 +87,9 @@ class AdaptiveActionBar extends StatelessWidget {
     final dense = density == ActionBarDensity.dense;
     final button = dense ? 36.0 : 44.0;
     if (!showLabels) return button;
-    return button + action.label.length * (dense ? 6.5 : 7.5) + (dense ? 8 : 12);
+    return button +
+        action.label.length * (dense ? 6.5 : 7.5) +
+        (dense ? 8 : 12);
   }
 
   static const _overflowWidth = 44.0;

@@ -59,19 +59,17 @@ const _allowedExternal = [
   'package:flutter_smooth_wheel_scroll/',
 ];
 
-List<File> _dartFilesUnder(String dir) =>
-    Directory('lib/$dir')
-        .listSync(recursive: true)
-        .whereType<File>()
-        .where((f) => f.path.endsWith('.dart'))
-        .toList();
+List<File> _dartFilesUnder(String dir) => Directory('lib/$dir')
+    .listSync(recursive: true)
+    .whereType<File>()
+    .where((f) => f.path.endsWith('.dart'))
+    .toList();
 
-List<File> _allDartFiles() =>
-    Directory('lib')
-        .listSync(recursive: true)
-        .whereType<File>()
-        .where((f) => f.path.endsWith('.dart'))
-        .toList();
+List<File> _allDartFiles() => Directory('lib')
+    .listSync(recursive: true)
+    .whereType<File>()
+    .where((f) => f.path.endsWith('.dart'))
+    .toList();
 
 /// A file's path relative to `lib/`, spelled the way an import spells it.
 ///
@@ -191,9 +189,9 @@ void main() {
           .map((m) => m.group(1)!)
           .toSet();
 
-      final present = _dartFilesUnder(_zoneInternals.replaceAll('/', ''))
-          .map(_libRelative)
-          .toSet();
+      final present = _dartFilesUnder(
+        _zoneInternals.replaceAll('/', ''),
+      ).map(_libRelative).toSet();
 
       expect(
         present.difference(exported),
@@ -243,10 +241,9 @@ void main() {
       // while the tree held five.
       expect(_allDartFiles(), isNotEmpty, reason: 'lib is empty.');
 
-      final areas = Directory('lib/$_zoneInternals')
-          .listSync()
-          .whereType<Directory>()
-          .toList();
+      final areas = Directory(
+        'lib/$_zoneInternals',
+      ).listSync().whereType<Directory>().toList();
       expect(areas, isNotEmpty, reason: 'lib/$_zoneInternals has no areas.');
 
       for (final area in areas) {

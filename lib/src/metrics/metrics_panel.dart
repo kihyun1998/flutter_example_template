@@ -245,8 +245,9 @@ class MetricsChip extends StatelessWidget {
     final ink = _ink(severity, scheme);
 
     return Tooltip(
-      message: [for (final r in metrics.readings) '${r.label}: ${r.value}']
-          .join('\n'),
+      message: [
+        for (final r in metrics.readings) '${r.label}: ${r.value}',
+      ].join('\n'),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(

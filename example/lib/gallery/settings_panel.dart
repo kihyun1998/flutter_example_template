@@ -39,8 +39,7 @@ class _SettingsPanelState extends State<SettingsPanel> {
               child: FeatureListPane(
                 host: host,
                 selectedFeatureId: _openFeatureId,
-                onFeatureSelected: (id) =>
-                    setState(() => _openFeatureId = id),
+                onFeatureSelected: (id) => setState(() => _openFeatureId = id),
               ),
             ),
             Divider(height: 1, color: Theme.of(context).dividerColor),

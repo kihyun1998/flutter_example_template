@@ -97,7 +97,8 @@ const settingsSpec = <SettingGroup>[
             effect:
                 'Turning labels off drops each action to a fixed button width, '
                 'so more of them survive before the bar overflows.',
-            evidence: 'AdaptiveActionBar.widthOf returns early when showLabels '
+            evidence:
+                'AdaptiveActionBar.widthOf returns early when showLabels '
                 'is false.',
           ),
         ],
@@ -116,7 +117,11 @@ const settingsSpec = <SettingGroup>[
           ),
         ],
       ),
-      SettingFeature(id: 'alignment', title: 'Alignment', options: ['alignment']),
+      SettingFeature(
+        id: 'alignment',
+        title: 'Alignment',
+        options: ['alignment'],
+      ),
     ],
   ),
   SettingGroup(
@@ -133,7 +138,8 @@ const settingsSpec = <SettingGroup>[
             effect:
                 'With the menu off, actions that do not fit are not drawn at '
                 'all rather than being moved.',
-            evidence: 'AdaptiveActionBar.build draws the popup only when '
+            evidence:
+                'AdaptiveActionBar.build draws the popup only when '
                 'allowOverflow is true; fitCount reserves no room for it.',
           ),
         ],

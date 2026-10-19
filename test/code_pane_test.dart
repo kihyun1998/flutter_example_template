@@ -39,7 +39,8 @@ Future<void> _wheel(WidgetTester tester, Offset delta) async {
 
 void main() {
   const path = 'lib/recipes/basic_action_bar.dart';
-  const source = "import 'package:flutter/material.dart';\n"
+  const source =
+      "import 'package:flutter/material.dart';\n"
       '\n'
       'class BasicActionBar extends StatelessWidget {\n'
       "  static const label = 'x \${1 + 1} y';\n"
@@ -147,7 +148,9 @@ void main() {
       const other = 'lib/recipes/other.dart';
       final bundle = _Bundle({path: long, other: long});
       Widget pane(String assetPath) => MaterialApp(
-        home: Scaffold(body: CodePane(assetPath: assetPath, bundle: bundle)),
+        home: Scaffold(
+          body: CodePane(assetPath: assetPath, bundle: bundle),
+        ),
       );
 
       await tester.pumpWidget(pane(path));
