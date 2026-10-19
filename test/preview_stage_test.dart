@@ -38,11 +38,14 @@ void main() {
       }
     });
 
-    test('chrome is kept at the two wide viewports and dropped at the phone', () {
-      expect(ViewportSpec.desktop.showsChrome, isTrue);
-      expect(ViewportSpec.tablet.showsChrome, isTrue);
-      expect(ViewportSpec.mobile.showsChrome, isFalse);
-    });
+    test(
+      'chrome is kept at the two wide viewports and dropped at the phone',
+      () {
+        expect(ViewportSpec.desktop.showsChrome, isTrue);
+        expect(ViewportSpec.tablet.showsChrome, isTrue);
+        expect(ViewportSpec.mobile.showsChrome, isFalse);
+      },
+    );
 
     test('byId round-trips every value and refuses an unknown one', () {
       for (final v in ViewportSpec.values) {

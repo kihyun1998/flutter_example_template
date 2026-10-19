@@ -58,7 +58,8 @@ void main() {
             expect(
               known,
               contains(interaction.otherFeatureId),
-              reason: '${feature.id} claims to affect '
+              reason:
+                  '${feature.id} claims to affect '
                   '${interaction.otherFeatureId}, which is not in the spec.',
             );
           }
@@ -87,7 +88,8 @@ void main() {
       expect(
         galleryPresets.firstWhere((p) => p.id == 'crowded').lookFor,
         contains('keeps three'),
-        reason: 'The bar fits $survive at phone width and the guidance says '
+        reason:
+            'The bar fits $survive at phone width and the guidance says '
             'otherwise. One of the two is wrong.',
       );
     });
@@ -99,20 +101,25 @@ void main() {
         expect(
           host.activePresetId,
           preset.id,
-          reason: 'Applying ${preset.id} did not make it the active preset, so '
+          reason:
+              'Applying ${preset.id} did not make it the active preset, so '
               'the chip goes back to unselected the moment it is pressed.',
         );
       }
     });
   });
 
-  testWidgets('all three panes draw, in a 320-wide knob region', (tester) async {
+  testWidgets('all three panes draw, in a 320-wide knob region', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(320, 844);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: SettingsPanel(notifier: notifier))),
+      MaterialApp(
+        home: Scaffold(body: SettingsPanel(notifier: notifier)),
+      ),
     );
     await tester.pumpAndSettle();
 

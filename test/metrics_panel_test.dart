@@ -36,75 +36,88 @@ Metrics _at(DateTime when, List<Reading> readings) =>
 
 void main() {
   group('the panel draws readings it cannot interpret', () {
-    testWidgets('severity is the loudest reading, and normal when there are none', (
-      tester,
-    ) async {
-      expect(_at(DateTime.now(), const []).severity, ReadingSeverity.normal);
+    testWidgets(
+      'severity is the loudest reading, and normal when there are none',
+      (tester) async {
+        expect(_at(DateTime.now(), const []).severity, ReadingSeverity.normal);
 
-      final mixed = _at(DateTime.now(), const [
-        Reading(label: 'A', value: '1', severity: ReadingSeverity.notable),
-        Reading(label: 'B', value: '2', severity: ReadingSeverity.critical),
-        Reading(label: 'C', value: '3'),
-      ]);
-      expect(mixed.severity, ReadingSeverity.critical);
+        final mixed = _at(DateTime.now(), const [
+          Reading(label: 'A', value: '1', severity: ReadingSeverity.notable),
+          Reading(label: 'B', value: '2', severity: ReadingSeverity.critical),
+          Reading(label: 'C', value: '3'),
+        ]);
+        expect(mixed.severity, ReadingSeverity.critical);
 
-      // Order must not decide it. The loudest reading is the loudest wherever
-      // the consumer happened to put it.
-      final reversed = _at(
-        DateTime.now(),
-        mixed.readings.reversed.toList(),
-      );
-      expect(reversed.severity, ReadingSeverity.critical);
-    });
+        // Order must not decide it. The loudest reading is the loudest wherever
+        // the consumer happened to put it.
+        final reversed = _at(DateTime.now(), mixed.readings.reversed.toList());
+        expect(reversed.severity, ReadingSeverity.critical);
+      },
+    );
 
-    testWidgets('every reading is drawn, label and value, exactly as handed over', (
-      tester,
-    ) async {
-      await _pump(
-        tester,
-        MetricsPanel(
-          title: 'Readings',
-          metrics: _at(DateTime.now(), const [
-            Reading(label: 'Total Rows', value: '128.4K', subtitle: '40K/sec'),
-            Reading(label: 'Last Sort', value: '1.28s'),
-          ]),
-        ),
-      );
+    testWidgets(
+      'every reading is drawn, label and value, exactly as handed over',
+      (tester) async {
+        await _pump(
+          tester,
+          MetricsPanel(
+            title: 'Readings',
+            metrics: _at(DateTime.now(), const [
+              Reading(
+                label: 'Total Rows',
+                value: '128.4K',
+                subtitle: '40K/sec',
+              ),
+              Reading(label: 'Last Sort', value: '1.28s'),
+            ]),
+          ),
+        );
 
-      expect(find.text('Readings'), findsOneWidget);
-      // The value is drawn as given. A panel that reformatted `128.4K` would
-      // have had to know it was a count.
-      expect(find.text('128.4K'), findsOneWidget);
-      expect(find.text('Total Rows'), findsOneWidget);
-      expect(find.text('40K/sec'), findsOneWidget);
-      expect(find.text('1.28s'), findsOneWidget);
-      expect(find.textContaining('Last updated:'), findsOneWidget);
-    });
+        expect(find.text('Readings'), findsOneWidget);
+        // The value is drawn as given. A panel that reformatted `128.4K` would
+        // have had to know it was a count.
+        expect(find.text('128.4K'), findsOneWidget);
+        expect(find.text('Total Rows'), findsOneWidget);
+        expect(find.text('40K/sec'), findsOneWidget);
+        expect(find.text('1.28s'), findsOneWidget);
+        expect(find.textContaining('Last updated:'), findsOneWidget);
+      },
+    );
 
-    testWidgets('a normal reading stays achromatic; a critical one is the error colour', (
-      tester,
-    ) async {
-      final scheme = await _pump(
-        tester,
-        MetricsPanel(
-          metrics: _at(DateTime.now(), const [
-            Reading(label: 'Quiet', value: '1'),
-            Reading(
-              label: 'Loud',
-              value: '2',
-              severity: ReadingSeverity.critical,
-            ),
-          ]),
-        ),
-      );
+    testWidgets(
+      'a normal reading stays achromatic; a critical one is the error colour',
+      (tester) async {
+        final scheme = await _pump(
+          tester,
+          MetricsPanel(
+            metrics: _at(DateTime.now(), const [
+              Reading(label: 'Quiet', value: '1'),
+              Reading(
+                label: 'Loud',
+                value: '2',
+                severity: ReadingSeverity.critical,
+              ),
+            ]),
+          ),
+        );
 
-      // The chrome carries no hue so that the only colour on screen is the
-      // subject's. Severity is the stated exemption — and an exemption that
-      // spreads to the default is the rule gone.
-      expect(tester.widget<Text>(find.text('Quiet')).style?.color, scheme.onSurface);
-      expect(tester.widget<Text>(find.text('Loud')).style?.color, scheme.error);
-      expect(tester.widget<Text>(find.text('1')).style?.color, scheme.onSurface);
-    });
+        // The chrome carries no hue so that the only colour on screen is the
+        // subject's. Severity is the stated exemption — and an exemption that
+        // spreads to the default is the rule gone.
+        expect(
+          tester.widget<Text>(find.text('Quiet')).style?.color,
+          scheme.onSurface,
+        );
+        expect(
+          tester.widget<Text>(find.text('Loud')).style?.color,
+          scheme.error,
+        );
+        expect(
+          tester.widget<Text>(find.text('1')).style?.color,
+          scheme.onSurface,
+        );
+      },
+    );
 
     testWidgets('an icon is optional, and its absence costs no layout', (
       tester,
@@ -126,22 +139,23 @@ void main() {
   });
 
   group('the chip', () {
-    testWidgets('names every reading in its tooltip, because a bare value does not', (
-      tester,
-    ) async {
-      await _pump(
-        tester,
-        MetricsChip(
-          metrics: _at(DateTime.now(), const [
-            Reading(label: 'Total Rows', value: '128.4K'),
-            Reading(label: 'Last Sort', value: '1.28s'),
-          ]),
-        ),
-      );
+    testWidgets(
+      'names every reading in its tooltip, because a bare value does not',
+      (tester) async {
+        await _pump(
+          tester,
+          MetricsChip(
+            metrics: _at(DateTime.now(), const [
+              Reading(label: 'Total Rows', value: '128.4K'),
+              Reading(label: 'Last Sort', value: '1.28s'),
+            ]),
+          ),
+        );
 
-      final tooltip = tester.widget<Tooltip>(find.byType(Tooltip));
-      expect(tooltip.message, 'Total Rows: 128.4K\nLast Sort: 1.28s');
-    });
+        final tooltip = tester.widget<Tooltip>(find.byType(Tooltip));
+        expect(tooltip.message, 'Total Rows: 128.4K\nLast Sort: 1.28s');
+      },
+    );
 
     testWidgets('status colour is ink, never ground', (tester) async {
       // The filled form is what this was, and it carried the panel's own bug in

@@ -218,9 +218,11 @@ void main() {
       await t.tap(find.text('Quiet'));
       await t.pump();
 
-      expect(host.applied, [
-        'quiet',
-      ], reason: 'the bar no longer hands back something it had to construct');
+      expect(
+        host.applied,
+        ['quiet'],
+        reason: 'the bar no longer hands back something it had to construct',
+      );
     });
 
     testWidgets(

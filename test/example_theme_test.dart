@@ -33,16 +33,15 @@ void main() {
     /// monospace test, which passed while reading the wrapper `SelectableText`
     /// puts around a span tree and had to move down to a leaf.
     Map<String, String?> leafFamilies(ThemeData t) => {
-          'appBarTheme.titleTextStyle':
-              t.appBarTheme.titleTextStyle?.fontFamily,
-          'listTileTheme.titleTextStyle':
-              t.listTileTheme.titleTextStyle?.fontFamily,
-          'listTileTheme.subtitleTextStyle':
-              t.listTileTheme.subtitleTextStyle?.fontFamily,
-          'segmentedButtonTheme.textStyle': t
-              .segmentedButtonTheme.style?.textStyle
-              ?.resolve(const <WidgetState>{})?.fontFamily,
-        };
+      'appBarTheme.titleTextStyle': t.appBarTheme.titleTextStyle?.fontFamily,
+      'listTileTheme.titleTextStyle':
+          t.listTileTheme.titleTextStyle?.fontFamily,
+      'listTileTheme.subtitleTextStyle':
+          t.listTileTheme.subtitleTextStyle?.fontFamily,
+      'segmentedButtonTheme.textStyle': t.segmentedButtonTheme.style?.textStyle
+          ?.resolve(const <WidgetState>{})
+          ?.fontFamily,
+    };
 
     /// Where `ThemeData(fontFamily:)` actually lands.
     ///
@@ -82,7 +81,8 @@ void main() {
       expect(
         sites,
         watched + 1,
-        reason: 'example_theme.dart names a font family at $sites sites; this '
+        reason:
+            'example_theme.dart names a font family at $sites sites; this '
             'file watches $watched leaves plus the top level. A site that is '
             'not in the roster is a surface the two tests below cannot see.',
       );
@@ -93,15 +93,15 @@ void main() {
       // left is Flutter's, which Flutter ships — correct with no assets, no
       // declaration and no network, in any consumer.
       for (final brightness in Brightness.values) {
-        final named = leafFamilies(exampleTheme(brightness))
-            .entries
+        final named = leafFamilies(exampleTheme(brightness)).entries
             .where((e) => e.value != null)
             .map((e) => '${e.key} = ${e.value}');
 
         expect(
           named,
           isEmpty,
-          reason: 'a leaf naming a family this package does not carry is the '
+          reason:
+              'a leaf naming a family this package does not carry is the '
               'silent fallback the parameter removes; at $brightness: '
               '${named.join(', ')}',
         );
@@ -119,8 +119,7 @@ void main() {
 
       for (final brightness in Brightness.values) {
         final theme = exampleTheme(brightness, chromeFont: face);
-        final missed = leafFamilies(theme)
-            .entries
+        final missed = leafFamilies(theme).entries
             .where((e) => e.value != face)
             .map((e) => '${e.key} = ${e.value}');
 
