@@ -175,6 +175,17 @@ Read the counts, not the `ok`. Zero invariants is reported and not failed — th
 call on #28, made knowing that a renamed `invariant/` with every link rewritten would pass with
 reciprocity unchecked; today the links such a rename breaks catch it first.
 
+Three more were too lenient rather than blind (#29), and the current tree passed all of them, so
+only mutations could show them. Links resolved by the host's path rules, so `..\` passed on
+Windows and broke on GitHub. Now they resolve from the note's own path with `/`, and a `\` is
+reported. A `## Code` filename matched any tracked path that merely ended with it, so
+`am_test.dart` passed as `portable_seam_test.dart`. Now only whole path segments match. And
+the section regexes ended at `\Z`, which in JavaScript is a literal `Z`, not the end of input.
+A capital Z cut a section short, and a note's last section was never read. That hid symbols and
+one-way edges, and it also rejected a valid back-reference that came after a Z. A section now
+ends at the next `## ` or at `(?![\s\S])`. An anchor of `$` would be just as wrong, and the
+current tree would pass it too.
+
 <!-- grill-map build stamp: SKILL.md sha256:b647f0ba1b0d (no revision available) -->
 <!-- ~/.claude/skills is not a git checkout on this machine, so `git log <stamp>..HEAD`
      cannot be run and no commit SHA can be recorded. The content hash above is a
