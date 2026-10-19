@@ -38,6 +38,43 @@ where the subject's own scroll views live, and chrome that scrolled differently 
 subject inside it would have the reader judging one against the other. Both axes was the
 maintainer's call on #24, over vertical-only; ADR-0015 holds the rest.
 
+**A long line has its own bar, and on Android it is the only way along it.** On Android and
+Fuchsia a sideways drag over the text never scrolls. Text selection's drag recognizer wins it
+eagerly (`eagerVictoryOnDrag` is set for every platform but iOS, in the SDK's
+`text_selection.dart`), and then does nothing with it on touch unless the text has focus. So the
+drag is taken and wasted. Selection is kept, and the bar is how the reader reaches the end of a
+line instead. Measured on #26, in widget tests and on the Medium Phone API 36.1 emulator:
+
+| | Android | iOS | Windows |
+|---|---|---|---|
+| sideways drag over the text, before | 0 | scrolls | scrolls |
+| horizontal bar, before | none | none | none |
+| thumb drag, after | reaches the end (test, emulator) | moves the line (probe) | moves the line (probe) |
+| long-press selects, after | yes (test, emulator) | yes (probe) | yes (probe) |
+
+"Probe" is the same bar on a throwaway build, read by a 140 px drag. The kept tests drive
+Android to the end and count desktop's bars.
+
+Four things make the bar work, and each was found by a candidate that lacked it:
+- **It is outermost.** The horizontal view sits inside the vertical one, so it is as tall as
+  the file, and a bar wrapped around it is drawn at the bottom of the file. The pane's bar
+  wraps both views and listens one level down (`notification.depth == 1`).
+- **It is interactive.** Material's `Scrollbar` defaults to non-interactive on Android.
+- **It is always shown where drag selects.** A faded thumb cannot be hit, and nothing on
+  Android can make it appear before the first sideways scroll. That is the maintainer's call
+  on #26, over always-shown everywhere and over dropping selection on Android. Elsewhere it
+  shows and fades like the vertical bar.
+- **It clears the system's gesture area.** On a phone the pane meets the bottom edge, and the
+  emulator's mandatory gesture area (84 px, against 63 px of padding) took a drag on the
+  thumb. A thumb drag at y=2330 barely moved, and one at y=2308 reached the end. The bars'
+  bottom inset is raised to the gesture inset when the pane has bottom padding, meaning it is
+  at the edge. A pane whose bottom padding something above it already took is left as it is.
+
+The pane draws its own two bars and no automatic ones. On desktop the default behaviour added
+a second vertical bar over the pane's own, on the same controller, and its automatic bars are
+vertical-only. So before #26 no platform had a horizontal bar, whatever a widget count
+suggested.
+
 **The vertical controller is explicit, and one reason once given for that was false.** The
 reason that holds is measured: a `primary: true` view takes the route's plain `ScrollController`, so
 the wheel stops gliding — switched over, the glide-down and the scrollbar-track tests fail,
@@ -101,9 +138,16 @@ more steps. What is left is the capture.
   The wheel over the scrollbar track is a separate path, and only a desktop one: the view
   registers for the wheel before the scrollbar does, so the track takes it only once a
   hover has revealed it and the view has left the hit path — the test checks that first, or
-  it re-measures the plain wheel. On a desktop platform the default scroll behaviour also
-  adds scrollbars to the pane's other scroll views, so `find.byType(Scrollbar)` finds three
-  and the pane's own is the first.
+  it re-measures the plain wheel.
+  `find.byType(Scrollbar)` finds more than the pane's two bars on every platform, because
+  `EditableText` turns scrollbars back on for its own inner view. The first is the pane's
+  horizontal bar, and its rect is the whole pane. A count of `Scrollbar` widgets cannot say
+  what is painted. The tests read each `ScrollbarPainter`'s thumb hit test instead, and that
+  also refuses a non-interactive bar's thumb.
+  A bar fades in on the scroll notifications of a glide, so a single long `pump` is one frame
+  and finds it still transparent. Pump frame by frame.
+  A sideways swipe over the text scrolled on the emulator with the bar present, while the
+  widget test reads 0 for the same build. Nothing relies on it.
 
 ## Reference behaviour
 **None.**

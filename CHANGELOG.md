@@ -14,6 +14,15 @@ On Flutter 3.27–3.31, stay on 0.3.0. Nothing in the public API changed.
   the stage least of all. ADR-0015 records the move. (#24)
 * `flutter_syntax_highlight` is now `^0.3.0`. Its tokenizer is unchanged.
 
+**Fixed**
+
+* On Android, a long line in the Code pane can now be read to its end. A
+  sideways drag over the code is taken by text selection there, and before this
+  there was no horizontal scrollbar on any platform. The pane now has one, at its
+  bottom edge. On Android it is always shown, draggable and clear of the system
+  gesture area. Elsewhere it appears while scrolling. Selecting text is
+  unchanged. (#26)
+
 ## 0.3.0
 
 **Added**
