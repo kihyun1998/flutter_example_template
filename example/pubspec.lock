@@ -68,7 +68,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.3.0"
+    version: "0.4.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -89,10 +89,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_syntax_highlight
-      sha256: a7fe86f1b0bbfb40716e5fd25df0dc6d1e8eaa407995d80332dbe636b533ffe4
+      sha256: "0d623fed7a34b5b644ce6b220e75c0f2ea66254ed521e13b6f6d39d390af1084"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -227,10 +227,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "5f37239c4851efcef929cea7824e76df7f2f0970aef85d66bbc430afa40e72f0"
+      sha256: "89b11d62e1040ee681af3b4f1c97a803ecbf010c6e8b9c5896ee5b08c3bf7b78"
       url: "https://pub.dev"
     source: hosted
-    version: "15.3.0"
+    version: "15.4.0"
 sdks:
   dart: ">=3.9.0 <4.0.0"
   flutter: ">=3.32.0"

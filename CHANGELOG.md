@@ -1,4 +1,4 @@
-## Unreleased
+## 0.4.0
 
 **Breaking: the SDK floor is now Flutter 3.32 / Dart 3.8** (was 3.27 / 3.6).
 On Flutter 3.27–3.31, stay on 0.3.0. Nothing in the public API changed.
@@ -12,7 +12,7 @@ On Flutter 3.27–3.31, stay on 0.3.0. Nothing in the public API changed.
   `SmoothWheelBinding`: how far a notch travels is set in your own `main()`.
   Nothing outside the Code pane changed, and a subject's own scroll views in
   the stage least of all. ADR-0015 records the move. (#24)
-* `flutter_syntax_highlight` is now `^0.3.0`. Its tokenizer is unchanged.
+* `flutter_syntax_highlight` is now `^0.4.0`. Its tokenizer is unchanged.
 
 **Fixed**
 

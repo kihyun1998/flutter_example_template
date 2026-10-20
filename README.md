@@ -25,7 +25,9 @@ package removed. You supply what to demonstrate; the shell draws everything arou
   them*.
 - **A Code pane** that reads the running file out of the asset bundle, so what is on screen and
   what executes cannot disagree. With Dart syntax highlighting that is a partition — concatenating
-  every token reproduces the file byte for byte, so what you copy is what shipped.
+  every token reproduces the file byte for byte, so what you copy is what shipped. A mouse wheel
+  glides through it on both axes, and a long line has a scrollbar of its own, which on Android,
+  where a sideways drag goes to text selection, is always shown.
 - **A settings panel** driven from a description: groups, features, the options each feature owns,
   and the interactions between them. Search reads control labels, so a setting can be found without
   opening the feature that holds it.
@@ -70,7 +72,8 @@ property that makes the shell reusable at all, and it is enforced rather than in
 
 Two test suites hold three things the compiler will not — all of which are legal Dart when violated:
 
-- nothing under `lib/` imports outside `dart:`, `package:flutter/` and `flutter_syntax_highlight`;
+- nothing under `lib/` imports outside `dart:`, `package:flutter/`, `flutter_syntax_highlight` and
+  `flutter_smooth_wheel_scroll`;
 - nothing outside `lib/src/` reaches into it (the suite stands in as the package's first consumer);
 - the barrel and the tree name the same set of files, in both directions.
 
@@ -83,7 +86,7 @@ In your **`example/pubspec.yaml`** — not your package's:
 
 ```yaml
 dependencies:
-  flutter_example_template: ^0.3.0
+  flutter_example_template: ^0.4.0
 ```
 
 Or, to track `main` ahead of a release:
@@ -241,13 +244,12 @@ is the working rules — the mistakes this codebase made and would make again.
 
 ## Status
 
-`0.3.0`, and honest about it: one example, and three consumers besides this repository's own —
-`flutter_dropdown_button` and `flutter_folderview` on 0.2.0, and `flutter_table_plus`, where the
-shell was first built, still on 0.1.0. This release came from the last of those: a table is
-something a reader wants to use and not only look at, and every mode before the room drew it scaled
-— 0.589× on the laptop the desktop viewport is named after (#18). The questions the transplant left
-open are answered in `docs/adr/` rather than still being weighed; the ones adoption is opening were
-not on that list.
+`0.4.0`, and honest about it. There is one example, and three consumers besides this repository's
+own: `flutter_dropdown_button`, `flutter_folderview` and `flutter_table_plus`, where the shell was
+first built. All three are on 0.3.0. This release is about the Code pane. It glides on a mouse
+wheel, which moved the floor (#24), and a long line can be read to its end on Android, which had
+no way along it before (#26). The questions the transplant left open are answered in `docs/adr/`
+rather than still being weighed. The ones adoption is opening were not on that list.
 
 **Requires Flutter 3.32.** Measured, not inherited, and held rather than remembered: CI runs both
 suites at that floor and at the current stable, on Linux and on Windows, on every push. The floor is

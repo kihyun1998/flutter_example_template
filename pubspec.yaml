@@ -1,6 +1,6 @@
 name: flutter_example_template
 description: "An example-app shell for Flutter packages: a preview stage at three widths or at 1:1, a device wall, a code pane and a settings panel, driven through ports so it names no subject."
-version: 0.3.0
+version: 0.4.0
 repository: https://github.com/kihyun1998/flutter_example_template
 issue_tracker: https://github.com/kihyun1998/flutter_example_template/issues
 
@@ -33,7 +33,7 @@ dependencies:
   # growing one dependency at a time, on purpose — `portable_seam_test.dart`
   # holds the rule. ADR-0012 records the tokenizer; ADR-0015 records the wheel
   # motion the Code pane takes from the other, and the floor both brought.
-  flutter_syntax_highlight: ^0.3.0
+  flutter_syntax_highlight: ^0.4.0
   flutter_smooth_wheel_scroll: ^0.1.3
 
 dev_dependencies:
