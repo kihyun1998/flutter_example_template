@@ -248,7 +248,8 @@ is the working rules — the mistakes this codebase made and would make again.
 own: `flutter_dropdown_button`, `flutter_folderview` and `flutter_table_plus`, where the shell was
 first built. All three are on 0.3.0. This release is about the Code pane. It glides on a mouse
 wheel, which moved the floor (#24), and a long line can be read to its end on Android, which had
-no way along it before (#26). The questions the transplant left open are answered in `docs/adr/`
+no way along it before (#26). One fix outside it came from a consumer: a dropdown's "default"
+item can be picked again once changed (#35). The questions the transplant left open are answered in `docs/adr/`
 rather than still being weighed. The ones adoption is opening were not on that list.
 
 **Requires Flutter 3.32.** Measured, not inherited, and held rather than remembered: CI runs both
