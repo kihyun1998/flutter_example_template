@@ -163,9 +163,7 @@ SettingsControl buildDropdownRow<T>({
         ),
         DropdownButton<T>(
           value: value,
-          onChanged: (T? newValue) {
-            if (newValue != null) onChanged(newValue);
-          },
+          onChanged: (T? newValue) => onChanged(newValue as T),
           items: items.map((item) {
             return DropdownMenuItem(
               value: item,
