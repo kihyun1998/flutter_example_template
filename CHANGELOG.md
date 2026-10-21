@@ -22,6 +22,10 @@ On Flutter 3.27–3.31, stay on 0.3.0. Nothing in the public API changed.
   bottom edge. On Android it is always shown, draggable and clear of the system
   gesture area. Elsewhere it appears while scrolling. Selecting text is
   unchanged. (#26)
+* `buildDropdownRow` over a nullable type now reports a `null` item when it is
+  picked. It used to drop it, so a setting with a "default" or "not set" item
+  could not be returned to it once changed. Closing the menu without picking
+  still reports nothing. (#35)
 
 ## 0.3.0
 

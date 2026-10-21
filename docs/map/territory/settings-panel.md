@@ -37,6 +37,12 @@ That is why `SettingsControl` carries the label rather than the pane composing o
 
 **A preset earns its name from the interaction it produces**, not from the switches it flips.
 
+**A dropdown's `null` item is a value.** `DropdownButton.onChanged` takes `T?`, but the SDK
+calls it only when an item is picked (`dropdown.dart`, the route's result): closing the menu
+without picking calls nothing. So `buildDropdownRow` passes every pick through, `null`
+included. A guard that dropped `null` read like it was for the dismiss case, and instead made
+a "default" item unreachable once changed (#35, seen in `flutter_folderview`'s font sizes).
+
 ## Code
 `lib/src/settings/setting_spec.dart` — `SettingGroup`, `SettingFeature`, `Interaction`, `PresetSummary`
 `lib/src/settings/settings_host.dart` — `SettingsHost`
@@ -46,6 +52,8 @@ That is why `SettingsControl` carries the label rather than the pane composing o
 `lib/src/settings/feature_search.dart` — `FeatureMatch`
 `lib/src/settings/preset_bar.dart` — `PresetBar`
 `test/settings_host_test.dart` — the port's contract, including the empty-`presets` default
+`test/settings_controls_test.dart` — `buildDropdownRow` over a nullable type: a `null` pick,
+  a value pick, and a dismiss that reports nothing
 
 ## Reference behaviour
 **None.**
