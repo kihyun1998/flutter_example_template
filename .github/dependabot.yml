@@ -1,10 +1,19 @@
-# Weekly pub constraint updates for the package at the repository root.
+# Pub constraint updates for the package root, and the workflows' actions.
 version: 2
 updates:
   - package-ecosystem: pub
     directory: /
     schedule:
       interval: weekly
-    versioning-strategy: increase
+    versioning-strategy: increase-if-necessary
+    labels:
+      - needs-triage
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
     labels:
       - needs-triage

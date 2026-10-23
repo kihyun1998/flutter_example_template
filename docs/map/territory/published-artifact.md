@@ -29,6 +29,13 @@ before either was written. The dates make them evidence that real suites ran —
 the measurement, which stays true — rather than a description of the suites today. The
 manifest used to carry the same pair as a live claim and has stopped.
 
+**Dependabot may raise a constraint only when it has to.** The root runs
+`increase-if-necessary`. Under `increase`, every release a caret already admitted
+became the new floor, which narrows what a consumer can resolve for no gain. A
+package that is depended on (ADR-0002) keeps the widest range that is true. A PR
+therefore means a release has left the caret, and the floor it brings has to be
+measured (ADR-0011) before merging.
+
 **A declined gate is recorded as declined.** ADR-0010 keeps two of them, so that a gate
 nobody built is distinguishable from a gate nobody thought of. It also sets a threshold for
 one of them: automation waits for a second occurrence rather than a first scare.
@@ -41,6 +48,7 @@ headless browser — which is why the trap in
 `tool/shots.mjs` — the capture driver and its blank-image check
 `tool/screenshots.sh` — the capture entry point
 `test/portable_seam_test.dart` — the import allow-list that enforces the dependency posture
+`.github/dependabot.yml` — the update cadence and how far a constraint may move
 
 ## Reference behaviour
 **None.**
