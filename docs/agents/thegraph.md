@@ -26,3 +26,7 @@ worth recording; diverging from a `spec` is a bug.
 
 **Summarized** sources never settle a question outright — what rests on one carries
 forward as *needs confirming against the real thing*.
+
+## Release
+
+pub-ready
